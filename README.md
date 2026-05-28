@@ -71,7 +71,7 @@ Reader         ──► stateless views over DataStore (no writes)
 | `libs/pricing_utils` | Swap and position price impact, execution price, impact pool management. |
 | `libs/swap_utils` | Single-hop and multi-hop token swaps through market pools. |
 | `libs/increase_position_utils` | Open or increase a long/short position (14-step flow). |
-| `libs/decrease_position_utils` | Partial or full position close with PnL settlement (14-step flow). |
+| `libs/decrease_position_utils` | Partial or full position close with PnL settlement (14-step flow). Accepts an optional `swap_path` — when non-empty, collateral output is swapped through the specified markets before reaching the receiver. |
 
 ---
 
@@ -368,11 +368,13 @@ cargo test -p gmx-market-utils
 cargo test -p gmx-position-utils
 cargo test -p gmx-pricing-utils
 cargo test -p gmx-swap-utils
+cargo test -p gmx-decrease-position-utils
 
 # Core contracts
 cargo test -p data-store
 cargo test -p role-store
 cargo test -p oracle
+cargo test -p fee-handler
 
 # Handler contracts
 cargo test -p deposit-handler
@@ -912,6 +914,7 @@ contracts/
 | 6 | Risk — liquidation handler, ADL handler | ✅ Complete |
 | 7 | Periphery — fee handler, referral storage, reader | ✅ Complete |
 | 8 | Router — exchange router with multicall | ✅ Complete |
+| 9 | Test hardening — fee/PnL/output on partial+full close, frozen-order state machine, collateral-output swap path | ✅ Complete |
 
 ---
 
@@ -955,7 +958,7 @@ make upgrade-all NETWORK=testnet SOURCE=deployer
 
 ## Contributing
 
-SO4.market is being built in the open. All eight implementation phases are complete — the full protocol logic is live in Rust/Soroban. See the issue tracker for integration tests, optimisation tasks, and frontend work.
+SO4.market is being built in the open. All nine implementation phases are complete — the full protocol logic is live in Rust/Soroban. See the issue tracker for integration tests, optimisation tasks, and frontend work.
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for deployment, and upgrade workflow rules.
 
