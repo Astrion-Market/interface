@@ -286,6 +286,7 @@ mod tests {
     #[test]
     fn fee_rounding_accumulates_not_leaks() {
         let env = Env::default();
+        env.cost_estimate().budget().reset_unlimited();
         let fp = FLOAT_PRECISION;
         // fee_factor = 0.001% = fp / 100_000
         let fee_factor = fp / 100_000;
