@@ -48,6 +48,14 @@ pub struct TraderCodeSet {
     pub code:   BytesN<32>,
 }
 
+#[contractevent(topics = ["ref_xfr"])]
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct CodeOwnershipTransferred {
+    pub code:      BytesN<32>,
+    pub from:      Address,
+    pub to:        Address,
+}
+
 // ─── Errors ───────────────────────────────────────────────────────────────────
 
 #[contracterror]
@@ -61,6 +69,7 @@ pub enum Error {
     CodeNotFound       = 5,
     InvalidTier        = 6,
     InvalidInput       = 7,
+    NotCodeOwner       = 8,
 }
 
 // ─── Contract ─────────────────────────────────────────────────────────────────
@@ -153,6 +162,28 @@ impl ReferralStorage {
         env.storage().persistent().set(&ReferralKey::TierConfig(tier), &config);
     }
 
+    /// Transfer ownership of a registered referral code to a new address.
+    ///
+    /// Only the current code owner may call this. Requires auth from `from`.
+    /// The new owner (`to`) immediately becomes the code's referrer for fee calculations.
+    pub fn transfer_code_ownership(env: Env, from: Address, to: Address, code: BytesN<32>) {
+        from.require_auth();
+        let key = ReferralKey::CodeOwner(code.clone());
+        let current_owner: Address = env.storage().persistent()
+            .get(&key)
+            .unwrap_or_else(|| panic_with_error!(&env, Error::CodeNotFound));
+        if current_owner != from {
+            panic_with_error!(&env, Error::NotCodeOwner);
+        }
+        env.storage().persistent().set(&key, &to);
+        env.events().publish_event(&CodeOwnershipTransferred { code, from, to });
+    }
+
+    /// Return the owner address for a given referral code, or None if unregistered.
+    pub fn get_code_owner(env: Env, code: BytesN<32>) -> Option<Address> {
+        env.storage().persistent().get(&ReferralKey::CodeOwner(code))
+    }
+
     /// Return the fee discount bps for a trader given their referral code, or 0 if none.
     pub fn get_trader_discount_bps(env: Env, trader: Address) -> u32 {
         let code: BytesN<32> = match env.storage().persistent()
@@ -207,6 +238,10 @@ mod tests {
 
     fn client(w: &World) -> ReferralStorageClient {
         ReferralStorageClient::new(&w.env, &w.handler)
+    }
+
+    fn make_code(env: &Env, seed: u8) -> BytesN<32> {
+        BytesN::from_array(env, &[seed; 32])
     }
 
     // ─── Issue #89: tier number bounds ───────────────────────────────────────
@@ -368,5 +403,78 @@ mod tests {
         // Bypass mock_all_auths by not passing the real admin.
         ReferralStorageClient::new(&w.env, &w.handler)
             .set_tier_config(&impostor, &0u32, &cfg);
+    }
+
+    // ─── Issue #88: code ownership transfer ──────────────────────────────────
+
+    /// Successful transfer: new owner is stored, old owner removed.
+    #[test]
+    fn test_transfer_code_ownership_success() {
+        let w = setup();
+        let alice = Address::generate(&w.env);
+        let bob   = Address::generate(&w.env);
+        let code  = make_code(&w.env, 0x01);
+
+        client(&w).register_code(&alice, &code);
+        assert_eq!(client(&w).get_code_owner(&code), Some(alice.clone()));
+
+        client(&w).transfer_code_ownership(&alice, &bob, &code);
+        assert_eq!(client(&w).get_code_owner(&code), Some(bob));
+    }
+
+    /// Non-owner attempting transfer must revert with NotCodeOwner.
+    #[test]
+    fn test_transfer_code_ownership_non_owner_rejected() {
+        let w = setup();
+        let alice   = Address::generate(&w.env);
+        let charlie = Address::generate(&w.env);
+        let code    = make_code(&w.env, 0x02);
+
+        client(&w).register_code(&alice, &code);
+
+        let result = client(&w).try_transfer_code_ownership(&charlie, &alice, &code);
+        assert_eq!(result, Err(Ok(Error::NotCodeOwner)));
+    }
+
+    /// Transfer on an unregistered code must revert with CodeNotFound.
+    #[test]
+    fn test_transfer_code_ownership_missing_code_rejected() {
+        let w = setup();
+        let alice = Address::generate(&w.env);
+        let bob   = Address::generate(&w.env);
+        let code  = make_code(&w.env, 0x03);
+
+        let result = client(&w).try_transfer_code_ownership(&alice, &bob, &code);
+        assert_eq!(result, Err(Ok(Error::CodeNotFound)));
+    }
+
+    /// get_code_owner returns None for an unregistered code.
+    #[test]
+    fn test_get_code_owner_returns_none_for_unregistered() {
+        let w = setup();
+        let code = make_code(&w.env, 0x04);
+        assert_eq!(client(&w).get_code_owner(&code), None);
+    }
+
+    /// After a transfer, discount calculation uses the new owner's tier.
+    #[test]
+    fn test_trader_discount_follows_new_owner_tier() {
+        let w = setup();
+        let alice  = Address::generate(&w.env);
+        let bob    = Address::generate(&w.env);
+        let trader = Address::generate(&w.env);
+        let code   = make_code(&w.env, 0x05);
+
+        client(&w).set_tier_config(&w.admin, &0, &TierConfig { total_rebate_bps: 1000, discount_share_bps: 5000 });
+        client(&w).set_tier_config(&w.admin, &1, &TierConfig { total_rebate_bps: 2000, discount_share_bps: 5000 });
+
+        client(&w).register_code(&alice, &code);
+        client(&w).set_trader_referral_code(&trader, &code);
+
+        // After transfer, discount should reflect bob's tier (default 0)
+        client(&w).transfer_code_ownership(&alice, &bob, &code);
+        let discount = client(&w).get_trader_discount_bps(&trader);
+        // tier 0 for bob: 1000 * 5000 / 10_000 = 500
+        assert_eq!(discount, 500);
     }
 }
