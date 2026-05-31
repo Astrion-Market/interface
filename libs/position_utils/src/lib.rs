@@ -463,4 +463,281 @@ mod tests {
         assert_eq!(pos.funding_fee_amount_per_size, global_value,
             "position tracker must be reset to current global after settlement");
     }
+
+    // ── Issue #136: property tests for position_utils ─────────────────────────
+
+    /// get_position_pnl_usd returns 0 when the position has zero size.
+    #[test]
+    fn property_pnl_zero_for_zero_size_position() {
+        let w = setup();
+        let mut pos = make_position(&w, 0, 0, 2_000 * FP);
+        pos.size_in_tokens = 0;
+        let price_props = PriceProps { min: 2_000 * FP, max: 2_000 * FP };
+        let (pnl, _) = get_position_pnl_usd(&w.env, &pos, &price_props, 0);
+        assert_eq!(pnl, 0, "zero-size position must have zero PnL");
+    }
+
+    /// A long position has zero PnL when the current price equals the entry price.
+    #[test]
+    fn property_long_pnl_zero_at_entry_price() {
+        let w           = setup();
+        let entry_price = 2_000 * FP;
+        let size_usd    = 1_000 * FP;
+        let pos         = make_position(&w, size_usd, ONE_TOKEN * 10, entry_price);
+        let price_props = PriceProps { min: entry_price, max: entry_price };
+        let (pnl, _)    = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd);
+        // pnl = tokens * price / TOKEN_PRECISION - size_in_usd
+        //     = (size_usd / entry_price * TOKEN_PRECISION) * entry_price / TOKEN_PRECISION - size_usd
+        //     ≈ 0  (up to rounding)
+        let tol = 1i128;
+        assert!(
+            pnl.abs() <= tol,
+            "long PnL must be ~0 at entry price; got {pnl}"
+        );
+    }
+
+    /// A long position has negative PnL when the price drops below entry.
+    #[test]
+    fn property_long_pnl_negative_when_price_falls() {
+        let w           = setup();
+        let entry_price = 2_000 * FP;
+        let exit_price  = 1_000 * FP; // halved
+        let size_usd    = 1_000 * FP;
+        let pos         = make_position(&w, size_usd, ONE_TOKEN * 10, entry_price);
+        let price_props = PriceProps { min: exit_price, max: exit_price };
+        let (pnl, _)    = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd);
+        assert!(pnl < 0, "long position must have negative PnL when price falls; got {pnl}");
+    }
+
+    /// A long position has positive PnL when the price rises above entry.
+    #[test]
+    fn property_long_pnl_positive_when_price_rises() {
+        let w           = setup();
+        let entry_price = 2_000 * FP;
+        let exit_price  = 4_000 * FP; // doubled
+        let size_usd    = 1_000 * FP;
+        let pos         = make_position(&w, size_usd, ONE_TOKEN * 10, entry_price);
+        let price_props = PriceProps { min: exit_price, max: exit_price };
+        let (pnl, _)    = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd);
+        assert!(pnl > 0, "long position must have positive PnL when price rises; got {pnl}");
+    }
+
+    /// All fee components are non-negative (no underflow into negative fees).
+    #[test]
+    fn property_position_fees_never_negative() {
+        let w    = setup();
+        let ds_c = DsClient::new(&w.env, &w.ds);
+
+        // Seed non-zero fee factors
+        let fee_factor: i128 = FP / 1_000; // 0.1%
+        ds_c.set_u128(&w.admin, &gmx_keys::position_fee_factor_key(&w.env, &w.market_tk, true), &(fee_factor as u128));
+
+        let cum_factor: i128 = FP / 500;
+        ds_c.set_u128(&w.admin, &gmx_keys::cumulative_borrowing_factor_key(&w.env, &w.market_tk, true), &(cum_factor as u128));
+
+        let market   = make_market(&w);
+        let position = make_position(&w, 1_000 * FP, ONE_TOKEN * 5, 2_000 * FP);
+
+        let fees = get_position_fees(&w.env, &w.ds, &market, &position, 2_000 * FP, 1_000 * FP, true);
+
+        assert!(fees.borrowing_fee_amount >= 0, "borrowing fee must not be negative: {}", fees.borrowing_fee_amount);
+        assert!(fees.funding_fee_amount   >= 0, "funding fee must not be negative: {}", fees.funding_fee_amount);
+        assert!(fees.position_fee_amount  >= 0, "position fee must not be negative: {}", fees.position_fee_amount);
+        assert!(fees.total_cost_amount    >= 0, "total cost must not be negative: {}", fees.total_cost_amount);
+    }
+
+    /// total_cost_amount == borrowing + funding + position fees (no hidden component).
+    #[test]
+    fn property_total_cost_is_sum_of_components() {
+        let w    = setup();
+        let ds_c = DsClient::new(&w.env, &w.ds);
+
+        let fee_factor: i128 = FP / 2_000;
+        ds_c.set_u128(&w.admin, &gmx_keys::position_fee_factor_key(&w.env, &w.market_tk, true), &(fee_factor as u128));
+
+        let market   = make_market(&w);
+        let position = make_position(&w, 2_000 * FP, ONE_TOKEN * 8, 2_000 * FP);
+
+        let fees = get_position_fees(&w.env, &w.ds, &market, &position, 2_000 * FP, 1_000 * FP, true);
+
+        assert_eq!(
+            fees.total_cost_amount,
+            fees.borrowing_fee_amount + fees.funding_fee_amount + fees.position_fee_amount,
+            "total_cost must equal sum of components"
+        );
+    }
+
+    /// Partial close PnL scales linearly with size_delta (property: proportionality).
+    /// Closing 50% of a position should yield 50% of the full PnL (within rounding).
+    #[test]
+    fn property_partial_close_pnl_proportional_to_size() {
+        let w           = setup();
+        let entry_price = 2_000 * FP;
+        let exit_price  = 3_000 * FP;
+        let size_usd    = 1_000 * FP;
+        let pos         = make_position(&w, size_usd, ONE_TOKEN * 10, entry_price);
+        let price_props = PriceProps { min: exit_price, max: exit_price };
+
+        let (full_pnl,    _) = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd);
+        let (half_pnl,    _) = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd / 2);
+
+        // half_pnl should be ~50% of full_pnl (within 1 unit rounding)
+        let expected_half = full_pnl / 2;
+        assert!(
+            (half_pnl - expected_half).abs() <= 1,
+            "partial close PnL must be proportional: full={full_pnl}, half={half_pnl}, expected_half={expected_half}"
+        );
+    }
+
+    /// is_liquidatable returns false for a well-collateralised position at entry price.
+    #[test]
+    fn property_healthy_position_is_not_liquidatable() {
+        let w       = setup();
+        let ds_c    = DsClient::new(&w.env, &w.ds);
+        let entry_p = 2_000 * FP;
+        let market  = make_market(&w);
+
+        // Set min collateral factor (1%)
+        ds_c.set_u128(&w.admin, &gmx_keys::min_collateral_factor_key(&w.env, &w.market_tk), &((FP / 100) as u128));
+
+        // Large collateral relative to size → very healthy
+        let position = make_position(&w, 1_000 * FP, ONE_TOKEN * 100, entry_p);
+        let price_props = PriceProps { min: entry_p, max: entry_p };
+
+        assert!(
+            !is_liquidatable(&w.env, &w.ds, &position, &market, entry_p, &price_props),
+            "well-collateralised position at entry price must not be liquidatable"
+        );
+    }
+
+    // ── Issue #137: differential tests against reference GMX formulas ─────────
+    //
+    // Each test pins a specific numeric result against a manually derived
+    // reference value to catch formula drift.
+
+    /// Reference (PositionUtils.sol): position PnL for full long close.
+    ///   size_in_usd    = $2 000   (FP units)
+    ///   size_in_tokens = 1 token  (TOKEN_PRECISION units)
+    ///   exit_price     = $3 000
+    ///   position_value = 1 token × $3 000 = $3 000
+    ///   pnl            = $3 000 − $2 000 = $1 000
+    #[test]
+    fn differential_position_pnl_long_profit_matches_reference() {
+        let w           = setup();
+        let entry_price = 2_000 * FP;
+        let exit_price  = 3_000 * FP;
+        let size_usd    = 2_000 * FP;
+
+        let pos         = make_position(&w, size_usd, ONE_TOKEN, entry_price);
+        let price_props = PriceProps { min: exit_price, max: exit_price };
+
+        let (pnl, uncapped) = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd);
+
+        let expected_pnl = 1_000 * FP; // $1 000 profit
+        assert_eq!(pnl, expected_pnl,   "full close PnL must match reference: {pnl} != {expected_pnl}");
+        assert_eq!(uncapped, expected_pnl, "uncapped PnL must equal pnl (no capping at this level)");
+    }
+
+    /// Reference: long loss when price falls below entry.
+    ///   size_in_usd    = $4 000
+    ///   size_in_tokens = 2 tokens  (at $2 000 entry)
+    ///   exit_price     = $1 000
+    ///   position_value = 2 × $1 000 = $2 000
+    ///   pnl            = $2 000 − $4 000 = −$2 000
+    #[test]
+    fn differential_position_pnl_long_loss_matches_reference() {
+        let w           = setup();
+        let entry_price = 2_000 * FP;
+        let exit_price  = 1_000 * FP;
+        let size_usd    = 4_000 * FP;
+
+        let pos = make_position(&w, size_usd, 2 * ONE_TOKEN, entry_price);
+        let price_props = PriceProps { min: exit_price, max: exit_price };
+
+        let (pnl, _) = get_position_pnl_usd(&w.env, &pos, &price_props, size_usd);
+
+        let expected_pnl = -2_000 * FP;
+        assert_eq!(pnl, expected_pnl, "long loss PnL must match reference: {pnl} != {expected_pnl}");
+    }
+
+    /// Reference: position opening fee.
+    ///   size_delta_usd  = $1 000 (FP)
+    ///   fee_factor      = 30 bps = 0.003 × FP
+    ///   collateral_price = $2 000 (FP per whole token)
+    ///   fee_usd         = $1 000 × 0.003 = $3
+    ///   fee_tokens      = $3 / $2 000 per token × TOKEN_PRECISION
+    ///                   = 3 * FP / (2_000 * FP) * TOKEN_PRECISION
+    ///                   = 3 * TOKEN_PRECISION / 2_000 = 15_000 units (≈ 0.0015 tokens)
+    #[test]
+    fn differential_position_fee_matches_reference_formula() {
+        let w    = setup();
+        let ds_c = DsClient::new(&w.env, &w.ds);
+
+        let fee_bps: i128    = 30;
+        let fee_factor: i128 = fee_bps * FP / 10_000; // 30 bps in FP units
+        ds_c.set_u128(
+            &w.admin,
+            &gmx_keys::position_fee_factor_key(&w.env, &w.market_tk, true),
+            &(fee_factor as u128),
+        );
+
+        let collateral_price = 2_000 * FP;
+        let size_delta_usd   = 1_000 * FP;
+        let market           = make_market(&w);
+        let position         = make_position(&w, size_delta_usd, ONE_TOKEN * 10, collateral_price);
+
+        let fees = get_position_fees(
+            &w.env, &w.ds, &market, &position,
+            collateral_price, size_delta_usd, true,
+        );
+
+        // Reference: fee_usd = size_delta × fee_factor / FP = $3
+        // fee_tokens = fee_usd × TOKEN_PRECISION / collateral_price
+        //            = 3*FP × TOKEN_PRECISION / (2000*FP) = 3 * TOKEN_PRECISION / 2000 = 15_000
+        let fee_usd      = gmx_math::mul_div_wide(&w.env, size_delta_usd, fee_factor, FP);
+        let expected_fee = gmx_math::mul_div_wide(&w.env, fee_usd, TOKEN_PRECISION, collateral_price);
+
+        assert_eq!(
+            fees.position_fee_amount, expected_fee,
+            "position fee must match reference formula: got {}, expected {}", fees.position_fee_amount, expected_fee
+        );
+        assert_eq!(fees.position_fee_amount, 15_000, "known numeric: 30bps of $1000 / $2000 = 0.0015 tokens = 15_000 units");
+    }
+
+    /// Reference: borrowing fee delta = (cum_now − cum_at_open) × size_in_tokens / FP
+    ///   cum_now      = FP / 5   (20%)
+    ///   cum_at_open  = 0
+    ///   size_tokens  = 3 tokens
+    ///   fee = 20% × 3 tokens = 0.6 tokens = 6_000_000 units
+    #[test]
+    fn differential_borrowing_fee_matches_reference_formula() {
+        let w    = setup();
+        let ds_c = DsClient::new(&w.env, &w.ds);
+
+        let cum_factor: i128 = FP / 5; // 20%
+        ds_c.set_u128(
+            &w.admin,
+            &gmx_keys::cumulative_borrowing_factor_key(&w.env, &w.market_tk, true),
+            &(cum_factor as u128),
+        );
+
+        let size_tokens  = 3 * ONE_TOKEN; // 3 tokens
+        let size_usd     = 6_000 * FP;    // 3 tokens @ $2 000
+        let market       = make_market(&w);
+        let mut position = make_position(&w, size_usd, size_tokens, 2_000 * FP);
+        position.borrowing_factor = 0; // opened when cum_factor was 0
+
+        let fees = get_position_fees(
+            &w.env, &w.ds, &market, &position,
+            2_000 * FP, size_usd, true,
+        );
+
+        // Reference: (FP/5 - 0) * 3 tokens / FP = 0.6 tokens = 6_000_000 units
+        let expected_borrow = gmx_math::mul_div_wide(&w.env, cum_factor, size_tokens, FP);
+        assert_eq!(
+            fees.borrowing_fee_amount, expected_borrow,
+            "borrowing fee must match reference: got {}, expected {}", fees.borrowing_fee_amount, expected_borrow
+        );
+        assert_eq!(fees.borrowing_fee_amount, 6_000_000, "known numeric: 20% of 3 tokens = 0.6 tokens = 6_000_000 units");
+    }
 }
