@@ -69,6 +69,9 @@ pub struct SignedPrice {
     pub signature: BytesN<64>,
     /// Index of the keeper's public key in data_store (0-based)
     pub keeper_index: u32,
+    /// Ledger sequence at which the keeper signed this price.
+    /// Must be within LEDGER_SEQ_WINDOW of the current ledger.
+    pub ledger_seq: u32,
 }
 
 // ─── Cross-contract clients ───────────────────────────────────────────────────
@@ -121,6 +124,14 @@ impl Oracle {
             .set(&InstanceKey::NetworkPassphrase, &network_passphrase);
     }
 
+    // ── Upgrade ──────────────────────────────────────────────────────────────
+
+    pub fn upgrade(env: Env, caller: Address, new_wasm_hash: BytesN<32>) {
+        caller.require_auth();
+        require_admin(&env, &caller);
+        env.deployer().update_current_contract_wasm(new_wasm_hash);
+    }
+
     // ── Keeper price submission ───────────────────────────────────────────────
 
     /// Submit a batch of keeper-signed prices.
@@ -141,7 +152,9 @@ impl Oracle {
             .instance()
             .get(&InstanceKey::DataStore)
             .unwrap();
-        let ledger_seq = env.ledger().sequence();
+        // Allow prices signed up to ~5 minutes ago (5s/ledger × 60 = 60 ledgers).
+        const LEDGER_SEQ_WINDOW: u32 = 60;
+        let current_seq = env.ledger().sequence();
 
         for i in 0..prices.len() {
             let sp = prices.get(i).unwrap();
@@ -158,11 +171,18 @@ impl Oracle {
                 panic_with_error!(&env, Error::StalePrice);
             }
 
-            // Verify ed25519 signature
+            // keeper_ledger_seq must be within LEDGER_SEQ_WINDOW of current
+            if sp.ledger_seq > current_seq
+                || current_seq.saturating_sub(sp.ledger_seq) > LEDGER_SEQ_WINDOW
+            {
+                panic_with_error!(&env, Error::StalePrice);
+            }
+
+            // Verify ed25519 signature using the keeper-provided ledger_seq
             let msg = build_price_message(
                 &env,
                 &passphrase,
-                ledger_seq,
+                sp.ledger_seq,
                 &sp.token,
                 sp.min_price,
                 sp.max_price,
@@ -285,6 +305,17 @@ impl Oracle {
 }
 
 // ─── Internal helpers ─────────────────────────────────────────────────────────
+
+fn require_admin(env: &Env, caller: &Address) {
+    let admin: Address = env
+        .storage()
+        .instance()
+        .get(&InstanceKey::Admin)
+        .unwrap_or_else(|| panic_with_error!(env, Error::NotInitialized));
+    if *caller != admin {
+        panic_with_error!(env, Error::Unauthorized);
+    }
+}
 
 fn require_order_keeper(env: &Env, caller: &Address) {
     let role_store: Address = env

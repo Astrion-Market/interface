@@ -155,6 +155,29 @@ impl WithdrawalHandler {
             .set(&InstanceKey::WithdrawalVault, &withdrawal_vault);
     }
 
+    pub fn upgrade(env: Env, new_wasm_hash: BytesN<32>) {
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&InstanceKey::Admin)
+            .unwrap_or_else(|| panic_with_error!(&env, Error::NotInitialized));
+        admin.require_auth();
+        env.deployer().update_current_contract_wasm(new_wasm_hash);
+    }
+
+    pub fn update_oracle(env: Env, caller: Address, new_oracle: Address) {
+        caller.require_auth();
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&InstanceKey::Admin)
+            .unwrap_or_else(|| panic_with_error!(&env, Error::NotInitialized));
+        if caller != admin {
+            panic_with_error!(&env, Error::Unauthorized);
+        }
+        env.storage().instance().set(&InstanceKey::Oracle, &new_oracle);
+    }
+
     // ── Create withdrawal ─────────────────────────────────────────────────────
 
     /// Pull LP tokens from caller into the withdrawal_vault and record the withdrawal.

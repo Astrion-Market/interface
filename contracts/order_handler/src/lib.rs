@@ -168,6 +168,19 @@ impl OrderHandler {
         env.deployer().update_current_contract_wasm(new_wasm_hash);
     }
 
+    pub fn update_oracle(env: Env, caller: Address, new_oracle: Address) {
+        caller.require_auth();
+        let admin: Address = env
+            .storage()
+            .instance()
+            .get(&InstanceKey::Admin)
+            .unwrap_or_else(|| panic_with_error!(&env, Error::NotInitialized));
+        if caller != admin {
+            panic_with_error!(&env, Error::Unauthorized);
+        }
+        env.storage().instance().set(&InstanceKey::Oracle, &new_oracle);
+    }
+
     /// Create a new order and record collateral in the order vault.
     ///
     /// # Collateral model (canonical — issue #47)
