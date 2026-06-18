@@ -1,20 +1,38 @@
-# Rust's output directory
-target
+# Dependencies
+node_modules
+.pnp
+.pnp.js
 
-# Local settings
-.soroban
-.stellar
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
-# Deployed contract addresses (network-specific, not for version control)
-.deployed/
+# Testing
+coverage
 
-# Private working documents (never commit)
-IMPLEMENTATION_PLAN.md
-issue.md
-issues_v2.md
-.github-issue-push-cursor
-.issues-progress.json
-push_issues.py
-push-github-issues.sh
-issue.md
-pr.md
+# Turbo
+.turbo
+
+# Vercel
+.vercel
+
+# Build Outputs
+dist
+.output
+.nitro
+.tanstack
+.vinxi
+
+# Debug
+npm-debug.log*
+
+# Misc
+.DS_Store
+*.pem
+
+# Local planning docs
+implementation-plan.md
+project-asset
