@@ -102,6 +102,15 @@ function formatHealthFactor(value: number | null | undefined) {
   return value.toFixed(2)
 }
 
+// Exact raw -> decimal string (no float rounding) for prefilling the amount.
+function rawToAmountString(raw: bigint, decimals: number) {
+  if (raw <= 0n) return ""
+  const padded = raw.toString().padStart(decimals + 1, "0")
+  const whole = padded.slice(0, padded.length - decimals)
+  const frac = padded.slice(padded.length - decimals).replace(/0+$/, "")
+  return frac ? `${whole}.${frac}` : whole
+}
+
 export function LendingTransactionDialog({
   action,
   market,
@@ -111,6 +120,9 @@ export function LendingTransactionDialog({
   const { address, connect, isConnecting } = useWallet()
   const queryClient = useQueryClient()
   const [amount, setAmount] = useState("")
+  // For a max withdraw/repay we submit by SHARES (not assets) so interest
+  // accruing between quote and submit can't leave dust behind.
+  const [useShares, setUseShares] = useState(false)
   const [view, setView] = useState<DialogView>("review")
   const [step, setStep] = useState<WriteTransactionStep>("idle")
   const currentStep = stepIndex(step)
@@ -188,6 +200,49 @@ export function LendingTransactionDialog({
   const projectedHealthFactor =
     projectedDebtUsd > 0 ? maxBorrowUsd / projectedDebtUsd : null
 
+  // The full amount the user can apply for this action, and whether a "max"
+  // submits by shares (withdraw/repay) to avoid interest-accrual dust.
+  const maxConfig = (() => {
+    const pos = account?.position
+    switch (action) {
+      case "withdraw":
+        return pos && account
+          ? { raw: pos.suppliedRaw, decimals: account.loanDecimals, shares: true }
+          : null
+      case "repay":
+        return pos && account
+          ? { raw: pos.borrowedRaw, decimals: account.loanDecimals, shares: true }
+          : null
+      case "withdraw_collateral":
+        return pos && account
+          ? {
+              raw: pos.collateralRaw,
+              decimals: account.collateralDecimals,
+              shares: false,
+            }
+          : null
+      case "supply":
+      case "supply_collateral":
+        return balance && token
+          ? { raw: balance.raw, decimals: token.decimals, shares: false }
+          : null
+      default:
+        return null
+    }
+  })()
+
+  function applyMax() {
+    if (!maxConfig) return
+    setAmount(rawToAmountString(maxConfig.raw, maxConfig.decimals))
+    setUseShares(maxConfig.shares)
+  }
+
+  function changeAmount(next: string) {
+    setAmount(next)
+    // Any manual edit invalidates a by-shares max.
+    if (useShares) setUseShares(false)
+  }
+
   const formattedAmount =
     amountNumber > 0 && Number.isFinite(amountNumber)
       ? `${amount} ${tokenSymbol}`
@@ -207,6 +262,7 @@ export function LendingTransactionDialog({
   useEffect(() => {
     if (open) return
     setAmount("")
+    setUseShares(false)
     setView("review")
     setStep("idle")
   }, [open])
@@ -231,6 +287,17 @@ export function LendingTransactionDialog({
       return
     }
 
+    // A by-shares max passes the position's shares so the contract burns the
+    // exact outstanding amount (assets is ignored when shares are set).
+    const maxShares =
+      useShares && account
+        ? action === "withdraw"
+          ? account.position.supplyShares
+          : action === "repay"
+            ? account.position.borrowShares
+            : undefined
+        : undefined
+
     setView("progress")
     mutation.mutate({
       userAddress: address,
@@ -238,6 +305,7 @@ export function LendingTransactionDialog({
       marketId: market.id,
       tokenContract,
       amount,
+      maxShares,
     })
   }
 
@@ -287,8 +355,19 @@ export function LendingTransactionDialog({
                   placeholder="0.00"
                   value={amount}
                   disabled={isBusy || isFinal}
-                  onChange={(event) => setAmount(event.target.value)}
+                  onChange={(event) => changeAmount(event.target.value)}
                 />
+                {maxConfig && maxConfig.raw > 0n ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={isBusy || isFinal}
+                    onClick={applyMax}
+                  >
+                    Max
+                  </Button>
+                ) : null}
                 <span className="min-w-12 text-right text-[12px] font-medium text-muted-foreground">
                   {tokenSymbol}
                 </span>
