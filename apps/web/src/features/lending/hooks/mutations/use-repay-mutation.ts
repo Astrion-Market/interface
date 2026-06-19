@@ -1,18 +1,18 @@
-import { corePoolWrite, lendingAmountArgs } from "./lending-write-inputs"
+import { repayArgs } from "./lending-write-inputs"
 import { useLendingWriteMutation } from "./use-lending-write-mutation"
-import type { LendingWriteInput } from "./lending-write-inputs"
+import type { MarketWriteInput } from "./lending-write-inputs"
 import type { WriteTransactionStep } from "../../lib/soroban"
 
 export function useRepayMutation(
   onStep?: (step: WriteTransactionStep) => void
 ) {
-  return useLendingWriteMutation<LendingWriteInput>({
+  return useLendingWriteMutation<MarketWriteInput>({
     mutationKey: ["lending", "write", "repay"],
     method: "repay",
-    contractId: corePoolWrite.contractId,
+    getContractId: (input) => input.marketAddress,
     getUserAddress: (input) => input.userAddress,
     getMarketId: (input) => input.marketId,
-    getArgs: lendingAmountArgs,
+    getArgs: repayArgs,
     onStep,
     toastLabel: "Repay",
   })

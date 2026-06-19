@@ -1,30 +1,5 @@
-import { CONTRACTS, TOKEN_BY_CONTRACT } from "../../lib/astrion-contracts"
+import { TOKEN_BY_CONTRACT } from "../../lib/astrion-contracts"
 import { addressArg, i128Arg } from "../../lib/soroban"
-
-// --- Legacy CorePool input (still used by not-yet-migrated hooks) -----------
-export type LendingWriteInput = {
-  userAddress: string
-  marketId: string
-  amount: string
-}
-export type CollateralWriteInput = Omit<LendingWriteInput, "amount">
-
-export const corePoolWrite = {
-  contractId: CONTRACTS.corePool,
-}
-
-export function lendingAmountArgs(input: LendingWriteInput) {
-  return [
-    addressArg(input.userAddress),
-    addressArg(input.marketId),
-    i128Arg(parseTokenAmount(input.amount, input.marketId)),
-  ]
-}
-
-export function lendingCollateralArgs(input: CollateralWriteInput) {
-  return [addressArg(input.userAddress), addressArg(input.marketId)]
-}
-// ---------------------------------------------------------------------------
 
 /**
  * Input for every isolated-market write. Unlike the old CorePool model, the

@@ -148,8 +148,17 @@ export function MarketCard({ market }: Props) {
         {/* Actions */}
         <div className="flex gap-2 border-t border-border px-4 py-3">
           <Button className="flex-1" onClick={() => setAction("supply")}>
-            Supply
+            {isIsolated ? "Lend" : "Supply"}
           </Button>
+          {isIsolated ? (
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setAction("supply_collateral")}
+            >
+              Collateral
+            </Button>
+          ) : null}
           <Button
             variant="outline"
             className="flex-1"

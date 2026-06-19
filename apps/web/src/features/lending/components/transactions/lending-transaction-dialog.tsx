@@ -18,7 +18,9 @@ import { TOKEN_BY_CONTRACT } from "../../lib/astrion-contracts"
 import { useBorrowMutation } from "../../hooks/mutations/use-borrow-mutation"
 import { useRepayMutation } from "../../hooks/mutations/use-repay-mutation"
 import { useSupplyMutation } from "../../hooks/mutations/use-supply-mutation"
+import { useSupplyCollateralMutation } from "../../hooks/mutations/use-supply-collateral-mutation"
 import { useWithdrawMutation } from "../../hooks/mutations/use-withdraw-mutation"
+import { useWithdrawCollateralMutation } from "../../hooks/mutations/use-withdraw-collateral-mutation"
 import { useLendingMarkets } from "../../hooks/queries/use-lending-markets"
 import { useLendingPortfolio } from "../../hooks/queries/use-lending-portfolio"
 import { lendingQueryKeys } from "../../hooks/queries/query-keys"
@@ -27,11 +29,26 @@ import { formatUsd } from "../../lib/stellar-format"
 import type { WriteTransactionStep } from "../../lib/soroban"
 import type { Market } from "../../types/lending"
 
-export type LendingAction = "supply" | "withdraw" | "borrow" | "repay"
+export type LendingAction =
+  | "supply"
+  | "withdraw"
+  | "borrow"
+  | "repay"
+  | "supply_collateral"
+  | "withdraw_collateral"
 
 type Props = {
   action: LendingAction
-  market: Pick<Market, "id" | "symbol" | "name">
+  market: Pick<
+    Market,
+    | "id"
+    | "symbol"
+    | "name"
+    | "loanAsset"
+    | "collateralAsset"
+    | "loanSymbol"
+    | "collateralSymbol"
+  >
   open: boolean
   onOpenChange: (open: boolean) => void
 }
@@ -39,18 +56,30 @@ type Props = {
 type DialogView = "review" | "progress"
 
 const actionCopy: Record<LendingAction, { title: string; cta: string }> = {
-  supply: { title: "Supply asset", cta: "Confirm supply" },
-  withdraw: { title: "Withdraw asset", cta: "Confirm withdraw" },
+  supply: { title: "Lend asset", cta: "Confirm lend" },
+  withdraw: { title: "Withdraw lent asset", cta: "Confirm withdraw" },
   borrow: { title: "Borrow asset", cta: "Confirm borrow" },
   repay: { title: "Repay debt", cta: "Confirm repay" },
+  supply_collateral: { title: "Add collateral", cta: "Confirm collateral" },
+  withdraw_collateral: {
+    title: "Withdraw collateral",
+    cta: "Confirm withdraw",
+  },
 }
 
 const actionVerb: Record<LendingAction, string> = {
-  supply: "Supplying",
+  supply: "Lending",
   withdraw: "Withdrawing",
   borrow: "Borrowing",
   repay: "Repaying",
+  supply_collateral: "Adding collateral",
+  withdraw_collateral: "Withdrawing collateral",
 }
+
+const collateralActions: ReadonlySet<LendingAction> = new Set<LendingAction>([
+  "supply_collateral",
+  "withdraw_collateral",
+])
 
 const stepLabels: Array<{ step: WriteTransactionStep; label: string }> = [
   { step: "preparing", label: "Preparing" },
@@ -81,12 +110,21 @@ export function LendingTransactionDialog({
   const [view, setView] = useState<DialogView>("review")
   const [step, setStep] = useState<WriteTransactionStep>("idle")
   const currentStep = stepIndex(step)
-  const token = TOKEN_BY_CONTRACT[market.id]
+  // Resolve which token this action moves: collateral asset for collateral
+  // actions, loan asset otherwise. Legacy core markets fall back to market.id.
+  const isCollateralAction = collateralActions.has(action)
+  const tokenContract = isCollateralAction
+    ? (market.collateralAsset ?? market.id)
+    : (market.loanAsset ?? market.id)
+  const tokenSymbol =
+    (isCollateralAction ? market.collateralSymbol : market.loanSymbol) ??
+    market.symbol
+  const token = TOKEN_BY_CONTRACT[tokenContract]
   const {
     data: balance,
     error: balanceError,
     isFetching: isBalanceFetching,
-  } = useTokenBalance(address, market.id)
+  } = useTokenBalance(address, tokenContract)
   const { data: markets } = useLendingMarkets()
   const { data: portfolio, isFetching: isPortfolioFetching } =
     useLendingPortfolio(address)
@@ -94,7 +132,16 @@ export function LendingTransactionDialog({
   const withdraw = useWithdrawMutation(setStep)
   const borrow = useBorrowMutation(setStep)
   const repay = useRepayMutation(setStep)
-  const mutation = { supply, withdraw, borrow, repay }[action]
+  const supplyCollateral = useSupplyCollateralMutation(setStep)
+  const withdrawCollateral = useWithdrawCollateralMutation(setStep)
+  const mutation = {
+    supply,
+    withdraw,
+    borrow,
+    repay,
+    supply_collateral: supplyCollateral,
+    withdraw_collateral: withdrawCollateral,
+  }[action]
   const copy = actionCopy[action]
   const isFinal = step === "confirmed"
   const isBusy = mutation.isPending || isConnecting
@@ -118,8 +165,8 @@ export function LendingTransactionDialog({
       : null
   const formattedAmount =
     amountNumber > 0 && Number.isFinite(amountNumber)
-      ? `${amount} ${market.symbol}`
-      : `0 ${market.symbol}`
+      ? `${amount} ${tokenSymbol}`
+      : `0 ${tokenSymbol}`
   const formattedAmountValue =
     oraclePrice > 0 ? formatUsd(amountValueUsd) : "USD value unavailable"
   const showBorrowPreview = action === "borrow" && view === "review"
@@ -162,7 +209,9 @@ export function LendingTransactionDialog({
     setView("progress")
     mutation.mutate({
       userAddress: address,
+      marketAddress: market.id,
       marketId: market.id,
+      tokenContract,
       amount,
     })
   }
@@ -203,7 +252,7 @@ export function LendingTransactionDialog({
                       ? "Loading"
                       : balanceError
                         ? "Unavailable"
-                        : (balance?.formatted ?? `0 ${market.symbol}`)
+                        : (balance?.formatted ?? `0 ${tokenSymbol}`)
                     : "Connect wallet"}
                 </span>
               </div>
@@ -216,13 +265,13 @@ export function LendingTransactionDialog({
                   onChange={(event) => setAmount(event.target.value)}
                 />
                 <span className="min-w-12 text-right text-[12px] font-medium text-muted-foreground">
-                  {market.symbol}
+                  {tokenSymbol}
                 </span>
               </div>
               {action === "borrow" ? (
                 <p className="mt-1 text-right text-[11px] text-muted-foreground">
                   {oraclePrice > 0
-                    ? `${formatUsd(amountValueUsd)} at ${formatUsd(oraclePrice)} / ${market.symbol}`
+                    ? `${formatUsd(amountValueUsd)} at ${formatUsd(oraclePrice)} / ${tokenSymbol}`
                     : "USD value unavailable"}
                 </p>
               ) : null}
