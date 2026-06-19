@@ -13,4 +13,10 @@ export const lendingQueryKeys = {
     [...lendingQueryKeys.account(address), "portfolio"] as const,
   portfolioSummary: (address: string) =>
     [...lendingQueryKeys.account(address), "portfolio-summary"] as const,
+  isolatedPosition: (address: string, marketId: string) =>
+    [
+      ...lendingQueryKeys.account(address),
+      "isolated-position",
+      marketId,
+    ] as const,
 }

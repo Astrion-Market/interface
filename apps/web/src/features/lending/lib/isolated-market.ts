@@ -238,3 +238,46 @@ export async function getIsolatedPosition(
       borrowedRaw > 0n && health !== null ? wadToNumber(health) : null,
   }
 }
+
+export type IsolatedAccount = {
+  position: IsolatedPosition
+  // WAD oracle prices for each leg, used for capacity/health math. The market
+  // normalizes value as `amount * price_wad / 10^decimals`.
+  loanPriceWad: bigint
+  collateralPriceWad: bigint
+  loanDecimals: number
+  collateralDecimals: number
+  lltv: number // percent (e.g. 70)
+}
+
+/**
+ * A user's position in a market plus the prices and parameters needed to do
+ * borrow-capacity / health math client-side (loan and collateral are different
+ * assets, so both prices are required).
+ */
+export async function getIsolatedAccount(
+  market: string,
+  user: string
+): Promise<IsolatedAccount | null> {
+  const params = await getParams(market)
+  if (!params) return null
+  const loan = TOKEN_BY_CONTRACT[params.loan_asset]
+  const collateral = TOKEN_BY_CONTRACT[params.collateral_asset]
+  if (!loan || !collateral) return null
+
+  const [position, loanPrice, collateralPrice] = await Promise.all([
+    getIsolatedPosition(market, user),
+    getPrice(params.loan_asset).catch(() => null),
+    getPrice(params.collateral_asset).catch(() => null),
+  ])
+  if (!position) return null
+
+  return {
+    position,
+    loanPriceWad: loanPrice?.price_wad ?? 0n,
+    collateralPriceWad: collateralPrice?.price_wad ?? 0n,
+    loanDecimals: loan.decimals,
+    collateralDecimals: collateral.decimals,
+    lltv: wadToPercent(params.lltv),
+  }
+}
