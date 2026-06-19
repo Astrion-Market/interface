@@ -1,4 +1,4 @@
-type FilterType = "all" | "core" | "isolated"
+type FilterType = "all" | "isolated"
 
 type Props = {
   search: string
@@ -9,7 +9,6 @@ type Props = {
 
 const FILTERS: { label: string; value: FilterType }[] = [
   { label: "All Markets", value: "all" },
-  { label: "Core Markets", value: "core" },
   { label: "Isolated Risk", value: "isolated" },
 ]
 

@@ -8,7 +8,7 @@ import { MarketCard } from "./market-card"
 import { MarketFilters } from "./market-filters"
 import type { Market } from "../../types/lending"
 
-type FilterType = "all" | "core" | "isolated"
+type FilterType = "all" | "isolated"
 
 function filterMarkets(
   markets: Array<Market>,
@@ -36,7 +36,6 @@ export function MarketsPage() {
   } = useLendingMarkets()
 
   const filtered = filterMarkets(markets, search, filter)
-  const coreMarkets = markets.filter((m) => m.type === "core")
   const isolatedMarkets = markets.filter((m) => m.type === "isolated")
   const totalBorrowed = markets.length === 0 ? "—" : `${markets.length} live`
 
@@ -57,9 +56,9 @@ export function MarketsPage() {
           accent="blue"
         />
         <MetricCard
-          label="Core Markets"
-          value={coreMarkets.length.toString()}
-          sub="Shared liquidity"
+          label="Total Markets"
+          value={markets.length.toString()}
+          sub="Live on testnet"
         />
         <MetricCard
           label="Isolated Markets"
