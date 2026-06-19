@@ -22,10 +22,14 @@ import { useSupplyCollateralMutation } from "../../hooks/mutations/use-supply-co
 import { useWithdrawMutation } from "../../hooks/mutations/use-withdraw-mutation"
 import { useWithdrawCollateralMutation } from "../../hooks/mutations/use-withdraw-collateral-mutation"
 import { useLendingMarkets } from "../../hooks/queries/use-lending-markets"
-import { useLendingPortfolio } from "../../hooks/queries/use-lending-portfolio"
+import { useIsolatedPosition } from "../../hooks/queries/use-isolated-position"
 import { lendingQueryKeys } from "../../hooks/queries/query-keys"
 import { useTokenBalance } from "../../hooks/queries/use-token-balance"
-import { formatUsd } from "../../lib/stellar-format"
+import {
+  formatUsd,
+  tokenAmountToNumber,
+  wadToNumber,
+} from "../../lib/stellar-format"
 import type { WriteTransactionStep } from "../../lib/soroban"
 import type { Market } from "../../types/lending"
 
@@ -126,8 +130,10 @@ export function LendingTransactionDialog({
     isFetching: isBalanceFetching,
   } = useTokenBalance(address, tokenContract)
   const { data: markets } = useLendingMarkets()
-  const { data: portfolio, isFetching: isPortfolioFetching } =
-    useLendingPortfolio(address)
+  const { data: account, isFetching: isAccountFetching } = useIsolatedPosition(
+    address,
+    market.id
+  )
   const supply = useSupplyMutation(setStep)
   const withdraw = useWithdrawMutation(setStep)
   const borrow = useBorrowMutation(setStep)
@@ -146,29 +152,48 @@ export function LendingTransactionDialog({
   const isFinal = step === "confirmed"
   const isBusy = mutation.isPending || isConnecting
   const activeMarket = markets?.find((item) => item.id === market.id)
-  const oraclePrice = activeMarket?.oraclePrice ?? 0
+  // Price (USD) of the token this action moves. Borrow/lend use the loan asset,
+  // collateral actions use the collateral asset — they are different assets, so
+  // the market-row oracle price (collateral) is only a fallback for display.
+  const movedTokenPrice = account
+    ? wadToNumber(
+        isCollateralAction ? account.collateralPriceWad : account.loanPriceWad
+      )
+    : (activeMarket?.oraclePrice ?? 0)
   const amountNumber = Number(amount)
   const amountValueUsd =
     Number.isFinite(amountNumber) && amountNumber > 0
-      ? amountNumber * oraclePrice
+      ? amountNumber * movedTokenPrice
       : 0
-  const summary = portfolio?.summary
-  const projectedDebtUsd =
-    action === "borrow" ? (summary?.totalDebtUsd ?? 0) + amountValueUsd : 0
-  const projectedAvailableUsd =
-    action === "borrow"
-      ? Math.max(0, (summary?.borrowCapacityUsd ?? 0) - projectedDebtUsd)
-      : 0
+
+  // Per-market borrow capacity / health. In Morpho health = collateral_value *
+  // lltv / debt_value, valuing each leg by its own oracle price.
+  const lltvFraction = (account?.lltv ?? activeMarket?.lltv ?? 0) / 100
+  const collateralUsd = account
+    ? tokenAmountToNumber(
+        account.position.collateralRaw,
+        account.collateralDecimals
+      ) * wadToNumber(account.collateralPriceWad)
+    : 0
+  const debtUsd = account
+    ? tokenAmountToNumber(account.position.borrowedRaw, account.loanDecimals) *
+      wadToNumber(account.loanPriceWad)
+    : 0
+  const maxBorrowUsd = collateralUsd * lltvFraction
+  const availableUsd = Math.max(0, maxBorrowUsd - debtUsd)
+  const currentHealthFactor = account?.position.healthFactor ?? null
+  const borrowValueUsd = action === "borrow" ? amountValueUsd : 0
+  const projectedDebtUsd = debtUsd + borrowValueUsd
+  const projectedAvailableUsd = Math.max(0, maxBorrowUsd - projectedDebtUsd)
   const projectedHealthFactor =
-    action === "borrow" && projectedDebtUsd > 0
-      ? (summary?.liquidationCapacityUsd ?? 0) / projectedDebtUsd
-      : null
+    projectedDebtUsd > 0 ? maxBorrowUsd / projectedDebtUsd : null
+
   const formattedAmount =
     amountNumber > 0 && Number.isFinite(amountNumber)
       ? `${amount} ${tokenSymbol}`
       : `0 ${tokenSymbol}`
   const formattedAmountValue =
-    oraclePrice > 0 ? formatUsd(amountValueUsd) : "USD value unavailable"
+    movedTokenPrice > 0 ? formatUsd(amountValueUsd) : "USD value unavailable"
   const showBorrowPreview = action === "borrow" && view === "review"
 
   const description = useMemo(() => {
@@ -270,8 +295,8 @@ export function LendingTransactionDialog({
               </div>
               {action === "borrow" ? (
                 <p className="mt-1 text-right text-[11px] text-muted-foreground">
-                  {oraclePrice > 0
-                    ? `${formatUsd(amountValueUsd)} at ${formatUsd(oraclePrice)} / ${tokenSymbol}`
+                  {movedTokenPrice > 0
+                    ? `${formatUsd(amountValueUsd)} at ${formatUsd(movedTokenPrice)} / ${tokenSymbol}`
                     : "USD value unavailable"}
                 </p>
               ) : null}
@@ -285,14 +310,14 @@ export function LendingTransactionDialog({
               {
                 id: "health-factor",
                 label: "Health Factor",
-                value: isPortfolioFetching
+                value: isAccountFetching
                   ? "Loading"
-                  : formatHealthFactor(summary?.healthFactor),
+                  : formatHealthFactor(currentHealthFactor),
               },
               {
                 id: "projected-health-factor",
                 label: "After Borrow",
-                value: isPortfolioFetching
+                value: isAccountFetching
                   ? "Loading"
                   : formatHealthFactor(projectedHealthFactor),
                 accent:
@@ -302,14 +327,14 @@ export function LendingTransactionDialog({
               {
                 id: "available-to-borrow",
                 label: "Available",
-                value: isPortfolioFetching
+                value: isAccountFetching
                   ? "Loading"
-                  : (summary?.availableToBorrow ?? "$0.00"),
+                  : formatUsd(availableUsd),
               },
               {
                 id: "projected-available",
                 label: "After Borrow",
-                value: isPortfolioFetching
+                value: isAccountFetching
                   ? "Loading"
                   : formatUsd(projectedAvailableUsd),
               },
@@ -321,7 +346,7 @@ export function LendingTransactionDialog({
               {
                 id: "projected-debt",
                 label: "Total Debt",
-                value: isPortfolioFetching
+                value: isAccountFetching
                   ? "Loading"
                   : formatUsd(projectedDebtUsd),
               },
@@ -362,7 +387,7 @@ export function LendingTransactionDialog({
                       Health Factor
                     </p>
                     <p className="mt-0.5 font-mono font-semibold text-foreground">
-                      {formatHealthFactor(summary?.healthFactor)}
+                      {formatHealthFactor(currentHealthFactor)}
                     </p>
                   </div>
                   <div>
