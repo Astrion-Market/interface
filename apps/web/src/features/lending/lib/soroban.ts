@@ -7,13 +7,14 @@ import {
   nativeToScVal,
   rpc,
   scValToNative,
+  xdr,
 } from "@stellar/stellar-sdk"
 import {
   ADMIN_TREASURY,
   SOROBAN_NETWORK_PASSPHRASE,
   SOROBAN_RPC_URL,
 } from "./astrion-contracts"
-import type { Transaction, xdr } from "@stellar/stellar-sdk"
+import type { Transaction } from "@stellar/stellar-sdk"
 
 const server = new rpc.Server(SOROBAN_RPC_URL)
 
@@ -33,6 +34,27 @@ export function u64Arg(value: bigint | number | string): ScArg {
 
 export function symbolArg(value: string): ScArg {
   return nativeToScVal(value, { type: "symbol" })
+}
+
+export function boolArg(value: boolean): ScArg {
+  return nativeToScVal(value, { type: "bool" })
+}
+
+/** Encode a 32-byte value (e.g. a market id / salt) given as a 64-char hex string. */
+export function bytesN32Arg(hex: string): ScArg {
+  const clean = hex.startsWith("0x") ? hex.slice(2) : hex
+  if (clean.length !== 64 || /[^0-9a-fA-F]/.test(clean)) {
+    throw new Error("Expected a 32-byte hex string")
+  }
+  return xdr.ScVal.scvBytes(Buffer.from(clean, "hex"))
+}
+
+/** Decode an `(i128, i128)` tuple return (e.g. from `withdraw`/`repay`). */
+export function decodeI128Tuple(value: unknown): [bigint, bigint] {
+  if (Array.isArray(value) && value.length === 2) {
+    return [BigInt(value[0]), BigInt(value[1])]
+  }
+  throw new Error("Expected an (i128, i128) tuple")
 }
 
 function buildReadTransaction(

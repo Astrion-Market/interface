@@ -1,20 +1,19 @@
-import { supplyArgs } from "./lending-write-inputs"
+import { withdrawCollateralArgs } from "./lending-write-inputs"
 import { useLendingWriteMutation } from "./use-lending-write-mutation"
 import type { MarketWriteInput } from "./lending-write-inputs"
 import type { WriteTransactionStep } from "../../lib/soroban"
 
-// Lend the loan asset into an isolated market (earns yield; not collateral).
-export function useSupplyMutation(
+export function useWithdrawCollateralMutation(
   onStep?: (step: WriteTransactionStep) => void
 ) {
   return useLendingWriteMutation<MarketWriteInput>({
-    mutationKey: ["lending", "write", "supply"],
-    method: "supply",
+    mutationKey: ["lending", "write", "withdraw-collateral"],
+    method: "withdraw_collateral",
     getContractId: (input) => input.marketAddress,
     getUserAddress: (input) => input.userAddress,
     getMarketId: (input) => input.marketId,
-    getArgs: supplyArgs,
+    getArgs: withdrawCollateralArgs,
     onStep,
-    toastLabel: "Lend",
+    toastLabel: "Withdraw collateral",
   })
 }

@@ -1,6 +1,8 @@
 export type MarketType = "core" | "isolated"
 
 export type Market = {
+  // For isolated markets this is the market CONTRACT address; for legacy core
+  // markets it is the asset address.
   id: string
   symbol: string
   name: string
@@ -11,6 +13,8 @@ export type Market = {
   totalSupplied: string
   totalBorrowed: string
   availableLiquidity: string
+  // Isolated markets expose a single LLTV; `ltv` and `liquidationThreshold` are
+  // both mirrored from it so existing UI keeps working.
   ltv: number
   liquidationThreshold: number
   liquidationPenalty: number
@@ -18,6 +22,16 @@ export type Market = {
   oraclePrice?: number
   oracleUpdated: string
   borrowCap?: string
+  // Morpho isolated-market fields (undefined for legacy core markets). An
+  // isolated market has two distinct tokens: the loan asset (lent/borrowed) and
+  // the collateral asset (posted, earns nothing).
+  loanAsset?: string
+  collateralAsset?: string
+  loanSymbol?: string
+  collateralSymbol?: string
+  loanDecimals?: number
+  collateralDecimals?: number
+  lltv?: number
 }
 
 export type Position = {
@@ -30,8 +44,12 @@ export type Position = {
   borrowedUsd: string
   supplyApy: number
   borrowApy: number
+  // In Morpho "has collateral" is `collateral > 0`, not a user toggle.
   collateralEnabled: boolean
   healthFactor: number | null
+  // Posted collateral, separate from lent supply (isolated markets).
+  collateral?: string
+  collateralUsd?: string
 }
 
 export type PortfolioSummary = {

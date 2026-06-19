@@ -12,7 +12,11 @@ import type { xdr } from "@stellar/stellar-sdk"
 type UseLendingWriteMutationOptions<TInput> = {
   mutationKey: ReadonlyArray<string>
   method: string
-  contractId: string
+  // Static contract (legacy CorePool hooks) ...
+  contractId?: string
+  // ... or resolved per-input. In Morpho this is the market CONTRACT address,
+  // not a shared pool. Exactly one of `contractId` / `getContractId` is set.
+  getContractId?: (input: TInput) => string
   getUserAddress: (input: TInput) => string
   getMarketId?: (input: TInput) => string
   getArgs: (input: TInput) => Array<xdr.ScVal>
@@ -24,6 +28,7 @@ export function useLendingWriteMutation<TInput>({
   mutationKey,
   method,
   contractId,
+  getContractId,
   getUserAddress,
   getMarketId,
   getArgs,
@@ -40,9 +45,14 @@ export function useLendingWriteMutation<TInput>({
         throw new Error("Connect your wallet first")
       }
 
+      const target = getContractId?.(input) ?? contractId
+      if (!target) {
+        throw new Error("No contract target for write")
+      }
+
       return sendWriteContract({
         sourceAddress: userAddress,
-        contractId,
+        contractId: target,
         method,
         args: getArgs(input),
         signTransaction: (xdr) => signStellarTransaction(xdr, userAddress),

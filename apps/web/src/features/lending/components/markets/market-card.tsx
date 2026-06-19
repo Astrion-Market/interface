@@ -86,22 +86,45 @@ export function MarketCard({ market }: Props) {
               {market.availableLiquidity}
             </p>
           </div>
-          <div>
-            <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
-              LTV
-            </p>
-            <p className="mt-0.5 font-mono text-[12px] text-foreground tabular-nums">
-              {market.ltv}%
-            </p>
-          </div>
-          <div>
-            <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
-              Liq. Threshold
-            </p>
-            <p className="mt-0.5 font-mono text-[12px] text-foreground tabular-nums">
-              {market.liquidationThreshold}%
-            </p>
-          </div>
+          {isIsolated ? (
+            <>
+              <div>
+                <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                  LLTV
+                </p>
+                <p className="mt-0.5 font-mono text-[12px] text-foreground tabular-nums">
+                  {market.lltv ?? market.ltv}%
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                  Liq. Penalty
+                </p>
+                <p className="mt-0.5 font-mono text-[12px] text-foreground tabular-nums">
+                  {market.liquidationPenalty.toFixed(2)}%
+                </p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                  LTV
+                </p>
+                <p className="mt-0.5 font-mono text-[12px] text-foreground tabular-nums">
+                  {market.ltv}%
+                </p>
+              </div>
+              <div>
+                <p className="text-[10px] tracking-wider text-muted-foreground uppercase">
+                  Liq. Threshold
+                </p>
+                <p className="mt-0.5 font-mono text-[12px] text-foreground tabular-nums">
+                  {market.liquidationThreshold}%
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         {/* Utilization bar */}
@@ -125,8 +148,17 @@ export function MarketCard({ market }: Props) {
         {/* Actions */}
         <div className="flex gap-2 border-t border-border px-4 py-3">
           <Button className="flex-1" onClick={() => setAction("supply")}>
-            Supply
+            {isIsolated ? "Lend" : "Supply"}
           </Button>
+          {isIsolated ? (
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setAction("supply_collateral")}
+            >
+              Collateral
+            </Button>
+          ) : null}
           <Button
             variant="outline"
             className="flex-1"
