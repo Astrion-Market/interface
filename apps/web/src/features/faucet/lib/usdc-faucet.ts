@@ -81,7 +81,10 @@ async function mintWithStellarCli(
   const { execFile } = await import("node:child_process")
   const { promisify } = await import("node:util")
   const execFileAsync = promisify(execFile)
-  const source = process.env.ASTRION_FAUCET_SOURCE ?? "deployer"
+  // The test tokens are owned by steins-testnet and `mint` is owner-only, so the
+  // faucet must sign as that key. Override with ASTRION_FAUCET_SOURCE only if the
+  // token owner changes; the named key must exist in the server's stellar keystore.
+  const source = process.env.ASTRION_FAUCET_SOURCE ?? "steins-testnet"
   const faucetAsset = FAUCET_ASSETS[asset]
   const rawAmount = decimalAmountToRaw(faucetAsset.amount, faucetAsset.decimals)
 
