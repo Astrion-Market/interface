@@ -47,7 +47,14 @@ export function BorrowPositionsTable({ positions }: Props) {
           <table className="w-full min-w-[680px] text-[13px]">
             <thead>
               <tr className="bg-muted/20 text-left">
-                {["Asset", "Debt", "APY", "Health Factor", ""].map((h) => (
+                {[
+                  "Asset",
+                  "Debt",
+                  "Collateral",
+                  "APY",
+                  "Health Factor",
+                  "",
+                ].map((h) => (
                   <th
                     key={h}
                     className="px-4 py-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
@@ -71,6 +78,18 @@ export function BorrowPositionsTable({ positions }: Props) {
                     <span className="text-muted-foreground">
                       ({p.borrowedUsd})
                     </span>
+                  </td>
+                  <td className="px-4 py-3 tabular-nums">
+                    {p.collateralEnabled ? (
+                      <span className="text-foreground">
+                        {p.collateral}{" "}
+                        <span className="text-muted-foreground">
+                          ({p.collateralUsd})
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 tabular-nums text-amber-500">
                     {p.borrowApy.toFixed(2)}%
@@ -112,6 +131,32 @@ export function BorrowPositionsTable({ positions }: Props) {
                       >
                         Borrow More
                       </Button>
+                      <Button
+                        variant="outline"
+                        size="xs"
+                        onClick={() =>
+                          setSelected({
+                            action: "supply_collateral",
+                            position: p,
+                          })
+                        }
+                      >
+                        + Collateral
+                      </Button>
+                      {p.collateralEnabled ? (
+                        <Button
+                          variant="outline"
+                          size="xs"
+                          onClick={() =>
+                            setSelected({
+                              action: "withdraw_collateral",
+                              position: p,
+                            })
+                          }
+                        >
+                          − Collateral
+                        </Button>
+                      ) : null}
                     </div>
                   </td>
                 </tr>
@@ -127,7 +172,15 @@ export function BorrowPositionsTable({ positions }: Props) {
           market={{
             id: selected.position.marketId,
             symbol: selected.position.symbol,
-            name: selected.position.symbol,
+            name:
+              selected.position.collateralSymbol &&
+              selected.position.loanSymbol
+                ? `${selected.position.collateralSymbol} / ${selected.position.loanSymbol}`
+                : selected.position.symbol,
+            loanAsset: selected.position.loanAsset,
+            collateralAsset: selected.position.collateralAsset,
+            loanSymbol: selected.position.loanSymbol,
+            collateralSymbol: selected.position.collateralSymbol,
           }}
           open={Boolean(selected)}
           onOpenChange={(open) => {

@@ -10,7 +10,11 @@ export function PortfolioPage() {
   const { data, error, isFetching } = useLendingPortfolio(address)
   const positions = data?.positions ?? []
   const supplyPositions = positions.filter((p) => parseFloat(p.supplied) > 0)
-  const borrowPositions = positions.filter((p) => parseFloat(p.borrowed) > 0)
+  // A borrower posts collateral then borrows — surface collateral-only
+  // positions (collateral > 0, no debt yet) in the borrow section too.
+  const borrowPositions = positions.filter(
+    (p) => parseFloat(p.borrowed) > 0 || p.collateralEnabled
+  )
 
   return (
     <div className="px-4 py-5 sm:px-6 sm:py-6">

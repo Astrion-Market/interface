@@ -74,12 +74,17 @@ export function SupplyPositionsTable({ positions }: Props) {
                   <td className="px-4 py-3 tabular-nums text-emerald-500">
                     {p.supplyApy.toFixed(2)}%
                   </td>
-                  <td className="px-4 py-3">
-                    <span
-                      className={`text-[11px] font-medium ${p.collateralEnabled ? "text-emerald-500" : "text-muted-foreground"}`}
-                    >
-                      {p.collateralEnabled ? "Enabled" : "Disabled"}
-                    </span>
+                  <td className="px-4 py-3 tabular-nums">
+                    {p.collateralEnabled ? (
+                      <span className="text-foreground">
+                        {p.collateral}{" "}
+                        <span className="text-muted-foreground">
+                          ({p.collateralUsd})
+                        </span>
+                      </span>
+                    ) : (
+                      <span className="text-muted-foreground">—</span>
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex gap-1.5">
@@ -116,7 +121,15 @@ export function SupplyPositionsTable({ positions }: Props) {
           market={{
             id: selected.position.marketId,
             symbol: selected.position.symbol,
-            name: selected.position.symbol,
+            name:
+              selected.position.collateralSymbol &&
+              selected.position.loanSymbol
+                ? `${selected.position.collateralSymbol} / ${selected.position.loanSymbol}`
+                : selected.position.symbol,
+            loanAsset: selected.position.loanAsset,
+            collateralAsset: selected.position.collateralAsset,
+            loanSymbol: selected.position.loanSymbol,
+            collateralSymbol: selected.position.collateralSymbol,
           }}
           open={Boolean(selected)}
           onOpenChange={(open) => {
