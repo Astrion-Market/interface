@@ -50,6 +50,13 @@ export type Position = {
   // Posted collateral, separate from lent supply (isolated markets).
   collateral?: string
   collateralUsd?: string
+  // Routing for the transaction dialog: the market is isolated, so an action
+  // must know the loan vs collateral token (marketId is the market CONTRACT, not
+  // a token). Undefined for legacy core positions.
+  loanAsset?: string
+  collateralAsset?: string
+  loanSymbol?: string
+  collateralSymbol?: string
 }
 
 export type PortfolioSummary = {
