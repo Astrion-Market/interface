@@ -4,6 +4,7 @@ import { Toaster } from "sonner"
 import appCss from "@workspace/ui/globals.css?url"
 import { ThemeProvider } from "../ui/theme-provider"
 import { WalletProvider } from "../features/wallet/wallet-provider"
+import { NotFound } from "../ui/not-found"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -140,14 +141,7 @@ export const Route = createRootRoute({
       { rel: "stylesheet", href: appCss },
     ],
   }),
-  notFoundComponent: () => (
-    <main className="mx-auto max-w-330 p-4 pt-16">
-      <h1 className="text-2xl font-medium text-foreground">404</h1>
-      <p className="mt-2 text-muted-foreground">
-        The requested page could not be found.
-      </p>
-    </main>
-  ),
+  notFoundComponent: NotFound,
   shellComponent: RootDocument,
 })
 

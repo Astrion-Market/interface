@@ -13,6 +13,7 @@ import { Route as TradeRouteImport } from './routes/trade'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as PitchDeckRouteImport } from './routes/pitch-deck'
 import { Route as MarketsRouteImport } from './routes/markets'
 import { Route as IsolatedMarketsRouteImport } from './routes/isolated-markets'
 import { Route as GovernanceRouteImport } from './routes/governance'
@@ -41,6 +42,11 @@ const ReferralsRoute = ReferralsRouteImport.update({
 const PortfolioRoute = PortfolioRouteImport.update({
   id: '/portfolio',
   path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PitchDeckRoute = PitchDeckRouteImport.update({
+  id: '/pitch-deck',
+  path: '/pitch-deck',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketsRoute = MarketsRouteImport.update({
@@ -99,6 +105,7 @@ export interface FileRoutesByFullPath {
   '/governance': typeof GovernanceRoute
   '/isolated-markets': typeof IsolatedMarketsRoute
   '/markets': typeof MarketsRoute
+  '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
   '/referrals': typeof ReferralsRoute
   '/settings': typeof SettingsRoute
@@ -114,6 +121,7 @@ export interface FileRoutesByTo {
   '/governance': typeof GovernanceRoute
   '/isolated-markets': typeof IsolatedMarketsRoute
   '/markets': typeof MarketsRoute
+  '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
   '/referrals': typeof ReferralsRoute
   '/settings': typeof SettingsRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   '/governance': typeof GovernanceRoute
   '/isolated-markets': typeof IsolatedMarketsRoute
   '/markets': typeof MarketsRoute
+  '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
   '/referrals': typeof ReferralsRoute
   '/settings': typeof SettingsRoute
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
     | '/governance'
     | '/isolated-markets'
     | '/markets'
+    | '/pitch-deck'
     | '/portfolio'
     | '/referrals'
     | '/settings'
@@ -162,6 +172,7 @@ export interface FileRouteTypes {
     | '/governance'
     | '/isolated-markets'
     | '/markets'
+    | '/pitch-deck'
     | '/portfolio'
     | '/referrals'
     | '/settings'
@@ -177,6 +188,7 @@ export interface FileRouteTypes {
     | '/governance'
     | '/isolated-markets'
     | '/markets'
+    | '/pitch-deck'
     | '/portfolio'
     | '/referrals'
     | '/settings'
@@ -193,6 +205,7 @@ export interface RootRouteChildren {
   GovernanceRoute: typeof GovernanceRoute
   IsolatedMarketsRoute: typeof IsolatedMarketsRoute
   MarketsRoute: typeof MarketsRoute
+  PitchDeckRoute: typeof PitchDeckRoute
   PortfolioRoute: typeof PortfolioRoute
   ReferralsRoute: typeof ReferralsRoute
   SettingsRoute: typeof SettingsRoute
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/portfolio'
       fullPath: '/portfolio'
       preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pitch-deck': {
+      id: '/pitch-deck'
+      path: '/pitch-deck'
+      fullPath: '/pitch-deck'
+      preLoaderRoute: typeof PitchDeckRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/markets': {
@@ -305,6 +325,7 @@ const rootRouteChildren: RootRouteChildren = {
   GovernanceRoute: GovernanceRoute,
   IsolatedMarketsRoute: IsolatedMarketsRoute,
   MarketsRoute: MarketsRoute,
+  PitchDeckRoute: PitchDeckRoute,
   PortfolioRoute: PortfolioRoute,
   ReferralsRoute: ReferralsRoute,
   SettingsRoute: SettingsRoute,
