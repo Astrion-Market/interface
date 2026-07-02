@@ -12,7 +12,7 @@
   <a href="https://astrion.market"><strong>astrion.market</strong></a> ·
   <a href="#getting-started">Get started</a> ·
   <a href="CONTRIBUTING.md">Contribute</a> ·
-  <a href="https://twitter.com/astrionmarket">Twitter</a>
+  <a href="https://x.com/Astrionmarket">X</a>
 </p>
 
 ---

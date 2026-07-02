@@ -61,15 +61,15 @@ const LANDING_LINKS = [
   { label: "Markets", href: "/markets" },
   { label: "Analytics", href: "/analytics" },
   { label: "Governance", href: "/governance" },
-  { label: "Docs", href: "#" },
+  { label: "Docs", href: "/docs" },
 ]
 
-const APP_LINKS: Array<{ label: string; to: "/trade" | "/earn" | "/referrals" | null }> = [
+const APP_LINKS: Array<{ label: string; to: "/trade" | "/earn" | "/referrals" | "/docs" | null }> = [
   { label: "Trade", to: "/trade" },
   { label: "Earn", to: "/earn" },
   { label: "Referrals", to: "/referrals" },
   { label: "Stats", to: null },
-  { label: "Docs", to: null },
+  { label: "Docs", to: "/docs" },
 ]
 
 type Props = {

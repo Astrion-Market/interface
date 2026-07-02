@@ -22,7 +22,7 @@ const TITLE = "Astrion — Hybrid Lending on Stellar"
 const DESCRIPTION =
   "The foundational credit infrastructure layer for Stellar. Supply, borrow, and earn yield with institutional-grade UX on Soroban."
 const OG_IMAGE = `${SITE_URL}/og-image.svg`
-const TWITTER_HANDLE = "@astrionmarket"
+const TWITTER_HANDLE = "@Astrionmarket"
 
 // JSON-LD structured data (WebApplication + FinancialService)
 const JSON_LD = {
@@ -49,7 +49,7 @@ const JSON_LD = {
       url: SITE_URL,
       logo: `${SITE_URL}/favicon.svg`,
       sameAs: [
-        "https://twitter.com/astrionmarket",
+        "https://x.com/Astrionmarket",
         "https://discord.gg/astrionmarket",
         "https://t.me/astrionmarket",
       ],
@@ -134,7 +134,7 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600;700&display=swap",
       },
 
       // ── App CSS ─────────────────────────────────────────────────

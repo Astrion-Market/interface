@@ -98,20 +98,20 @@ export function NotFound() {
         </Link>
 
         <section className="mt-12 w-full max-w-[640px] sm:mt-16 lg:mt-20">
-          <div className="font-mono-num inline-flex h-7 items-center gap-2 rounded-md border border-border/80 bg-background/75 px-2.5 text-[11px] uppercase tracking-normal text-muted-foreground shadow-sm backdrop-blur">
+          <div className="font-mono-num text-label-xs inline-flex h-7 items-center gap-2 rounded-md border border-border/80 bg-background/75 px-2.5 uppercase text-muted-foreground shadow-sm backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-[#F59E0B]" />
             Route missing
           </div>
 
-          <p className="mt-7 font-mono-num text-[13px] uppercase tracking-normal text-muted-foreground">
+          <p className="font-mono-num text-label mt-7 uppercase text-muted-foreground">
             Error 404
           </p>
 
-          <h1 className="mt-3 max-w-[560px] text-[54px] font-semibold leading-[0.94] tracking-normal text-foreground sm:text-[72px] lg:text-[88px]">
+          <h1 className="text-display mt-3 max-w-[560px] text-foreground">
             Page not found.
           </h1>
 
-          <p className="mt-5 max-w-[500px] text-[15px] leading-7 text-muted-foreground sm:text-base">
+          <p className="text-copy mt-5 max-w-[500px] text-muted-foreground">
             The page you opened is not here anymore, or the URL is a little off.
             Pick a useful place to continue.
           </p>
@@ -128,11 +128,11 @@ export function NotFound() {
               >
                 <span className="flex h-full items-start justify-between gap-4">
                   <span className="min-w-0">
-                    <span className="flex items-center gap-2 text-[14px] font-medium text-foreground">
+                    <span className="text-label flex items-center gap-2 text-foreground">
                       <span className={`h-2 w-2 rounded-full ${link.tone}`} />
                       {link.label}
                     </span>
-                    <span className="mt-2 block text-[12px] leading-5 text-muted-foreground">
+                    <span className="text-copy-sm mt-2 block text-muted-foreground">
                       {link.desc}
                     </span>
                   </span>
@@ -144,7 +144,7 @@ export function NotFound() {
             ))}
           </nav>
 
-          <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-[12px] text-muted-foreground">
+          <div className="text-copy-sm mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground">
             <span>Need another path?</span>
             <Link
               to="/earn"

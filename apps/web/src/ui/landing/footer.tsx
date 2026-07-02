@@ -12,7 +12,7 @@ const FOOTER_COLS = [
   {
     heading: "Developers",
     links: [
-      { label: "Documentation", href: "#" },
+      { label: "Documentation", href: "/docs" },
       { label: "Contracts",     href: "#" },
       { label: "SDK",           href: "#" },
       { label: "Bug Bounty",    href: "#" },
@@ -21,9 +21,9 @@ const FOOTER_COLS = [
   {
     heading: "Community",
     links: [
-      { label: "Twitter / X", href: "#" },
-      { label: "Discord",     href: "#" },
-      { label: "Telegram",    href: "#" },
+      { label: "Twitter / X", href: "https://x.com/Astrionmarket", external: true },
+      { label: "Discord",     href: "https://discord.gg/astrionmarket", external: true },
+      { label: "Telegram",    href: "https://t.me/astrionmarket", external: true },
       { label: "Blog",        href: "#" },
     ],
   },
@@ -42,6 +42,7 @@ const FOOTER_COLS = [
 const SOCIALS = [
   {
     label: "X",
+    href: "https://x.com/Astrionmarket",
     icon: (
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <path d="M4 4l16 16M20 4 4 20" />
@@ -50,6 +51,7 @@ const SOCIALS = [
   },
   {
     label: "Discord",
+    href: "https://discord.gg/astrionmarket",
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
         <circle cx="8" cy="12" r="1" /><circle cx="16" cy="12" r="1" />
@@ -59,6 +61,7 @@ const SOCIALS = [
   },
   {
     label: "Telegram",
+    href: "https://t.me/astrionmarket",
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
         <path d="m22 3-10 18-3-8-8-3 21-7z" />
@@ -67,6 +70,7 @@ const SOCIALS = [
   },
   {
     label: "GitHub",
+    href: "https://github.com/Astrion-Market",
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
         <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.9a3.4 3.4 0 0 0-.9-2.4c3-.3 6.2-1.5 6.2-6.7a5.2 5.2 0 0 0-1.4-3.6 5 5 0 0 0-.1-3.6s-1.2-.4-3.8 1.4a13 13 0 0 0-7 0C6.4 3 5.2 3.4 5.2 3.4a5 5 0 0 0-.1 3.6A5.2 5.2 0 0 0 3.7 10.6c0 5.2 3.2 6.4 6.2 6.7a3.4 3.4 0 0 0-.9 2.4V22" />
@@ -92,10 +96,12 @@ export function Footer() {
                     {heading}
                   </h5>
                   <ul className="space-y-0.5">
-                    {links.map(({ label, href }) => (
+                    {links.map(({ label, href, external }) => (
                       <li key={label}>
                         <a
                           href={href}
+                          target={external ? "_blank" : undefined}
+                          rel={external ? "noopener noreferrer" : undefined}
                           className="block py-1 text-[12.5px] text-muted-foreground transition-colors hover:text-foreground"
                         >
                           {label}
@@ -109,10 +115,12 @@ export function Footer() {
 
             {/* Social icons — top right */}
             <div className="flex shrink-0 items-start gap-2">
-              {SOCIALS.map(({ label, icon }) => (
+              {SOCIALS.map(({ label, href, icon }) => (
                 <a
                   key={label}
-                  href="#"
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={label}
                   className="inline-flex h-8 w-8 items-center justify-center rounded border border-border text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
                 >
@@ -131,11 +139,11 @@ export function Footer() {
         fills exactly 100% of the SVG. `width="100%"` + no max-width
         container = genuine full-viewport fill.
       */}
-      <div className="select-none border-t border-border" aria-hidden="true">
+      <div className="select-none border-t border-border text-foreground" aria-hidden="true">
         <svg
           viewBox="0 0 1000 168"
           width="100%"
-          className="block"
+          className="block h-[clamp(74px,16vw,260px)]"
           preserveAspectRatio="none"
         >
           <text
@@ -144,10 +152,11 @@ export function Footer() {
             fontSize="184"
             fontWeight="700"
             fontFamily="Geist Variable, sans-serif"
-            fill="none"
+            fill="currentColor"
+            fillOpacity="0.05"
             stroke="currentColor"
-            strokeWidth="0.65"
-            opacity="0.07"
+            strokeOpacity="0.26"
+            strokeWidth="1.2"
             textLength="1000"
             lengthAdjust="spacingAndGlyphs"
           >

@@ -7,7 +7,7 @@ function Logo() {
   return (
     <a
       href="/"
-      className="flex cursor-pointer items-center gap-2.5 tracking-[-0.02em] transition-opacity hover:opacity-80"
+      className="flex cursor-pointer items-center gap-2.5 transition-opacity hover:opacity-80"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -63,7 +63,7 @@ function Logo() {
           </g>
         </g>
       </svg>
-      <span className="font-mono-num text-[17px] font-medium tracking-[0.02em] text-foreground">
+      <span className="font-mono-num text-[17px] font-medium tracking-normal text-foreground">
         Astrion
       </span>
     </a>
@@ -74,7 +74,7 @@ const NAV_LINKS = [
   { label: "Markets", href: "/markets" },
   { label: "Analytics", href: "/analytics" },
   { label: "Governance", href: "/governance" },
-  { label: "Docs", href: "#" },
+  { label: "Docs", href: "/docs" },
 ]
 
 export function Nav() {
@@ -91,7 +91,7 @@ export function Nav() {
             <li key={label}>
               <a
                 href={href}
-                className="text-[13.5px] font-normal text-muted-foreground transition-colors hover:text-foreground"
+                className="text-label text-muted-foreground transition-colors hover:text-foreground"
               >
                 {label}
               </a>
@@ -105,7 +105,7 @@ export function Nav() {
           <ConnectWalletButton placement="header" />
           <Button
             variant="default"
-            className="hidden h-[38px] gap-2 px-4 text-[13.5px] sm:inline-flex"
+            className="hidden h-[38px] gap-2 px-4 text-label sm:inline-flex"
             onClick={() => {
               window.location.href = "/dashboard"
             }}
@@ -159,7 +159,7 @@ export function Nav() {
               <li key={label}>
                 <a
                   href={href}
-                  className="block rounded py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                  className="text-label block rounded py-2 text-muted-foreground transition-colors hover:text-foreground"
                   onClick={() => setMobileOpen(false)}
                 >
                   {label}

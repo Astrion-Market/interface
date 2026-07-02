@@ -29,11 +29,12 @@
 }
 
 .font-mono-num {
-  font-family: "Geist Mono", ui-monospace, monospace;
-  font-feature-settings: "tnum" 1, "zero" 1;
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum" 1, "zero" 1, "ss02" 1;
+  font-variant-numeric: tabular-nums slashed-zero;
 }
 
 .font-trading {
-  font-family: "Geist Variable", sans-serif;
-  font-feature-settings: "ss01" 1, "cv01" 1;
+  font-family: var(--font-sans);
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "cv01" 1;
 }

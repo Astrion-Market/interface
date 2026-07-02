@@ -10,6 +10,7 @@
 
 @theme inline {
     --font-heading: var(--font-sans);
+    --font-mono: "Geist Mono", "SFMono-Regular", "Roboto Mono", ui-monospace, monospace;
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -48,7 +49,7 @@
     --radius-2xl: calc(var(--radius) * 1.8);
     --radius-3xl: calc(var(--radius) * 2.2);
     --radius-4xl: calc(var(--radius) * 2.6);
-    --font-sans: 'Geist Variable', sans-serif;
+    --font-sans: "Geist Variable", "Geist", Inter, ui-sans-serif, system-ui, sans-serif;
 }
 
 /* ── Light mode (Astrion) ─────────────────────────────────── */
@@ -88,53 +89,186 @@
     --sidebar-ring: oklch(0.60 0.14 222);
 }
 
-/* ── Dark mode (Astrion — near-black graphite + electric blue) ── */
+/* ── Dark mode (Astrion — dense black + electric blue) ── */
 .dark {
-    /* #0F1117 near-black bg */
-    --background: oklch(0.115 0.012 261);
+    /* Deep product black: intentional, not gray. */
+    --background: oklch(0.055 0.006 260);
     --foreground: oklch(0.965 0.006 225);
-    /* #161B26 blue-tinted surface */
-    --card: oklch(0.16 0.018 262);
+    --card: oklch(0.095 0.009 260);
     --card-foreground: oklch(0.965 0.006 225);
-    --popover: oklch(0.16 0.018 262);
+    --popover: oklch(0.085 0.008 260);
     --popover-foreground: oklch(0.965 0.006 225);
     /* Vivid electric blue — #6CB6FF range */
     --primary: oklch(0.72 0.155 222);
-    --primary-foreground: oklch(0.09 0.01 261);
-    /* #1A2030 elevated surface */
-    --secondary: oklch(0.20 0.018 261);
+    --primary-foreground: oklch(0.045 0.006 260);
+    --secondary: oklch(0.125 0.01 260);
     --secondary-foreground: oklch(0.965 0.006 225);
-    --muted: oklch(0.20 0.016 260);
-    --muted-foreground: oklch(0.60 0.014 238);
-    --accent: oklch(0.22 0.018 260);
+    --muted: oklch(0.12 0.009 260);
+    --muted-foreground: oklch(0.63 0.012 238);
+    --accent: oklch(0.155 0.012 260);
     --accent-foreground: oklch(0.965 0.006 225);
     --destructive: oklch(0.65 0.22 25);
-    --border: oklch(1 0 0 / 9%);
-    --input: oklch(1 0 0 / 13%);
+    --border: oklch(1 0 0 / 10%);
+    --input: oklch(1 0 0 / 12%);
     --ring: oklch(0.72 0.155 222);
     --chart-1: oklch(0.72 0.14 220);
     --chart-2: oklch(0.80 0.14 201);
     --chart-3: oklch(0.65 0.18 228);
     --chart-4: oklch(0.70 0.17 195);
     --chart-5: oklch(0.55 0.16 238);
-    --sidebar: oklch(0.14 0.016 262);
+    --sidebar: oklch(0.075 0.007 260);
     --sidebar-foreground: oklch(0.965 0.006 225);
     --sidebar-primary: oklch(0.72 0.155 222);
-    --sidebar-primary-foreground: oklch(0.09 0.01 261);
-    --sidebar-accent: oklch(0.22 0.018 260);
+    --sidebar-primary-foreground: oklch(0.045 0.006 260);
+    --sidebar-accent: oklch(0.13 0.01 260);
     --sidebar-accent-foreground: oklch(0.965 0.006 225);
-    --sidebar-border: oklch(1 0 0 / 9%);
+    --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.72 0.155 222);
 }
 
 @layer base {
+  html {
+    font-family: var(--font-sans);
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "cv01" 1;
+    font-optical-sizing: auto;
+    font-synthesis-weight: none;
+    text-rendering: geometricPrecision;
+  }
+
   * {
     @apply border-border outline-ring/50;
     }
   body {
     @apply bg-background text-foreground;
+    font-size: 14px;
+    line-height: 1.5;
+    letter-spacing: 0;
     }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "cv01" 1;
+    font-variation-settings: "wght" 650;
+    letter-spacing: 0;
+  }
+
+  p,
+  li,
+  dt,
+  dd {
+    letter-spacing: 0;
+  }
+
+  strong,
+  b,
+  th,
+  label {
+    font-variation-settings: "wght" 560;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+    letter-spacing: 0;
+  }
+
   button:not(:disabled), [role="button"]:not(:disabled) {
     cursor: pointer;
     }
+}
+
+@layer utilities {
+  .font-trading {
+    font-family: var(--font-sans);
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1, "ss01" 1, "cv01" 1;
+  }
+
+  .font-mono-num {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" 1, "zero" 1, "ss02" 1;
+    font-variant-numeric: tabular-nums slashed-zero;
+  }
+
+  .text-display {
+    font-family: var(--font-sans);
+    font-size: clamp(3rem, 6vw, 5.75rem);
+    font-variation-settings: "wght" 680;
+    letter-spacing: 0;
+    line-height: 0.95;
+  }
+
+  .text-display-compact {
+    font-family: var(--font-sans);
+    font-size: clamp(2.5rem, 4.8vw, 4.75rem);
+    font-variation-settings: "wght" 670;
+    letter-spacing: 0;
+    line-height: 1;
+  }
+
+  .text-heading-page {
+    font-size: 1.375rem;
+    font-variation-settings: "wght" 650;
+    letter-spacing: 0;
+    line-height: 1.18;
+  }
+
+  .text-heading-section {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    font-variation-settings: "wght" 650;
+    letter-spacing: 0;
+    line-height: 1.08;
+  }
+
+  .text-heading-card {
+    font-size: 1rem;
+    font-variation-settings: "wght" 620;
+    letter-spacing: 0;
+    line-height: 1.35;
+  }
+
+  .text-copy {
+    font-size: 0.9375rem;
+    font-variation-settings: "wght" 410;
+    letter-spacing: 0;
+    line-height: 1.65;
+  }
+
+  .text-copy-sm {
+    font-size: 0.8125rem;
+    font-variation-settings: "wght" 420;
+    letter-spacing: 0;
+    line-height: 1.55;
+  }
+
+  .text-label {
+    font-size: 0.8125rem;
+    font-variation-settings: "wght" 560;
+    letter-spacing: 0;
+    line-height: 1.35;
+  }
+
+  .text-label-xs {
+    font-size: 0.6875rem;
+    font-variation-settings: "wght" 560;
+    letter-spacing: 0;
+    line-height: 1.2;
+  }
+
+  .text-number-lg {
+    font-family: var(--font-mono);
+    font-size: 2.25rem;
+    font-feature-settings: "tnum" 1, "zero" 1;
+    font-variation-settings: "wght" 620;
+    font-variant-numeric: tabular-nums slashed-zero;
+    letter-spacing: 0;
+    line-height: 1;
+  }
 }

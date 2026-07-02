@@ -296,7 +296,7 @@ Open an issue with:
 ## Questions?
 
 - Open a [GitHub Discussion](https://github.com/Astrion-Market/interface/discussions)
-- Reach out on [Twitter](https://twitter.com/astrionmarket)
+- Reach out on [X](https://x.com/Astrionmarket)
 - Join our [Discord](https://discord.gg/astrionmarket)
 
 ---

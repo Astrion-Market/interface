@@ -19,6 +19,7 @@ import { Route as IsolatedMarketsRouteImport } from './routes/isolated-markets'
 import { Route as GovernanceRouteImport } from './routes/governance'
 import { Route as FaucetRouteImport } from './routes/faucet'
 import { Route as EarnRouteImport } from './routes/earn'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
@@ -74,6 +75,11 @@ const EarnRoute = EarnRouteImport.update({
   path: '/earn',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -100,6 +106,7 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
+  '/docs': typeof DocsRoute
   '/earn': typeof EarnRoute
   '/faucet': typeof FaucetRoute
   '/governance': typeof GovernanceRoute
@@ -116,6 +123,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
+  '/docs': typeof DocsRoute
   '/earn': typeof EarnRoute
   '/faucet': typeof FaucetRoute
   '/governance': typeof GovernanceRoute
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
+  '/docs': typeof DocsRoute
   '/earn': typeof EarnRoute
   '/faucet': typeof FaucetRoute
   '/governance': typeof GovernanceRoute
@@ -151,6 +160,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brand'
     | '/dashboard'
+    | '/docs'
     | '/earn'
     | '/faucet'
     | '/governance'
@@ -167,6 +177,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brand'
     | '/dashboard'
+    | '/docs'
     | '/earn'
     | '/faucet'
     | '/governance'
@@ -183,6 +194,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brand'
     | '/dashboard'
+    | '/docs'
     | '/earn'
     | '/faucet'
     | '/governance'
@@ -200,6 +212,7 @@ export interface RootRouteChildren {
   AnalyticsRoute: typeof AnalyticsRoute
   BrandRoute: typeof BrandRoute
   DashboardRoute: typeof DashboardRoute
+  DocsRoute: typeof DocsRoute
   EarnRoute: typeof EarnRoute
   FaucetRoute: typeof FaucetRoute
   GovernanceRoute: typeof GovernanceRoute
@@ -284,6 +297,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EarnRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -320,6 +340,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalyticsRoute: AnalyticsRoute,
   BrandRoute: BrandRoute,
   DashboardRoute: DashboardRoute,
+  DocsRoute: DocsRoute,
   EarnRoute: EarnRoute,
   FaucetRoute: FaucetRoute,
   GovernanceRoute: GovernanceRoute,

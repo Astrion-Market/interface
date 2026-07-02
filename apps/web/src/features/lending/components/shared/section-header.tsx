@@ -8,9 +8,9 @@ export function SectionHeader({ title, description, action }: Props) {
   return (
     <div className="flex items-start justify-between">
       <div>
-        <h2 className="text-base font-semibold text-foreground">{title}</h2>
+        <h2 className="text-heading-card text-foreground">{title}</h2>
         {description && (
-          <p className="mt-0.5 text-[13px] text-muted-foreground">{description}</p>
+          <p className="text-copy-sm mt-0.5 text-muted-foreground">{description}</p>
         )}
       </div>
       {action && <div>{action}</div>}

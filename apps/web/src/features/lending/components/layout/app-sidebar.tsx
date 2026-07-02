@@ -15,6 +15,7 @@ type NavItem = {
     | "/governance"
     | "/settings"
     | "/brand"
+    | "/docs"
   icon: React.ReactNode
   comingSoon?: boolean
 }
@@ -144,7 +145,7 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: "Docs",
-    comingSoon: true,
+    to: "/docs",
     icon: (
       <svg
         width="16"

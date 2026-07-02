@@ -17,14 +17,14 @@ export function Stats() {
                 i < STATS.length - 1 ? "border-b border-border lg:border-b-0 lg:border-r" : ""
               } ${i % 2 === 0 && i < 2 ? "max-lg:border-r" : ""}`}
             >
-              <p className="font-mono-num flex items-center gap-2 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="font-mono-num text-label-xs flex items-center gap-2 uppercase text-muted-foreground">
                 <span className="inline-block h-1 w-1 rounded-full bg-primary" />
                 {label}
               </p>
-              <p className="font-mono-num mt-3 text-[36px] font-semibold leading-none tracking-[-0.02em] text-foreground">
+              <p className="text-number-lg mt-3 text-foreground">
                 {value}
               </p>
-              <p className="mt-1.5 text-[11px] text-muted-foreground/60">{sub}</p>
+              <p className="text-copy-sm mt-1.5 text-muted-foreground/60">{sub}</p>
             </div>
           ))}
         </div>

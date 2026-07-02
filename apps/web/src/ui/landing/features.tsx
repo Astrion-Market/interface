@@ -131,10 +131,10 @@ export function Features() {
       <div className="mx-auto max-w-[1320px]">
         {/* Section label */}
         <div className="mb-10">
-          <p className="font-mono-num text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+          <p className="font-mono-num text-label-xs uppercase text-muted-foreground">
             Why Astrion
           </p>
-          <h2 className="mt-2 text-[28px] font-semibold leading-tight tracking-[-0.02em] text-foreground sm:text-[36px]">
+          <h2 className="text-heading-section mt-2 text-foreground">
             Institutional-grade lending.<br className="hidden sm:block" /> Designed for Soroban.
           </h2>
         </div>
@@ -145,14 +145,14 @@ export function Features() {
           <div className="grid grid-cols-1 sm:grid-cols-2">
             {/* Health Factor */}
             <div className="border-b border-border p-6 sm:border-r lg:p-8">
-              <p className="font-mono-num mb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="font-mono-num text-label-xs mb-1 uppercase text-muted-foreground">
                 Health Factor System
               </p>
-              <h3 className="mb-4 text-[18px] font-semibold text-foreground">
+              <h3 className="text-heading-card mb-4 text-foreground">
                 Always know your liquidation risk
               </h3>
               <HealthVisual />
-              <p className="mt-4 text-[12.5px] leading-relaxed text-muted-foreground">
+              <p className="text-copy-sm mt-4 text-muted-foreground">
                 A color-coded gauge shows your position's safety at a glance.
                 Green is safe. Amber is a warning. Red means act now.
               </p>
@@ -160,14 +160,14 @@ export function Features() {
 
             {/* Markets */}
             <div className="border-b border-border p-6 lg:p-8">
-              <p className="font-mono-num mb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="font-mono-num text-label-xs mb-1 uppercase text-muted-foreground">
                 Hybrid Markets
               </p>
-              <h3 className="mb-4 text-[18px] font-semibold text-foreground">
+              <h3 className="text-heading-card mb-4 text-foreground">
                 Core + Isolated markets
               </h3>
               <MarketVisual />
-              <p className="mt-4 text-[12.5px] leading-relaxed text-muted-foreground">
+              <p className="text-copy-sm mt-4 text-muted-foreground">
                 Stable assets share deep liquidity in Core markets.
                 Volatile or experimental assets live in isolated pools — failure stays contained.
               </p>
@@ -178,14 +178,14 @@ export function Features() {
           <div className="grid grid-cols-1 sm:grid-cols-2">
             {/* Oracle */}
             <div className="border-b border-border p-6 sm:border-r lg:p-8">
-              <p className="font-mono-num mb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="font-mono-num text-label-xs mb-1 uppercase text-muted-foreground">
                 Oracle Transparency
               </p>
-              <h3 className="mb-4 text-[18px] font-semibold text-foreground">
+              <h3 className="text-heading-card mb-4 text-foreground">
                 Price feeds, always visible
               </h3>
               <OracleVisual />
-              <p className="mt-4 text-[12.5px] leading-relaxed text-muted-foreground">
+              <p className="text-copy-sm mt-4 text-muted-foreground">
                 Every market displays its oracle provider, last update time, and confidence score.
                 No hidden price sources.
               </p>
@@ -193,14 +193,14 @@ export function Features() {
 
             {/* Borrow flow */}
             <div className="border-b border-border p-6 lg:p-8">
-              <p className="font-mono-num mb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="font-mono-num text-label-xs mb-1 uppercase text-muted-foreground">
                 Guided Borrow Flow
               </p>
-              <h3 className="mb-4 text-[18px] font-semibold text-foreground">
+              <h3 className="text-heading-card mb-4 text-foreground">
                 4-step borrow with risk preview
               </h3>
               <BorrowVisual />
-              <p className="mt-4 text-[12.5px] leading-relaxed text-muted-foreground">
+              <p className="text-copy-sm mt-4 text-muted-foreground">
                 Step 3 shows liquidation price, health factor impact, and stress scenarios
                 before you sign a single transaction.
               </p>
@@ -217,8 +217,8 @@ export function Features() {
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-muted/40 text-muted-foreground">
                   {icon}
                 </div>
-                <h4 className="mb-2 text-[15px] font-semibold text-foreground">{title}</h4>
-                <p className="text-[12.5px] leading-relaxed text-muted-foreground">{body}</p>
+                <h4 className="text-heading-card mb-2 text-foreground">{title}</h4>
+                <p className="text-copy-sm text-muted-foreground">{body}</p>
               </div>
             ))}
           </div>

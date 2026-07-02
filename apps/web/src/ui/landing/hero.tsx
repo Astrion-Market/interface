@@ -196,15 +196,12 @@ export function Hero() {
 
           {/* Left — copy */}
           <div>
-            <span className="font-mono-num inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.12em] text-muted-foreground backdrop-blur-sm">
+            <span className="font-mono-num text-label-xs inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 uppercase text-muted-foreground backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" style={{ animation: "pulseDot 2.4s ease-in-out infinite" }} />
               Stellar · Soroban · Testnet
             </span>
 
-            <h1
-              className="font-trading mt-6 font-semibold leading-[1.05] tracking-[-0.03em] text-foreground"
-              style={{ fontSize: "clamp(40px, 4.8vw, 70px)" }}
-            >
+            <h1 className="text-display font-trading mt-6 text-foreground">
               The credit layer<br />
               <span
                 className="inline-block"
@@ -219,7 +216,7 @@ export function Hero() {
               </span>
             </h1>
 
-            <p className="mt-5 max-w-[460px] text-[16px] leading-[1.65] text-muted-foreground">
+            <p className="text-copy mt-5 max-w-[500px] text-muted-foreground sm:text-[16px]">
               Supply assets and earn yield. Borrow against collateral.
               Astrion is a hybrid lending protocol — institutional-grade,
               built on Soroban.
@@ -228,17 +225,17 @@ export function Hero() {
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button
                 variant="default"
-                className="h-11 gap-2 px-5 text-[13.5px] font-medium"
+                className="h-11 gap-2 px-5 text-label"
                 onClick={() => { window.location.href = "/dashboard" }}
               >
                 Launch App <span>→</span>
               </Button>
-              <Button variant="outline" className="h-11 px-5 text-[13.5px]">
+              <Button variant="outline" className="h-11 px-5 text-label">
                 View Markets
               </Button>
             </div>
 
-            <div className="font-mono-num mt-8 flex flex-wrap items-center gap-4 text-[12px] text-muted-foreground/70">
+            <div className="font-mono-num text-label-xs mt-8 flex flex-wrap items-center gap-4 text-muted-foreground/70">
               <span><span className="font-medium text-foreground">—</span> TVL</span>
               <span className="h-3 w-px bg-border" />
               <span><span className="font-medium text-foreground">—</span> Markets</span>
