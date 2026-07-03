@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VideoDemoRouteImport } from './routes/video-demo'
+import { Route as VideDemoRouteImport } from './routes/vide-demo'
 import { Route as TradeRouteImport } from './routes/trade'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ReferralsRouteImport } from './routes/referrals'
@@ -25,6 +27,16 @@ import { Route as BrandRouteImport } from './routes/brand'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VideoDemoRoute = VideoDemoRouteImport.update({
+  id: '/video-demo',
+  path: '/video-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VideDemoRoute = VideDemoRouteImport.update({
+  id: '/vide-demo',
+  path: '/vide-demo',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TradeRoute = TradeRouteImport.update({
   id: '/trade',
   path: '/trade',
@@ -117,6 +129,8 @@ export interface FileRoutesByFullPath {
   '/referrals': typeof ReferralsRoute
   '/settings': typeof SettingsRoute
   '/trade': typeof TradeRoute
+  '/vide-demo': typeof VideDemoRoute
+  '/video-demo': typeof VideoDemoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -134,6 +148,8 @@ export interface FileRoutesByTo {
   '/referrals': typeof ReferralsRoute
   '/settings': typeof SettingsRoute
   '/trade': typeof TradeRoute
+  '/vide-demo': typeof VideDemoRoute
+  '/video-demo': typeof VideoDemoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -152,6 +168,8 @@ export interface FileRoutesById {
   '/referrals': typeof ReferralsRoute
   '/settings': typeof SettingsRoute
   '/trade': typeof TradeRoute
+  '/vide-demo': typeof VideDemoRoute
+  '/video-demo': typeof VideoDemoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +189,8 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/settings'
     | '/trade'
+    | '/vide-demo'
+    | '/video-demo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +208,8 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/settings'
     | '/trade'
+    | '/vide-demo'
+    | '/video-demo'
   id:
     | '__root__'
     | '/'
@@ -205,6 +227,8 @@ export interface FileRouteTypes {
     | '/referrals'
     | '/settings'
     | '/trade'
+    | '/vide-demo'
+    | '/video-demo'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -223,10 +247,26 @@ export interface RootRouteChildren {
   ReferralsRoute: typeof ReferralsRoute
   SettingsRoute: typeof SettingsRoute
   TradeRoute: typeof TradeRoute
+  VideDemoRoute: typeof VideDemoRoute
+  VideoDemoRoute: typeof VideoDemoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/video-demo': {
+      id: '/video-demo'
+      path: '/video-demo'
+      fullPath: '/video-demo'
+      preLoaderRoute: typeof VideoDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vide-demo': {
+      id: '/vide-demo'
+      path: '/vide-demo'
+      fullPath: '/vide-demo'
+      preLoaderRoute: typeof VideDemoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/trade': {
       id: '/trade'
       path: '/trade'
@@ -351,6 +391,8 @@ const rootRouteChildren: RootRouteChildren = {
   ReferralsRoute: ReferralsRoute,
   SettingsRoute: SettingsRoute,
   TradeRoute: TradeRoute,
+  VideDemoRoute: VideDemoRoute,
+  VideoDemoRoute: VideoDemoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
