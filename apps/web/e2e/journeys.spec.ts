@@ -166,7 +166,7 @@ test.describe("wallets", () => {
     await expect(page.getByText(/switched accounts/)).toBeVisible()
 
     await page.reload()
-    await expect(panel.getByText("Connected")).toBeVisible()
+    await expect(panel.getByText("Connected", { exact: true })).toBeVisible()
     await emitWallet(page, "accountsChanged", [])
     await expect(page.getByText(/locked or disconnected/)).toBeVisible()
   })
