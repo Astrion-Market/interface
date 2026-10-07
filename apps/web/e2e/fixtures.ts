@@ -48,6 +48,23 @@ const MOCK_WALLET = `(() => {
 })()`
 
 export const test = base.extend<{ mockWallet: void }>({
+  // Navigation waits for the network to settle so clicks never land before
+  // React hydrates the server-rendered page.
+  page: async ({ page }, use) => {
+    const goto = page.goto.bind(page)
+    const reload = page.reload.bind(page)
+    page.goto = async (url, options) => {
+      const response = await goto(url, options)
+      await page.waitForLoadState("networkidle")
+      return response
+    }
+    page.reload = async (options) => {
+      const response = await reload(options)
+      await page.waitForLoadState("networkidle")
+      return response
+    }
+    await use(page)
+  },
   mockWallet: [
     async ({ page }, use) => {
       await page.addInitScript(MOCK_WALLET)

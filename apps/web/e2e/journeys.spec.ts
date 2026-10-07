@@ -95,7 +95,7 @@ test.describe("borrow, repay, withdraw", () => {
     await review(page, MARKETS.morpho86, "borrow")
     await page.getByPlaceholder("0.0", { exact: true }).fill("1")
     await page.getByPlaceholder("0.00").fill("3000")
-    await expect(page.getByText("This borrow is more than the collateral supports.")).toBeVisible()
+    await expect(page.getByText("This borrow is more than the collateral supports.").first()).toBeVisible()
   })
 
   test("a borrow with a failed payout is labeled and recoverable", async ({ page }) => {

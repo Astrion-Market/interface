@@ -30,7 +30,7 @@ export const CHAINS: Record<ChainId, Identity> = {
   ethereum: {
     label: "Ethereum",
     mark: "Et",
-    markClass: "bg-[#627EEA] text-white",
+    markClass: "bg-[#3B4FB8] text-white",
   },
 }
 
@@ -39,19 +39,19 @@ export const PROTOCOLS: Record<ProtocolId, Identity & { version: string }> = {
     label: "Aave",
     version: "V3",
     mark: "Aa",
-    markClass: "bg-[#9391F7]/20 text-[#5B58D6] dark:text-[#B6B4FF]",
+    markClass: "bg-[#9391F7]/20 text-[#3F3BA6] dark:text-[#C9C7FF]",
   },
   "morpho-blue": {
     label: "Morpho",
     version: "Blue",
     mark: "Mo",
-    markClass: "bg-[#2470FF]/15 text-[#1F5FDB] dark:text-[#7FAAFF]",
+    markClass: "bg-[#2470FF]/15 text-[#174AAE] dark:text-[#A3C2FF]",
   },
   "compound-v3": {
     label: "Compound",
     version: "III",
     mark: "Co",
-    markClass: "bg-[#00D395]/15 text-[#008F65] dark:text-[#4DE3B5]",
+    markClass: "bg-[#00D395]/15 text-[#005C41] dark:text-[#7CF0CC]",
   },
 }
 

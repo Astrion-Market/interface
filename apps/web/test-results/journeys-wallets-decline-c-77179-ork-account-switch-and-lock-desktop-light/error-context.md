@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary [ref=e4]:
+      - link "Astrion" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e7]
+        - generic [ref=e20]: Astrion
+      - navigation "Primary" [ref=e21]:
+        - generic [ref=e22]:
+          - link "Overview" [ref=e23] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e24]
+            - text: Overview
+          - link "Markets" [ref=e26] [cursor=pointer]:
+            - /url: /markets
+            - img [ref=e27]
+            - text: Markets
+          - link "Positions" [ref=e29] [cursor=pointer]:
+            - /url: /portfolio
+            - img [ref=e30]
+            - text: Positions
+          - link "Activity" [ref=e32] [cursor=pointer]:
+            - /url: /activity
+            - img [ref=e33]
+            - text: Activity
+          - link "Learn" [ref=e35] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e36]
+            - text: Learn
+      - navigation "Stellar and settings" [ref=e38]:
+        - link "Stellar positions" [ref=e39] [cursor=pointer]:
+          - /url: /legacy
+        - link "Testnet faucet" [ref=e40] [cursor=pointer]:
+          - /url: /faucet
+        - link "Settings" [ref=e41] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Stellar Testnet
+        - button "Connect Stellar" [ref=e44] [cursor=pointer]:
+          - img
+          - generic [ref=e45]: Connect Stellar
+          - img
+        - button "0x9999…0009 Base Sepolia" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: 0x9999…0009
+          - generic [ref=e48]: Base Sepolia
+    - main [ref=e49]:
+      - generic [ref=e50]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e51] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - heading "Settings" [level=1] [ref=e54]
+          - paragraph [ref=e55]: Configure your Astrion workspace preferences.
+        - region "Wallets" [ref=e57]:
+          - generic [ref=e58]:
+            - heading "Wallets" [level=2] [ref=e59]
+            - paragraph [ref=e60]: Cross-chain lending uses two wallets. Each one signs only on its own chain; connecting both does not let either sign for the other.
+          - generic [ref=e61]:
+            - article [ref=e62]:
+              - generic [ref=e63]:
+                - heading "Stellar wallet" [level=3] [ref=e64]
+                - generic [ref=e65]:
+                  - img [ref=e66]
+                  - text: Not connected
+              - generic [ref=e68]:
+                - generic [ref=e69]:
+                  - term [ref=e70]: Account
+                  - definition [ref=e71]: "-"
+                - generic [ref=e72]:
+                  - term [ref=e73]: Network
+                  - definition [ref=e74]: Stellar Testnet
+                - generic [ref=e75]:
+                  - term [ref=e76]: Signs
+                  - definition [ref=e77]: "Transfers that start on Stellar: lending from Stellar and repaying from Stellar."
+              - button "Connect Stellar" [ref=e79] [cursor=pointer]:
+                - img
+                - generic [ref=e80]: Connect Stellar
+                - img
+            - article [ref=e81]:
+              - generic [ref=e82]:
+                - heading "EVM wallet" [level=3] [ref=e83]
+                - generic [ref=e84]:
+                  - img [ref=e85]
+                  - text: Connected
+              - generic [ref=e88]:
+                - generic [ref=e89]:
+                  - term [ref=e90]: Account
+                  - definition [ref=e91]:
+                    - generic [ref=e92]:
+                      - generic "0x9999000000000000000000000000000000000009" [ref=e93]:
+                        - text: 0x999900…0009
+                        - generic [ref=e94]: "0x9999000000000000000000000000000000000009"
+                      - button "Show full EVM account" [ref=e95] [cursor=pointer]
+                - generic [ref=e96]:
+                  - term [ref=e97]: Network
+                  - definition [ref=e98]: Base Sepolia
+                - generic [ref=e99]:
+                  - term [ref=e100]: Execution account
+                  - definition [ref=e101]: Not created yet. Your EVM wallet will own it, and it holds your lending positions on each chain.
+                - generic [ref=e102]:
+                  - term [ref=e103]: Signs
+                  - definition [ref=e104]: Supplying, borrowing, repaying, and withdrawing on Base and Ethereum, plus transfers back to Stellar.
+              - button "0x9999…0009 Base Sepolia" [ref=e106] [cursor=pointer]:
+                - generic [ref=e107]: 0x9999…0009
+                - generic [ref=e108]: Base Sepolia
+        - generic [ref=e110]:
+          - generic [ref=e111]:
+            - paragraph [ref=e112]: Theme
+            - paragraph [ref=e113]: "Current appearance: light"
+          - generic [ref=e114]:
+            - button "System Follow your device preference." [pressed] [ref=e115] [cursor=pointer]:
+              - generic [ref=e117]: System
+              - generic [ref=e119]: Follow your device preference.
+            - button "Dark Use Astrion's dark trading interface." [ref=e120] [cursor=pointer]:
+              - generic [ref=e122]: Dark
+              - generic [ref=e124]: Use Astrion's dark trading interface.
+            - button "Light Use a brighter interface." [ref=e125] [cursor=pointer]:
+              - generic [ref=e127]: Light
+              - generic [ref=e129]: Use a brighter interface.
+  - region "Notifications alt+T"
+```

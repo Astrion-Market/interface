@@ -1,0 +1,66 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary [ref=e4]:
+      - link "Astrion" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e7]
+        - generic [ref=e20]: Astrion
+      - navigation "Primary" [ref=e21]:
+        - generic [ref=e22]:
+          - link "Overview" [ref=e23] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e24]
+            - text: Overview
+          - link "Markets" [ref=e26] [cursor=pointer]:
+            - /url: /markets
+            - img [ref=e27]
+            - text: Markets
+          - link "Positions" [ref=e29] [cursor=pointer]:
+            - /url: /portfolio
+            - img [ref=e30]
+            - text: Positions
+          - link "Activity" [ref=e32] [cursor=pointer]:
+            - /url: /activity
+            - img [ref=e33]
+            - text: Activity
+          - link "Learn" [ref=e35] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e36]
+            - text: Learn
+      - navigation "Stellar and settings" [ref=e38]:
+        - link "Stellar positions" [ref=e39] [cursor=pointer]:
+          - /url: /legacy
+        - link "Testnet faucet" [ref=e40] [cursor=pointer]:
+          - /url: /faucet
+        - link "Settings" [ref=e41] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Stellar Testnet
+        - button "Connect Stellar" [ref=e44] [cursor=pointer]:
+          - img
+          - generic [ref=e45]: Connect Stellar
+          - img
+        - button "Connect EVM" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Connect EVM
+          - generic [ref=e48]: ›
+    - main [ref=e49]:
+      - generic [ref=e50]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e51] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e52]:
+        - generic [ref=e54]:
+          - heading "Activity" [level=1] [ref=e55]
+          - paragraph [ref=e56]: Each cross-chain action and every leg of it, for the wallets connected now.
+        - paragraph [ref=e57]: Status is cached on this device until the tracking service is connected, and is always rechecked against the chains before it can show success.
+        - status [ref=e58]:
+          - paragraph [ref=e59]: No cross-chain activity for these wallets
+          - generic [ref=e60]: "This is not a complete transaction history: actions from other devices appear once the tracking service is connected."
+          - button "Browse markets" [ref=e62] [cursor=pointer]
+  - region "Notifications alt+T"
+```

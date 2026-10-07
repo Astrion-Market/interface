@@ -43,7 +43,7 @@ export function AmountRow({
       <dt className="min-w-0">
         <span className="text-copy-sm text-muted-foreground">{label}</span>
         {hint && (
-          <span className="text-label-xs mt-0.5 block font-normal text-muted-foreground/80">
+          <span className="text-label-xs mt-0.5 block font-normal text-muted-foreground">
             {hint}
           </span>
         )}

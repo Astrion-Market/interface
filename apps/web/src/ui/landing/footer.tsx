@@ -155,7 +155,7 @@ export function Footer() {
       {/* ── Bottom bar ─────────────────────────────────── */}
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1320px]">
-          <div className="font-mono-num flex flex-col gap-2 border-t border-border py-5 text-[10.5px] uppercase tracking-widest text-muted-foreground/50 sm:flex-row sm:items-center sm:justify-between">
+          <div className="font-mono-num flex flex-col gap-2 border-t border-border py-5 text-[10.5px] uppercase tracking-widest text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
             <span>Cross-chain alpha in development</span>
             <span>© 2026 Astrion Labs. All rights reserved.</span>
           </div>

@@ -24,8 +24,8 @@ function Stat({ label, value, hint, muted }: { label: string; value: React.React
       <dt className="text-label-xs text-muted-foreground uppercase">{label}</dt>
       <dd className={`font-mono-num mt-1 text-[14px] break-words ${muted ? "text-muted-foreground" : "text-foreground"}`}>
         {value}
+        {hint && <span className="text-label-xs mt-1 block font-sans font-normal text-muted-foreground">{hint}</span>}
       </dd>
-      {hint && <p className="text-label-xs mt-1 font-normal text-muted-foreground">{hint}</p>}
     </div>
   )
 }
