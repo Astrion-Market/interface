@@ -1,100 +1,130 @@
-import { Button } from "@workspace/ui/components/button"
+import { StatusBadge } from "@workspace/ui/components/status-badge"
+import { ChainBadge, ProtocolBadge } from "../../features/lending/components/primitives/identity-badge"
+import type { StatusTone } from "@workspace/ui/components/status-badge"
+import type { ExecutionChainId, ProtocolId } from "../../features/lending/lib/identity"
 
-const CORE_MARKETS = [
-  { symbol: "USDC", name: "USD Coin",    supplyApy: "-", borrowApy: "-", util: 0 },
-  { symbol: "XLM",  name: "Stellar",     supplyApy: "-", borrowApy: "-", util: 0 },
-  { symbol: "BTC",  name: "Bitcoin",     supplyApy: "-", borrowApy: "-", util: 0 },
-  { symbol: "EURC", name: "Euro Coin",   supplyApy: "-", borrowApy: "-", util: 0 },
+// Mirrors the capability matrix in docs/PRODUCT.md. Every row is planned.
+const ROUTES: Array<{
+  protocol: ProtocolId
+  chain: ExecutionChainId
+  lend: string
+  borrow: string
+  status: string
+  tone: StatusTone
+}> = [
+  {
+    protocol: "aave-v3",
+    chain: "base",
+    lend: "Supply native USDC to an approved reserve",
+    borrow: "Borrow USDC against approved collateral",
+    status: "First planned route",
+    tone: "pending",
+  },
+  {
+    protocol: "morpho-blue",
+    chain: "base",
+    lend: "Supply USDC as the loan asset in an approved market",
+    borrow: "Post that market's collateral and borrow USDC",
+    status: "Planned",
+    tone: "neutral",
+  },
+  {
+    protocol: "compound-v3",
+    chain: "base",
+    lend: "Supply USDC to an approved USDC Comet",
+    borrow: "Post eligible collateral and borrow USDC",
+    status: "Proposed",
+    tone: "neutral",
+  },
+  {
+    protocol: "aave-v3",
+    chain: "ethereum",
+    lend: "Supply native USDC to an approved reserve",
+    borrow: "Borrow USDC against approved collateral",
+    status: "After Base",
+    tone: "neutral",
+  },
+  {
+    protocol: "morpho-blue",
+    chain: "ethereum",
+    lend: "Supply USDC as the loan asset in an approved market",
+    borrow: "Post that market's collateral and borrow USDC",
+    status: "After Base",
+    tone: "neutral",
+  },
+  {
+    protocol: "compound-v3",
+    chain: "ethereum",
+    lend: "Supply USDC to an approved USDC Comet",
+    borrow: "Post eligible collateral and borrow USDC",
+    status: "Proposed",
+    tone: "neutral",
+  },
 ]
-
-const ISOLATED_MARKETS = [
-  { symbol: "AQUA", name: "Aquarius",    supplyApy: "-", borrowApy: "-", util: 0 },
-  { symbol: "yBTC", name: "Yield BTC",   supplyApy: "-", borrowApy: "-", util: 0 },
-]
-
-function MarketRow({
-  symbol, name, supplyApy, borrowApy, util, type,
-}: {
-  symbol: string; name: string; supplyApy: string; borrowApy: string; util: number; type: "core" | "isolated"
-}) {
-  return (
-    <div className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-0">
-      <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${
-        type === "core" ? "bg-blue-500/15 text-blue-400" : "bg-amber-500/15 text-amber-400"
-      }`}>
-        {symbol.slice(0, 2)}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[12px] font-medium text-foreground">{symbol}</p>
-        <p className="text-[10px] text-muted-foreground">{name}</p>
-      </div>
-      <div className="hidden sm:block text-right">
-        <p className="font-mono-num text-[11px] text-emerald-400">{supplyApy}</p>
-        <p className="text-[9px] text-muted-foreground">Supply APY</p>
-      </div>
-      <div className="text-right">
-        <p className="font-mono-num text-[11px] text-amber-400">{borrowApy}</p>
-        <p className="text-[9px] text-muted-foreground">Borrow APY</p>
-      </div>
-      <div className="hidden w-16 sm:block">
-        <div className="h-1 overflow-hidden rounded-full bg-muted">
-          <div className="h-full rounded-full bg-primary" style={{ width: `${util}%` }} />
-        </div>
-        <p className="font-mono-num mt-0.5 text-[9px] text-muted-foreground">{util}%</p>
-      </div>
-    </div>
-  )
-}
 
 export function Markets() {
   return (
     <section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto max-w-[1320px]">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="font-mono-num text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-              Markets
-            </p>
-            <h2 className="mt-2 text-[28px] font-semibold leading-tight tracking-[-0.02em] text-foreground sm:text-[36px]">
-              Core &amp; Isolated markets.
-            </h2>
-          </div>
-          <Button variant="outline" className="h-9 px-4 text-[12px]"
-            onClick={() => { window.location.href = "/markets" }}>
-            View all markets →
-          </Button>
+        <div className="mb-10 max-w-[640px]">
+          <p className="font-mono-num text-label-xs uppercase text-muted-foreground">
+            Planned markets
+          </p>
+          <h2 className="text-heading-section mt-2 text-foreground">
+            Three protocols. Base first, then Ethereum.
+          </h2>
+          <p className="text-copy mt-4 text-muted-foreground">
+            Each market is enabled on its own after integration and release
+            checks. Rates and liquidity will appear from live market data, with
+            the time they were read.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          {/* Core markets */}
-          <div className="overflow-hidden rounded-lg border border-blue-500/20">
-            <div className="flex items-center gap-2 border-b border-blue-500/20 bg-blue-500/5 px-4 py-3">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-blue-400" />
-              <p className="text-[12px] font-semibold text-blue-400">Core Markets</p>
-              <span className="ml-auto font-mono-num text-[10px] text-muted-foreground">Shared liquidity · Blue chip assets</span>
-            </div>
-            {CORE_MARKETS.map((m) => (
-              <MarketRow key={m.symbol} {...m} type="core" />
-            ))}
-          </div>
-
-          {/* Isolated markets */}
-          <div className="overflow-hidden rounded-lg border border-amber-500/20">
-            <div className="flex items-center gap-2 border-b border-amber-500/20 bg-amber-500/5 px-4 py-3">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-amber-400" />
-              <p className="text-[12px] font-semibold text-amber-400">Isolated Markets</p>
-              <span className="ml-auto font-mono-num text-[10px] text-muted-foreground">Independent risk</span>
-            </div>
-            {ISOLATED_MARKETS.map((m) => (
-              <MarketRow key={m.symbol} {...m} type="isolated" />
-            ))}
-            <div className="border-t border-amber-500/10 bg-amber-500/5 px-4 py-3">
-              <p className="text-[11px] text-amber-400/70">
-                More isolated markets will be added via governance.
-              </p>
-            </div>
-          </div>
+        <div className="overflow-hidden rounded-lg border border-border">
+          <table className="w-full text-left">
+            <caption className="sr-only">Planned protocol and chain routes</caption>
+            <thead className="hidden bg-muted/40 md:table-header-group">
+              <tr className="text-label-xs uppercase text-muted-foreground">
+                <th scope="col" className="px-4 py-3 font-medium">Market</th>
+                <th scope="col" className="px-4 py-3 font-medium">Lend</th>
+                <th scope="col" className="px-4 py-3 font-medium">Borrow</th>
+                <th scope="col" className="px-4 py-3 font-medium">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border">
+              {ROUTES.map((route) => (
+                <tr
+                  key={`${route.protocol}-${route.chain}`}
+                  className="grid grid-cols-1 gap-2 px-4 py-4 md:table-row md:p-0"
+                >
+                  <th scope="row" className="font-normal md:px-4 md:py-3.5">
+                    <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                      <ProtocolBadge protocol={route.protocol} />
+                      <ChainBadge chain={route.chain} size="sm" />
+                    </div>
+                  </th>
+                  <td className="text-copy-sm text-muted-foreground md:px-4 md:py-3.5">
+                    <span className="font-medium text-foreground md:hidden">Lend: </span>
+                    {route.lend}
+                  </td>
+                  <td className="text-copy-sm text-muted-foreground md:px-4 md:py-3.5">
+                    <span className="font-medium text-foreground md:hidden">Borrow: </span>
+                    {route.borrow}
+                  </td>
+                  <td className="md:px-4 md:py-3.5">
+                    <StatusBadge tone={route.tone}>{route.status}</StatusBadge>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
+
+        <p className="text-copy-sm mt-4 text-muted-foreground">
+          Compound III is the proposed third protocol and still needs
+          confirmation. Protocol names describe planned integrations, not
+          partnerships or endorsements.
+        </p>
       </div>
     </section>
   )

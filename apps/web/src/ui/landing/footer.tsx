@@ -1,21 +1,19 @@
 const FOOTER_COLS = [
   {
-    heading: "Protocol",
+    heading: "Product",
     links: [
-      { label: "Dashboard",  href: "/dashboard" },
-      { label: "Markets",    href: "/markets" },
-      { label: "Portfolio",  href: "/portfolio" },
-      { label: "Analytics",  href: "/analytics" },
-      { label: "Governance", href: "/governance" },
+      { label: "Overview",          href: "/dashboard" },
+      { label: "Markets",           href: "/markets" },
+      { label: "Positions",         href: "/portfolio" },
+      { label: "Activity",          href: "/activity" },
+      { label: "Stellar positions", href: "/legacy" },
     ],
   },
   {
-    heading: "Developers",
+    heading: "Learn",
     links: [
       { label: "Documentation", href: "/docs" },
-      { label: "Contracts",     href: "#" },
-      { label: "SDK",           href: "#" },
-      { label: "Bug Bounty",    href: "#" },
+      { label: "GitHub",        href: "https://github.com/Astrion-Market", external: true },
     ],
   },
   {
@@ -24,17 +22,6 @@ const FOOTER_COLS = [
       { label: "Twitter / X", href: "https://x.com/Astrionmarket", external: true },
       { label: "Discord",     href: "https://discord.gg/astrionmarket", external: true },
       { label: "Telegram",    href: "https://t.me/astrionmarket", external: true },
-      { label: "Blog",        href: "#" },
-    ],
-  },
-  {
-    heading: "Company",
-    links: [
-      { label: "About",    href: "#" },
-      { label: "Careers",  href: "#" },
-      { label: "Security", href: "#" },
-      { label: "Terms",    href: "#" },
-      { label: "Privacy",  href: "#" },
     ],
   },
 ]
@@ -89,7 +76,7 @@ export function Footer() {
           <div className="flex flex-col gap-8 pb-12 sm:flex-row sm:items-start sm:justify-between">
 
             {/* Nav columns grid */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4 sm:gap-x-12 lg:gap-x-16">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-3 sm:gap-x-12 lg:gap-x-16">
               {FOOTER_COLS.map(({ heading, links }) => (
                 <div key={heading}>
                   <h5 className="font-mono-num mb-4 text-[10px] font-medium uppercase tracking-[0.14em] text-foreground">
@@ -169,10 +156,7 @@ export function Footer() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1320px]">
           <div className="font-mono-num flex flex-col gap-2 border-t border-border py-5 text-[10.5px] uppercase tracking-widest text-muted-foreground/50 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2">
-              <span className="h-[5px] w-[5px] rounded-full bg-emerald-400" style={{ animation: "pulseDot 2s ease-in-out infinite" }} />
-              <span>All Systems Normal</span>
-            </div>
+            <span>Cross-chain alpha in development</span>
             <span>© 2026 Astrion Labs. All rights reserved.</span>
           </div>
         </div>

@@ -1,7 +1,7 @@
 {
   "short_name": "Astrion",
-  "name": "Astrion: Hybrid Lending on Stellar",
-  "description": "The foundational credit infrastructure layer for the Stellar ecosystem. Supply, borrow, and earn across core and isolated markets.",
+  "name": "Astrion: Lend across chains from Stellar",
+  "description": "Access to Aave, Morpho, and Compound lending markets on Base and Ethereum for Stellar users. In development.",
   "icons": [
     {
       "src": "favicon.svg",

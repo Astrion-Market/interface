@@ -4,11 +4,11 @@ import "../styles/landing.css"
 
 import { Navbar } from "../ui/Navbar"
 import { Hero } from "../ui/landing/hero"
-import { Stats } from "../ui/landing/stats"
+import { AlphaStatus } from "../ui/landing/stats"
 import { Features } from "../ui/landing/features"
 import { Markets } from "../ui/landing/markets"
 import { HowItWorks } from "../ui/landing/how-it-works"
-import { Infrastructure } from "../ui/landing/infrastructure"
+import { Risks } from "../ui/landing/infrastructure"
 import { FinalCTA } from "../ui/landing/final-cta"
 import { Footer } from "../ui/landing/footer"
 
@@ -19,11 +19,11 @@ function LandingPage() {
     <div className="font-trading min-h-svh bg-background text-foreground antialiased">
       <Navbar variant="landing" />
       <Hero />
-      <Stats />
-      <Features />
-      <Markets />
+      <AlphaStatus />
       <HowItWorks />
-      <Infrastructure />
+      <Markets />
+      <Features />
+      <Risks />
       <FinalCTA />
       <Footer />
     </div>

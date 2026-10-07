@@ -18,9 +18,9 @@ const queryClient = new QueryClient({
 // Update this to your production domain before going live.
 const SITE_URL = "https://astrion.market"
 const SITE_NAME = "astrion.market"
-const TITLE = "Astrion: Hybrid Lending on Stellar"
+const TITLE = "Astrion: Lend across chains from Stellar"
 const DESCRIPTION =
-  "The foundational credit infrastructure layer for Stellar. Supply, borrow, and earn yield with institutional-grade UX on Soroban."
+  "Astrion is building access to Aave, Morpho, and Compound lending markets on Base and Ethereum for Stellar users, with clear costs, position risks, and transfer tracking. In development."
 const OG_IMAGE = `${SITE_URL}/og-image.svg`
 const TWITTER_HANDLE = "@Astrionmarket"
 
@@ -76,7 +76,7 @@ export const Route = createRootRoute({
       {
         name: "keywords",
         content:
-          "lending protocol, DeFi lending, Stellar DeFi, Soroban, borrow crypto, earn yield, USDC lending, XLM collateral, isolated markets, money market",
+          "Stellar, cross-chain lending, USDC, Circle CCTP, Aave, Morpho, Compound, Base, Ethereum, DeFi lending",
       },
       { name: "author", content: "astrion labs" },
       { name: "robots", content: "index, follow, max-image-preview:large" },
@@ -99,7 +99,7 @@ export const Route = createRootRoute({
       {
         property: "og:image:alt",
         content:
-          "Astrion: Hybrid Lending on Stellar · Supply, borrow, and earn yield on Soroban",
+          "Astrion: Lend across chains. Bring your liquidity home. Cross-chain lending from Stellar, in development.",
       },
 
       // ── Twitter / X Card ────────────────────────────────────────
@@ -112,7 +112,7 @@ export const Route = createRootRoute({
       {
         name: "twitter:image:alt",
         content:
-          "Astrion: Hybrid Lending on Stellar · Supply, borrow, and earn yield on Soroban",
+          "Astrion: Lend across chains. Bring your liquidity home. Cross-chain lending from Stellar, in development.",
       },
     ],
     links: [

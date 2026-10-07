@@ -23,6 +23,7 @@ import { Route as GovernanceRouteImport } from './routes/governance'
 import { Route as FaucetRouteImport } from './routes/faucet'
 import { Route as EarnRouteImport } from './routes/earn'
 import { Route as DocsRouteImport } from './routes/docs'
+import { Route as DesignSystemRouteImport } from './routes/design-system'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
@@ -101,6 +102,11 @@ const DocsRoute = DocsRouteImport.update({
   path: '/docs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesignSystemRoute = DesignSystemRouteImport.update({
+  id: '/design-system',
+  path: '/design-system',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
+  '/design-system': typeof DesignSystemRoute
   '/docs': typeof DocsRoute
   '/earn': typeof EarnRoute
   '/faucet': typeof FaucetRoute
@@ -168,6 +175,7 @@ export interface FileRoutesByTo {
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
+  '/design-system': typeof DesignSystemRoute
   '/docs': typeof DocsRoute
   '/earn': typeof EarnRoute
   '/faucet': typeof FaucetRoute
@@ -192,6 +200,7 @@ export interface FileRoutesById {
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
+  '/design-system': typeof DesignSystemRoute
   '/docs': typeof DocsRoute
   '/earn': typeof EarnRoute
   '/faucet': typeof FaucetRoute
@@ -217,6 +226,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brand'
     | '/dashboard'
+    | '/design-system'
     | '/docs'
     | '/earn'
     | '/faucet'
@@ -240,6 +250,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brand'
     | '/dashboard'
+    | '/design-system'
     | '/docs'
     | '/earn'
     | '/faucet'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/analytics'
     | '/brand'
     | '/dashboard'
+    | '/design-system'
     | '/docs'
     | '/earn'
     | '/faucet'
@@ -287,6 +299,7 @@ export interface RootRouteChildren {
   AnalyticsRoute: typeof AnalyticsRoute
   BrandRoute: typeof BrandRoute
   DashboardRoute: typeof DashboardRoute
+  DesignSystemRoute: typeof DesignSystemRoute
   DocsRoute: typeof DocsRoute
   EarnRoute: typeof EarnRoute
   FaucetRoute: typeof FaucetRoute
@@ -405,6 +418,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/design-system': {
+      id: '/design-system'
+      path: '/design-system'
+      fullPath: '/design-system'
+      preLoaderRoute: typeof DesignSystemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -463,6 +483,7 @@ const rootRouteChildren: RootRouteChildren = {
   AnalyticsRoute: AnalyticsRoute,
   BrandRoute: BrandRoute,
   DashboardRoute: DashboardRoute,
+  DesignSystemRoute: DesignSystemRoute,
   DocsRoute: DocsRoute,
   EarnRoute: EarnRoute,
   FaucetRoute: FaucetRoute,

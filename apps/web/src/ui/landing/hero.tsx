@@ -1,4 +1,8 @@
+import { Link } from "@tanstack/react-router"
 import { Button } from "@workspace/ui/components/button"
+import { StatusBadge } from "@workspace/ui/components/status-badge"
+import { StepTimeline } from "@workspace/ui/components/step-timeline"
+import { RouteSummary } from "../../features/lending/components/primitives/route-summary"
 
 function OrbitalBackground() {
   return (
@@ -98,90 +102,42 @@ function OrbitalBackground() {
   )
 }
 
-function HealthMeter({ value, label, color }: { value: number; label: string; color: string }) {
-  const r = 30
-  const circ = 2 * Math.PI * r
-  const arc = circ * 0.75
-  const progress = Math.min(value / 3, 1) * arc
+function RoutePreview() {
   return (
-    <div className="flex flex-col items-center gap-1">
-      <svg viewBox="0 0 80 80" className="h-16 w-16" style={{ transform: "rotate(135deg)" }}>
-        <circle cx="40" cy="40" r={r} fill="none" stroke="currentColor" strokeWidth="4"
-          strokeDasharray={`${arc} ${circ}`} strokeLinecap="round" className="text-muted/30" />
-        <circle cx="40" cy="40" r={r} fill="none" stroke={color} strokeWidth="4"
-          strokeDasharray={`${progress} ${circ}`} strokeLinecap="round" />
-      </svg>
-      <span className="font-mono-num -mt-5 text-[11px]" style={{ color }}>{label}</span>
-    </div>
-  )
-}
-
-function DashboardMockup() {
-  return (
-    <div className="relative w-full max-w-[500px] overflow-hidden rounded-xl border border-border bg-card shadow-2xl">
-      {/* Top bar */}
-      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
-        <div className="flex items-center gap-2">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-400/60" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-400/60" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/60" />
-        </div>
-        <span className="font-mono-num text-[10px] text-muted-foreground">astrion · dashboard</span>
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+    <div className="w-full max-w-[500px] space-y-4 rounded-xl border border-border bg-card p-4 shadow-2xl sm:p-5">
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-label text-foreground">Example: lend from Stellar</p>
+        <StatusBadge tone="neutral">Preview, not live</StatusBadge>
       </div>
-
-      {/* Metrics row */}
-      <div className="grid grid-cols-3 divide-x divide-border border-b border-border">
-        {[
-          { label: "Net Worth",   value: "$24,850",  accent: "text-foreground" },
-          { label: "Supplied",    value: "$30,000",  accent: "text-primary" },
-          { label: "Borrowed",    value: "$5,150",   accent: "text-foreground" },
-        ].map(({ label, value, accent }) => (
-          <div key={label} className="p-3">
-            <p className="text-[9px] uppercase tracking-wider text-muted-foreground">{label}</p>
-            <p className={`font-mono-num mt-0.5 text-[13px] font-semibold tabular-nums ${accent}`}>{value}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Health factor gauges */}
-      <div className="flex items-center justify-around border-b border-border px-4 py-3">
-        <HealthMeter value={2.4} label="2.40 Safe" color="#10b981" />
-        <div className="space-y-1.5">
-          <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Positions</p>
-          {[
-            { symbol: "USDC", type: "Supply",     apy: "4.2%", color: "text-emerald-400" },
-            { symbol: "XLM",  type: "Collateral", apy: "2.8%", color: "text-primary" },
-            { symbol: "BTC",  type: "Borrow",     apy: "5.1%", color: "text-amber-400" },
-          ].map(({ symbol, type, apy, color }) => (
-            <div key={symbol} className="flex items-center gap-3">
-              <span className={`font-mono-num text-[10px] font-medium ${color}`}>{symbol}</span>
-              <span className="text-[9px] text-muted-foreground">{type}</span>
-              <span className={`font-mono-num ml-auto text-[10px] tabular-nums ${color}`}>{apy}</span>
-            </div>
-          ))}
-        </div>
-        <HealthMeter value={1.2} label="1.20 Risk" color="#f59e0b" />
-      </div>
-
-      {/* Mini market row */}
-      <div className="grid grid-cols-2 divide-x divide-border">
-        {[
-          { symbol: "USDC", badge: "Core",     supplyApy: "4.2%",  utilization: 68, badgeColor: "text-primary border-primary/20 bg-primary/8" },
-          { symbol: "AQUA", badge: "Isolated", supplyApy: "14.8%", utilization: 42, badgeColor: "text-amber-400 border-amber-500/20 bg-amber-500/8" },
-        ].map(({ symbol, badge, supplyApy, utilization, badgeColor }) => (
-          <div key={symbol} className="p-3">
-            <div className="flex items-center justify-between">
-              <span className="font-mono-num text-[11px] font-medium">{symbol}</span>
-              <span className={`rounded-full border px-1.5 py-0.5 text-[8px] font-medium ${badgeColor}`}>{badge}</span>
-            </div>
-            <p className="font-mono-num mt-1 text-[13px] font-semibold text-emerald-400">{supplyApy}</p>
-            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-muted">
-              <div className="h-full rounded-full bg-primary" style={{ width: `${utilization}%` }} />
-            </div>
-          </div>
-        ))}
-      </div>
+      <RouteSummary
+        legs={[
+          { kind: "origin", chain: "stellar", asset: "USDC" },
+          { kind: "destination", chain: "base", protocol: "aave-v3", action: "Lend" },
+        ]}
+      />
+      <StepTimeline
+        aria-label="Example lending progress"
+        steps={[
+          {
+            id: "sign",
+            label: "Sign on Stellar",
+            description: "Your Stellar wallet approves the USDC transfer.",
+            status: "complete",
+          },
+          {
+            id: "transfer",
+            label: "Transfer to Base",
+            description: "Circle CCTP moves native USDC. Progress stays visible if you reload.",
+            status: "current",
+          },
+          {
+            id: "supply",
+            label: "Supply on Aave V3",
+            description: "Earning starts once the supply is confirmed on Base.",
+            status: "pending",
+          },
+        ]}
+      />
     </div>
   )
 }
@@ -198,11 +154,11 @@ export function Hero() {
           <div>
             <span className="font-mono-num text-label-xs inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 uppercase text-muted-foreground backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" style={{ animation: "pulseDot 2.4s ease-in-out infinite" }} />
-              Stellar · Soroban · Testnet
+              Cross-chain alpha · In development
             </span>
 
-            <h1 className="text-display font-trading mt-6 text-foreground">
-              The credit layer<br />
+            <h1 className="text-display-compact font-trading mt-6 text-foreground">
+              Lend across chains.<br />
               <span
                 className="inline-block"
                 style={{
@@ -212,46 +168,48 @@ export function Hero() {
                   backgroundClip: "text",
                 }}
               >
-                for Stellar.
+                Bring your liquidity home.
               </span>
             </h1>
 
-            <p className="text-copy mt-5 max-w-[500px] text-muted-foreground sm:text-[16px]">
-              Supply assets and earn yield. Borrow against collateral.
-              Astrion is a hybrid lending protocol: institutional-grade,
-              built on Soroban.
+            <p className="text-copy mt-5 max-w-[520px] text-muted-foreground sm:text-[16px]">
+              Astrion is building one place for Stellar users to lend USDC into
+              Aave, Morpho, and Compound markets on Base and Ethereum, borrow
+              against collateral there, and receive USDC back on Stellar.
+            </p>
+
+            <p className="text-copy-sm mt-4 max-w-[520px] text-muted-foreground">
+              <span className="font-medium text-foreground">First planned route:</span>{" "}
+              Stellar USDC to Aave V3 on Base. The alpha will need a Stellar
+              wallet and an EVM wallet you control.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <Button
                 variant="default"
                 className="h-11 gap-2 px-5 text-label"
-                onClick={() => { window.location.href = "/dashboard" }}
+                nativeButton={false}
+                render={<Link to="/dashboard" />}
               >
-                Launch App <span>→</span>
+                Open the app <span aria-hidden="true">→</span>
               </Button>
-              <Button variant="outline" className="h-11 px-5 text-label">
-                View Markets
+              <Button
+                variant="outline"
+                className="h-11 px-5 text-label"
+                nativeButton={false}
+                render={<a href="#how-it-works" />}
+              >
+                How it works
               </Button>
-            </div>
-
-            <div className="font-mono-num text-label-xs mt-8 flex flex-wrap items-center gap-4 text-muted-foreground/70">
-              <span><span className="font-medium text-foreground">-</span> TVL</span>
-              <span className="h-3 w-px bg-border" />
-              <span><span className="font-medium text-foreground">-</span> Markets</span>
-              <span className="h-3 w-px bg-border" />
-              <span><span className="font-medium text-foreground">Non-custodial</span></span>
-              <span className="h-3 w-px bg-border" />
-              <span><span className="font-medium text-foreground">Soroban</span> native</span>
             </div>
           </div>
 
-          {/* Right: dashboard mockup */}
+          {/* Right: example route */}
           <div
             className="flex justify-center lg:justify-end"
             style={{ animation: "floatUp 5s ease-in-out infinite" }}
           >
-            <DashboardMockup />
+            <RoutePreview />
           </div>
         </div>
       </div>

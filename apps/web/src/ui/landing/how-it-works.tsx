@@ -1,86 +1,110 @@
-const STEPS = [
+import { RouteSummary } from "../../features/lending/components/primitives/route-summary"
+import type { RouteLeg } from "../../features/lending/components/primitives/route-summary"
+
+const FLOWS: Array<{
+  title: string
+  summary: string
+  legs: Array<RouteLeg>
+  steps: Array<{ title: string; body: string }>
+}> = [
   {
-    num: "01",
-    title: "Supply Collateral",
-    body: "Deposit XLM, USDC, BTC, or EURC. Your assets start earning supply APY immediately while serving as borrowing collateral.",
-    terminal: [
-      { t: "→ deposit 10,000 USDC" },
-      { t: "→ tx confirmed · 1 block" },
-      { t: "→ earning 4.2% APY", ok: true },
-      { t: "▸ collateral active", ok: true },
+    title: "Lend from Stellar",
+    summary: "Start with USDC in your Stellar wallet.",
+    legs: [
+      { kind: "origin", chain: "stellar", asset: "USDC" },
+      { kind: "destination", chain: "base", protocol: "aave-v3", action: "Lend" },
+    ],
+    steps: [
+      {
+        title: "Choose a market",
+        body: "Pick an approved market and see its variable rate, available liquidity, and when that data was last read.",
+      },
+      {
+        title: "Review the route and costs",
+        body: "See each leg, the estimated bridge and network fees, who pays gas, and which wallet signs each step.",
+      },
+      {
+        title: "Sign and follow progress",
+        body: "Sign on Stellar, then follow the transfer and the supply. Your supply earns the market rate once it is confirmed on Base, not while bridging.",
+      },
     ],
   },
   {
-    num: "02",
-    title: "Borrow Against It",
-    body: "Select a borrow asset, review your projected health factor and liquidation price, then confirm in a single transaction.",
-    terminal: [
-      { t: "→ collateral: 10,000 USDC" },
-      { t: "→ borrow: 5,000 EURC @ 5.1%" },
-      { t: "→ health factor: 2.40", ok: true },
-      { t: "▸ position open", ok: true },
+    title: "Borrow to Stellar",
+    summary: "Use eligible collateral you already hold on Base.",
+    legs: [
+      { kind: "origin", chain: "base", asset: "Collateral" },
+      { kind: "destination", chain: "base", protocol: "aave-v3", action: "Borrow" },
+      { kind: "receive", chain: "stellar", asset: "USDC" },
     ],
-  },
-  {
-    num: "03",
-    title: "Monitor & Manage",
-    body: "Watch your health factor in real time. Repay, supply more, or withdraw, all with the same single-click UX.",
-    terminal: [
-      { t: "→ health factor: 1.85" },
-      { t: "→ liq. price: $0.078 XLM" },
-      { t: "→ repay 1,000 EURC", ok: true },
-      { t: "▸ health factor: 2.14", ok: true },
+    steps: [
+      {
+        title: "Post collateral on Base",
+        body: "Supply approved collateral to the market. XLM in your Stellar wallet is not usable as collateral there.",
+      },
+      {
+        title: "Borrow USDC",
+        body: "Check your health factor and liquidation point before your EVM wallet signs the borrow.",
+      },
+      {
+        title: "Receive on Stellar",
+        body: "USDC is sent to the Stellar address you confirm. Your debt is live, and accrues interest, while that transfer is pending.",
+      },
     ],
   },
 ]
 
-function Terminal({ lines }: { lines: { t: string; ok?: boolean }[] }) {
-  return (
-    <div className="overflow-hidden rounded-lg border border-border bg-muted/20">
-      <div className="flex items-center gap-1.5 border-b border-border px-3 py-2">
-        <span className="h-2 w-2 rounded-full bg-muted" />
-        <span className="h-2 w-2 rounded-full bg-muted" />
-        <span className="h-2 w-2 rounded-full bg-muted" />
-        <span className="font-mono-num ml-2 text-[9px] text-muted-foreground/50">astrion · cli</span>
-      </div>
-      <div className="space-y-1 p-3">
-        {lines.map(({ t, ok }, i) => (
-          <p key={i} className={`font-mono-num text-[11px] ${ok ? "text-emerald-400" : "text-muted-foreground"}`}>
-            {t}
-          </p>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function HowItWorks() {
   return (
-    <section className="px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+    <section id="how-it-works" className="scroll-mt-20 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto max-w-[1320px]">
-        <div className="mb-12">
-          <p className="font-mono-num text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-            How it works
+        <div className="mb-12 max-w-[640px]">
+          <p className="font-mono-num text-label-xs uppercase text-muted-foreground">
+            How it will work
           </p>
-          <h2 className="mt-2 text-[28px] font-semibold leading-tight tracking-[-0.02em] text-foreground sm:text-[36px]">
-            Three steps to on-chain credit.
+          <h2 className="text-heading-section mt-2 text-foreground">
+            Lending and borrowing are different routes.
           </h2>
+          <p className="text-copy mt-4 text-muted-foreground">
+            Every review screen shows where your funds start, which market they
+            reach, and where anything comes back. These flows are planned and
+            not yet available.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {STEPS.map(({ num, title, body, terminal }) => (
-            <div key={num} className="flex flex-col gap-4 rounded-lg border border-border p-6">
-              <div className="flex items-center gap-3">
-                <span className="font-mono-num flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-primary/30 bg-primary/10 text-[12px] font-bold text-primary">
-                  {num}
-                </span>
-                <h3 className="text-[16px] font-semibold text-foreground">{title}</h3>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {FLOWS.map(({ title, summary, legs, steps }) => (
+            <article key={title} className="flex flex-col gap-5 rounded-lg border border-border p-5 sm:p-6">
+              <div>
+                <h3 className="text-heading-card text-foreground">{title}</h3>
+                <p className="text-copy-sm mt-1 text-muted-foreground">{summary}</p>
               </div>
-              <p className="text-[13px] leading-relaxed text-muted-foreground">{body}</p>
-              <Terminal lines={terminal} />
-            </div>
+              <RouteSummary legs={legs} />
+              <ol className="space-y-4">
+                {steps.map((step, i) => (
+                  <li key={step.title} className="grid grid-cols-[1.75rem_1fr] gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="font-mono-num flex size-7 items-center justify-center rounded-md border border-primary/30 bg-primary/10 text-[12px] font-semibold text-primary"
+                    >
+                      {i + 1}
+                    </span>
+                    <div>
+                      <p className="text-label text-foreground">{step.title}</p>
+                      <p className="text-copy-sm mt-0.5 text-muted-foreground">{step.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </article>
           ))}
         </div>
+
+        <p className="text-copy-sm mt-6 max-w-[720px] text-muted-foreground">
+          Collateral and debt stay on the lending chain. Sending USDC back to
+          Stellar does not move them. Repaying from Stellar and withdrawing to
+          Stellar follow the same route review.
+        </p>
       </div>
     </section>
   )
