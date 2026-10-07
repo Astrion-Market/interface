@@ -1,6 +1,10 @@
 # Contributing to Astrion
 
-Thank you for your interest in contributing to Astrion — the hybrid lending protocol for Stellar. This guide will help you get set up and make your first contribution.
+Astrion is building a cross-chain lending interface for Stellar users. Start with
+the [product scope and capability matrix](docs/PRODUCT.md) and
+[architecture](docs/ARCHITECTURE.md) to distinguish the existing Soroban
+implementation from planned Base/Ethereum integrations. This guide covers setup
+and the contribution workflow.
 
 ---
 
