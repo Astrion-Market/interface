@@ -82,8 +82,12 @@ export function ActivityList() {
         />
       ) : (
         <ul className="divide-y divide-border rounded-xl border border-border bg-card">
-          {operations.map((op) => {
+          {[...operations]
+            // Anything needing action comes first: this list is the recovery center.
+            .sort((a, b) => Number(operationStatus(b).state === "needs-action") - Number(operationStatus(a).state === "needs-action"))
+            .map((op) => {
             const status = operationStatus(op)
+            const guide = diagnose(op, Date.now()).at(0)
             return (
               <li key={op.id} className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-3 hover:bg-muted/40">
                 <div className="min-w-0">
@@ -94,7 +98,9 @@ export function ActivityList() {
                   >
                     {KIND_LABEL[op.kind]} {amountText(op)}
                   </Link>
-                  <p className="text-copy-sm text-muted-foreground">{new Date(op.createdAt).toLocaleString()}</p>
+                  <p className="text-copy-sm text-muted-foreground">
+                    {guide ? `Next step: ${ACTION_TEXT[guide.actions[0]]}` : new Date(op.createdAt).toLocaleString()}
+                  </p>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {op.simulated && <StatusBadge tone="attention">Simulated</StatusBadge>}

@@ -33,7 +33,7 @@ test("fully repaid only when remaining debt is zero; leftovers are reported", ()
 test("interest beyond the buffer asks for a top-up and keeps the debt visible", () => {
   const outcome = settleRepay(1_000_003_083n, 1_000_010_000n)
   assert.equal(outcome.kind, "top-up-needed")
-  assert.equal(outcome.kind === "top-up-needed" && outcome.remainingDebt, 6_917n)
+  assert.equal(outcome.remainingDebt, 6_917n)
 })
 
 test("withdrawals are capped by market liquidity, and unknown is not zero", () => {

@@ -28,6 +28,10 @@ function op(kind: TrackedOperation["kind"], statuses: Array<LegStatus>, reasons:
   }
 }
 
+// Reasons array with `reason` at `index` and nothing elsewhere.
+const failAt = (index: number, reason: FailureReason) =>
+  Array.from({ length: index + 1 }, (_, i) => (i === index ? reason : undefined))
+
 const NOW = Date.parse("2026-10-07T00:05:00Z")
 const cases = (o: TrackedOperation, now = NOW) => diagnose(o, now).map((g) => g.case)
 
@@ -39,12 +43,12 @@ test("a failed supply after delivery offers retry, return, and withdraw", () => 
 })
 
 test("each failure reason maps to its own guide", () => {
-  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "confirmed", "failed"], [, , , "intent-expired"])), ["intent-expired"])
-  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "confirmed", "failed"], [, , , "protocol-paused"])), ["protocol-paused"])
-  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "failed", "waiting"], [, , "insufficient-gas"])), ["insufficient-gas"])
-  assert.deepEqual(cases(op("borrow", ["confirmed", "confirmed", "confirmed", "failed"], [, , , "trustline-missing"])), ["trustline-missing"])
-  assert.deepEqual(cases(op("borrow", ["confirmed", "confirmed", "confirmed", "failed"], [, , , "relayer-outage"])), ["relayer-outage"])
-  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "failed", "waiting"], [, , "already-minted"])), ["already-minted"])
+  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "confirmed", "failed"], failAt(3, "intent-expired"))), ["intent-expired"])
+  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "confirmed", "failed"], failAt(3, "protocol-paused"))), ["protocol-paused"])
+  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "failed", "waiting"], failAt(2, "insufficient-gas"))), ["insufficient-gas"])
+  assert.deepEqual(cases(op("borrow", ["confirmed", "confirmed", "confirmed", "failed"], failAt(3, "trustline-missing"))), ["trustline-missing"])
+  assert.deepEqual(cases(op("borrow", ["confirmed", "confirmed", "confirmed", "failed"], failAt(3, "relayer-outage"))), ["relayer-outage"])
+  assert.deepEqual(cases(op("lend", ["confirmed", "confirmed", "failed", "waiting"], failAt(2, "already-minted"))), ["already-minted"])
 })
 
 test("a withdrawal whose return transfer failed is recoverable and labeled separately", () => {
