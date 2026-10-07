@@ -30,6 +30,7 @@ import { Route as BrandRouteImport } from './routes/brand'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ActivityOperationIdRouteImport } from './routes/activity_.$operationId'
 import { Route as PortfolioChainProtocolPositionIdRouteImport } from './routes/portfolio_.$chain.$protocol.$positionId'
 import { Route as MarketsChainProtocolMarketIdRouteImport } from './routes/markets_.$chain.$protocol.$marketId'
 
@@ -138,6 +139,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActivityOperationIdRoute = ActivityOperationIdRouteImport.update({
+  id: '/activity_/$operationId',
+  path: '/activity/$operationId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PortfolioChainProtocolPositionIdRoute =
   PortfolioChainProtocolPositionIdRouteImport.update({
     id: '/portfolio_/$chain/$protocol/$positionId',
@@ -173,6 +179,7 @@ export interface FileRoutesByFullPath {
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
   '/video-demo': typeof VideoDemoRoute
+  '/activity/$operationId': typeof ActivityOperationIdRoute
   '/markets/$chain/$protocol/$marketId': typeof MarketsChainProtocolMarketIdRoute
   '/portfolio/$chain/$protocol/$positionId': typeof PortfolioChainProtocolPositionIdRoute
 }
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
   '/video-demo': typeof VideoDemoRoute
+  '/activity/$operationId': typeof ActivityOperationIdRoute
   '/markets/$chain/$protocol/$marketId': typeof MarketsChainProtocolMarketIdRoute
   '/portfolio/$chain/$protocol/$positionId': typeof PortfolioChainProtocolPositionIdRoute
 }
@@ -224,6 +232,7 @@ export interface FileRoutesById {
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
   '/video-demo': typeof VideoDemoRoute
+  '/activity_/$operationId': typeof ActivityOperationIdRoute
   '/markets_/$chain/$protocol/$marketId': typeof MarketsChainProtocolMarketIdRoute
   '/portfolio_/$chain/$protocol/$positionId': typeof PortfolioChainProtocolPositionIdRoute
 }
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/trade'
     | '/vide-demo'
     | '/video-demo'
+    | '/activity/$operationId'
     | '/markets/$chain/$protocol/$marketId'
     | '/portfolio/$chain/$protocol/$positionId'
   fileRoutesByTo: FileRoutesByTo
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/trade'
     | '/vide-demo'
     | '/video-demo'
+    | '/activity/$operationId'
     | '/markets/$chain/$protocol/$marketId'
     | '/portfolio/$chain/$protocol/$positionId'
   id:
@@ -301,6 +312,7 @@ export interface FileRouteTypes {
     | '/trade'
     | '/vide-demo'
     | '/video-demo'
+    | '/activity_/$operationId'
     | '/markets_/$chain/$protocol/$marketId'
     | '/portfolio_/$chain/$protocol/$positionId'
   fileRoutesById: FileRoutesById
@@ -327,6 +339,7 @@ export interface RootRouteChildren {
   TradeRoute: typeof TradeRoute
   VideDemoRoute: typeof VideDemoRoute
   VideoDemoRoute: typeof VideoDemoRoute
+  ActivityOperationIdRoute: typeof ActivityOperationIdRoute
   MarketsChainProtocolMarketIdRoute: typeof MarketsChainProtocolMarketIdRoute
   PortfolioChainProtocolPositionIdRoute: typeof PortfolioChainProtocolPositionIdRoute
 }
@@ -480,6 +493,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activity_/$operationId': {
+      id: '/activity_/$operationId'
+      path: '/activity/$operationId'
+      fullPath: '/activity/$operationId'
+      preLoaderRoute: typeof ActivityOperationIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/portfolio_/$chain/$protocol/$positionId': {
       id: '/portfolio_/$chain/$protocol/$positionId'
       path: '/portfolio/$chain/$protocol/$positionId'
@@ -519,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   TradeRoute: TradeRoute,
   VideDemoRoute: VideDemoRoute,
   VideoDemoRoute: VideoDemoRoute,
+  ActivityOperationIdRoute: ActivityOperationIdRoute,
   MarketsChainProtocolMarketIdRoute: MarketsChainProtocolMarketIdRoute,
   PortfolioChainProtocolPositionIdRoute: PortfolioChainProtocolPositionIdRoute,
 }

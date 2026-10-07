@@ -82,7 +82,13 @@ export function runPreflight(input: PreflightInput): Array<PreflightCheck> {
     })
   } else checks.push(pass("environment", "Network environment", routeEnv))
 
-  const lookalike = evmNetwork.lookalikes.find((l) => l.address.toLowerCase() === token.address.toLowerCase())
+  // Compare against the market's own environment; the environment check above
+  // already covers a mismatch with the route. Preview data has no canonical
+  // addresses, so only the asset type can be checked.
+  const canonical = market.env === "fixture" ? null : EVM_NETWORKS[market.env][chain]
+  const crosses = legs.funding === "stellar" || legs.payout === "stellar"
+  const lookalike = canonical?.lookalikes.find((l) => l.address.toLowerCase() === token.address.toLowerCase())
+  const isNativeUsdc = canonical ? token.address.toLowerCase() === canonical.usdc.toLowerCase() : token.symbol === "USDC"
   if (lookalike) {
     checks.push({
       id: "asset",
@@ -91,15 +97,18 @@ export function runPreflight(input: PreflightInput): Array<PreflightCheck> {
       detail: `${lookalike.symbol} is bridged USDC, not Circle's native USDC. CCTP cannot carry it.`,
       remediation: "Use a market whose loan asset is native USDC.",
     })
-  } else if (token.symbol === "USDC" && token.address.toLowerCase() !== evmNetwork.usdc.toLowerCase()) {
+  } else if (crosses && !isNativeUsdc) {
     checks.push({
       id: "asset",
       label: "Native USDC",
       status: "fail",
-      detail: `The market's USDC (${token.address}) is not ${evmNetwork.name}'s native USDC.`,
-      remediation: "Use a market whose loan asset is native USDC.",
+      detail:
+        token.symbol === "USDC"
+          ? `This market's USDC (${token.address}) is not Circle's native USDC on ${evmNetwork.name}.`
+          : `Only native USDC moves between Stellar and ${evmNetwork.name}; this market's asset is ${token.symbol}.`,
+      remediation: "Choose a native USDC market for this action.",
     })
-  } else checks.push(pass("asset", "Native USDC"))
+  } else checks.push(crosses ? pass("asset", "Native USDC") : skip("asset", "Native USDC"))
 
   // 2. Route and protocol state.
   const availability = actionAvailability(market, input.route).find((a) => a.action === action)
@@ -154,8 +163,11 @@ export function runPreflight(input: PreflightInput): Array<PreflightCheck> {
   else if (input.stellar.usdcBalance === null)
     checks.push({ id: "stellar-balance", label: "Stellar USDC balance", status: "unknown", remediation: "Couldn't read your balance. Try again." })
   else {
-    // Stellar USDC has 7 decimals; the EVM loan token has 6.
-    const needed = amount * 10n ** BigInt(7 - token.decimals)
+    // Stellar USDC has 7 decimals; scale the loan-token amount, rounding up.
+    const needed =
+      token.decimals <= 7
+        ? amount * 10n ** BigInt(7 - token.decimals)
+        : (amount + 10n ** BigInt(token.decimals - 7) - 1n) / 10n ** BigInt(token.decimals - 7)
     checks.push(
       input.stellar.usdcBalance >= needed
         ? pass("stellar-balance", "Stellar USDC balance")

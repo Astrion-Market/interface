@@ -130,3 +130,11 @@ test("EVM-only actions skip Stellar checks", () => {
   assert.equal(checks["stellar-wallet"].status, "not-needed")
   assert.equal(checks.trustline.status, "not-needed")
 })
+
+test("only native USDC can cross between Stellar and EVM", () => {
+  const weth = { ...reserve("testnet", "0x4200000000000000000000000000000000000006"), asset: { chain: "base" as const, address: "0x4200000000000000000000000000000000000006" as Address, symbol: "WETH", decimals: 18 } }
+  const lend = byId(runPreflight(input({ market: weth })))
+  assert.match(lend.asset.detail ?? "", /Only native USDC moves/)
+  const post = byId(runPreflight(input({ market: weth, action: "post-collateral" })))
+  assert.equal(post.asset.status, "not-needed")
+})

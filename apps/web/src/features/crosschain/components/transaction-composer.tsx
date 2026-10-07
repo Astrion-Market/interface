@@ -336,7 +336,12 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
               <Button
                 variant="outline"
                 className="w-full"
-                disabled={!quoteUsable || !request || (borrow?.blockers.length ?? 0) > 0}
+                disabled={
+                  !quoteUsable ||
+                  !request ||
+                  (borrow?.blockers.length ?? 0) > 0 ||
+                  checks.some((c) => c.id === "asset" && c.status === "fail")
+                }
                 onClick={() => {
                   if (!quote || !request) return
                   const result = ops.startSimulation({

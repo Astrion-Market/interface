@@ -24,6 +24,7 @@ function Page() {
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <Link
             to="/portfolio"
+            search={{ venue: "stellar" }}
             className="rounded-lg border border-border bg-card p-5 hover:border-primary"
           >
             <h2 className="font-medium">Manage positions</h2>
@@ -34,7 +35,7 @@ function Page() {
           </Link>
           <Link
             to="/markets"
-            search={{ type: "isolated" }}
+            search={{ venue: "stellar", type: "isolated" }}
             className="rounded-lg border border-border bg-card p-5 hover:border-primary"
           >
             <h2 className="font-medium">Stellar isolated markets</h2>
