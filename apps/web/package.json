@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "react-router dev --port 3000",
     "build": "react-router build",
+    "build:vercel": "node scripts/vercel-output.mjs",
     "preview": "react-router-serve ./build/server/index.js",
     "start": "react-router-serve ./build/server/index.js",
     "test": "node --test \"src/**/*.test.ts\"",
