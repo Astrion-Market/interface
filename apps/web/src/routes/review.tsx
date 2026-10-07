@@ -9,7 +9,7 @@ import type { ComposerAction } from "../features/crosschain/components/transacti
 
 type ReviewSearch = { market?: string; action?: ComposerAction }
 
-const ACTIONS: ReadonlyArray<ComposerAction> = ["lend", "borrow", "repay", "withdraw"]
+const ACTIONS: ReadonlyArray<ComposerAction> = ["lend", "borrow", "repay", "withdraw", "withdraw-collateral"]
 
 export const Route = createFileRoute("/review")({
   validateSearch: (search: Record<string, unknown>): ReviewSearch => ({

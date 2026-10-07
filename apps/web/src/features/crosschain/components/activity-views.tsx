@@ -8,6 +8,7 @@ import { ROUTE_ENV } from "../env"
 import { LEG_LABEL, operationStatus } from "../lifecycle"
 import { explorerTxUrl } from "../networks"
 import { useOperations } from "../operations-store"
+import { ACTION_TEXT, diagnose, redactedDiagnostics, retryPlan } from "../recovery"
 import type { StatusTone } from "@workspace/ui/components/status-badge"
 import type { TimelineStep } from "@workspace/ui/components/step-timeline"
 import type { OperationStatus } from "../lifecycle"
@@ -108,6 +109,59 @@ export function ActivityList() {
   )
 }
 
+function downloadDiagnostics(op: TrackedOperation) {
+  const blob = new Blob([JSON.stringify(redactedDiagnostics(op), null, 2)], { type: "application/json" })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement("a")
+  a.href = url
+  a.download = `astrion-${op.id}-diagnostics.json`
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
+function RecoveryPanel({ op }: { op: TrackedOperation }) {
+  const guides = diagnose(op, Date.now())
+  if (guides.length === 0) return null
+  const retry = retryPlan(op)
+  return (
+    <section aria-label="Recovery" className="space-y-3">
+      {guides.map((guide) => (
+        <div key={guide.case} role="alert" className="space-y-2 rounded-lg border border-attention/40 bg-attention-surface p-4">
+          <p className="text-label">{guide.title}</p>
+          <p className="text-copy-sm text-foreground/80">{guide.explanation}</p>
+          <ol className="space-y-1.5">
+            {guide.actions.map((action, i) => (
+              <li key={action} className="flex flex-wrap items-center gap-2">
+                {action === "wait" ? (
+                  <span className="text-copy-sm font-medium">{ACTION_TEXT[action]}</span>
+                ) : (
+                  <Button size="sm" variant={i === 0 ? "default" : "outline"} disabled>
+                    {ACTION_TEXT[action]}
+                  </Button>
+                )}
+                {i === 0 && <span className="text-label-xs text-muted-foreground">Recommended</span>}
+              </li>
+            ))}
+          </ol>
+          {guide.actions.includes("retry-action") && retry.length > 0 && (
+            <p className="text-copy-sm text-muted-foreground">
+              A retry resubmits only: {retry.map((i) => LEG_LABEL[op.legs[i].kind]).join(", ")}. Confirmed burns and lending
+              actions are never repeated.
+            </p>
+          )}
+          <p className="text-copy-sm text-muted-foreground">
+            Actions that move funds open once execution accounts and the relayer are deployed. You can always act
+            directly from the EVM wallet that owns your execution account.
+          </p>
+        </div>
+      ))}
+      <Button size="sm" variant="ghost" onClick={() => downloadDiagnostics(op)}>
+        Download diagnostics (addresses shortened)
+      </Button>
+    </section>
+  )
+}
+
 export function OperationDetail({ operationId }: { operationId: string }) {
   const { find, hiddenCount } = useOperations()
   const op = find(operationId)
@@ -156,8 +210,6 @@ export function OperationDetail({ operationId }: { operationId: string }) {
     }
   })
 
-  const fundsStranded = status.label.startsWith("Funds available on")
-
   return (
     <div className="mx-auto max-w-3xl space-y-5 px-4 py-6 sm:px-6">
       <Link to="/activity" className="text-copy-sm text-primary underline-offset-2 hover:underline">
@@ -176,26 +228,7 @@ export function OperationDetail({ operationId }: { operationId: string }) {
         </div>
       </div>
 
-      {fundsStranded && (
-        <div role="alert" className="space-y-2 rounded-lg border border-attention/40 bg-attention-surface p-4">
-          <p className="text-label">Your USDC arrived, but the {KIND_LABEL[op.kind].toLowerCase()} didn&apos;t complete</p>
-          <p className="text-copy-sm text-foreground/80">
-            The USDC is safe in your execution account. It is not earning interest. Choose what to do next:
-          </p>
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" variant="outline" disabled>
-              Retry
-            </Button>
-            <Button size="sm" variant="outline" disabled>
-              Return USDC to Stellar
-            </Button>
-            <Button size="sm" variant="outline" disabled>
-              Withdraw to my EVM wallet
-            </Button>
-          </div>
-          <p className="text-copy-sm text-muted-foreground">Recovery actions open once execution accounts are deployed.</p>
-        </div>
-      )}
+      <RecoveryPanel op={op} />
 
       <StepTimeline steps={steps} aria-label="Operation progress" />
 

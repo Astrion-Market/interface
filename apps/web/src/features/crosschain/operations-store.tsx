@@ -18,7 +18,7 @@ import type { LegUpdate, TrackedOperation } from "./operations"
 // only operations that can exist.
 const STORAGE_KEY = "astrion.operations.v1"
 
-export type SimulationScenario = "success" | "action-fails"
+export type SimulationScenario = "success" | "action-fails" | "return-fails"
 
 type OperationsContextValue = {
   // Operations for the currently connected wallets only.
@@ -112,7 +112,9 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
           return
         }
         steps.push({ legIndex, status: "submitted", sequence: 1, txHash: `simulated-${id}-${legIndex}` })
-        failed = input.scenario === "action-fails" && leg.kind === "protocol-action"
+        failed =
+          (input.scenario === "action-fails" && leg.kind === "protocol-action") ||
+          (input.scenario === "return-fails" && leg.kind === "return-transfer")
         steps.push({ legIndex, status: failed ? "failed" : "confirmed", sequence: 2 })
       })
       steps.forEach((step, i) => {

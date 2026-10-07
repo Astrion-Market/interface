@@ -19,19 +19,29 @@ import { previewBorrow } from "../risk"
 import { useRouteReadiness } from "../use-route-readiness"
 import { PreflightChecklist } from "./preflight-checklist"
 import { PreviewNotice } from "./preview-notice"
+import {
+  CollateralWithdrawPanel,
+  DirectRepayInstructions,
+  RepayPanel,
+  WithdrawPanel,
+  collateralWithdrawPreview,
+  fullRepayPlan,
+  withdrawChecks,
+} from "./settlement-panels"
 import type { RouteLeg } from "../../lending/components/primitives/route-summary"
 import type { MarketFixture } from "../fixture-client"
 import type { AaveReserve, Market, Token } from "../model"
 import type { SimulationScenario } from "../operations-store"
 import type { Quote, QuoteRequest } from "../quote"
 
-export type ComposerAction = "lend" | "borrow" | "repay" | "withdraw"
+export type ComposerAction = "lend" | "borrow" | "repay" | "withdraw" | "withdraw-collateral"
 
 const VERB: Record<ComposerAction, "Lend" | "Borrow" | "Repay" | "Withdraw"> = {
   lend: "Lend",
   borrow: "Borrow",
   repay: "Repay",
   withdraw: "Withdraw",
+  "withdraw-collateral": "Withdraw",
 }
 
 function routeLegs(market: Market, action: ComposerAction, collateral?: Token): Array<RouteLeg> {
@@ -40,7 +50,7 @@ function routeLegs(market: Market, action: ComposerAction, collateral?: Token): 
   const { funding, payout } = actionLegs(action)
   const legs: Array<RouteLeg> = []
   if (funding === "stellar") legs.push({ kind: "origin", chain: "stellar", asset: "USDC" })
-  else legs.push({ kind: "origin", chain, asset: action === "borrow" ? `${collateral?.symbol ?? "Collateral"} collateral` : "Your supply" })
+  else legs.push({ kind: "origin", chain, asset: action === "borrow" || action === "withdraw-collateral" ? `${collateral?.symbol ?? "Collateral"} collateral` : "Your supply" })
   legs.push(destination)
   if (payout === "stellar") legs.push({ kind: "receive", chain: "stellar", asset: "USDC" })
   return legs
@@ -85,7 +95,6 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
   const now = useNow()
   const readiness = useRouteReadiness(market.ref.chain)
   const route = findRoute(data.routes, market.ref.chain, market.protocol)
-  const token = loanToken(market)
   const { payout } = actionLegs(action)
 
   const [amountText, setAmountText] = useState("")
@@ -94,12 +103,19 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
   const choices = useMemo(() => collateralChoices(market, data.markets), [market, data.markets])
   const [collateralAddress, setCollateralAddress] = useState(choices.at(0)?.token.address ?? "")
   const collateralChoice = choices.find((c) => c.token.address === collateralAddress)
+  // Collateral withdrawals are denominated in the collateral token.
+  const token = action === "withdraw-collateral" && collateralChoice ? collateralChoice.token : loanToken(market)
+  // Preview markets read the labeled sample account; real reads arrive with C16.
+  const position = market.env === "fixture" ? (data.samplePortfolio.positions.find((p) => p.marketKey === market.key) ?? null) : null
+  const [repayMode, setRepayMode] = useState<"partial" | "full">("partial")
+  const fullPlan = action === "repay" ? fullRepayPlan(market, position) : null
   const [collateralText, setCollateralText] = useState("")
   const [quote, setQuote] = useState<Quote | null>(null)
   const [scenario, setScenario] = useState<SimulationScenario>("success")
 
-  const amount = amountText === "" ? null : parseUnits(amountText, token.decimals)
-  const amountError = amountText !== "" && amount === null ? `Enter a ${token.symbol} amount with at most ${token.decimals} decimals.` : null
+  const typed = amountText === "" ? null : parseUnits(amountText, token.decimals)
+  const amount = action === "repay" && repayMode === "full" ? (fullPlan?.send ?? null) : typed
+  const amountError = amountText !== "" && typed === null ? `Enter a ${token.symbol} amount with at most ${token.decimals} decimals.` : null
   const recipientValid = payout !== "stellar" || StrKey.isValidEd25519PublicKey(recipient)
   const collateralAmount =
     action === "borrow" && collateralChoice ? (collateralText === "" ? null : parseUnits(collateralText, collateralChoice.token.decimals)) : null
@@ -107,6 +123,12 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
   const borrow =
     action === "borrow" && collateralChoice && collateralAmount !== null && amount !== null
       ? previewBorrow(market, collateralChoice.token, collateralAmount, amount, data.prices, collateralChoice.reserve)
+      : null
+
+  const withdraw = action === "withdraw" ? withdrawChecks(market, position, amount) : null
+  const collateralWithdraw =
+    action === "withdraw-collateral" && collateralChoice
+      ? collateralWithdrawPreview(market, position, collateralChoice.token, amount, data.prices)
       : null
 
   const request: QuoteRequest | null =
@@ -130,6 +152,8 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
     ...(isReady(checks) ? [] : ["Some route checks need attention."]),
     ...issues.map((i) => i.message),
     ...(borrow?.blockers ?? []),
+    ...(withdraw?.blockers ?? []),
+    ...(collateralWithdraw?.blockers ?? []),
     "Signing is turned off until the transaction builders and pre-sign simulation are connected.",
   ]
   const quoteUsable = quote !== null && !issues.some((i) => i.kind === "changed" || i.kind === "expired" || i.kind === "invalid")
@@ -162,12 +186,48 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
               ? "Collateral and debt stay on the lending chain. Your debt is live as soon as the borrow confirms, even while USDC is on its way to Stellar."
               : action === "repay"
                 ? "Interest keeps accruing while USDC is in transit, so a full repayment may need a refreshed amount."
-                : "The market checks liquidity and your risk before the withdrawal; USDC then returns to Stellar."
+                : action === "withdraw-collateral"
+                  ? "Collateral comes back to your EVM wallet on the lending chain. Nothing crosses to Stellar."
+                  : "The market checks liquidity and your risk before the withdrawal; USDC then returns to Stellar."
         }
       />
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="space-y-5">
+          {action === "repay" && (
+            <RepayPanel
+              market={market}
+              token={token}
+              position={position}
+              mode={repayMode}
+              onModeChange={(mode) => {
+                setRepayMode(mode)
+                setQuote(null)
+              }}
+            />
+          )}
+          {action === "withdraw" && <WithdrawPanel market={market} token={token} position={position} />}
+          {action === "withdraw-collateral" && (
+            <section className="space-y-3 rounded-xl border border-border bg-card p-4">
+              <Field label="Collateral asset">
+                <select
+                  value={collateralAddress}
+                  onChange={(e) => {
+                    setCollateralAddress(e.target.value)
+                    setAmountText("")
+                    setQuote(null)
+                  }}
+                  className="h-9 w-full rounded-md border border-border bg-background px-2 text-[13px]"
+                >
+                  {choices.map((c) => (
+                    <option key={c.token.address} value={c.token.address}>
+                      {c.token.symbol}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </section>
+          )}
           {action === "borrow" && (
             <section className="space-y-3 rounded-xl border border-border bg-card p-4">
               <h2 className="text-heading-card">Collateral</h2>
@@ -208,7 +268,14 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
               error={amountError}
             >
               <div className="relative">
-                <Input inputMode="decimal" value={amountText} onChange={(e) => setAmountText(e.target.value)} placeholder="0.00" className="pr-14" />
+                <Input
+                  inputMode="decimal"
+                  value={action === "repay" && repayMode === "full" ? (fullPlan ? formatUnits(fullPlan.send, token.decimals, { group: false }).text : "") : amountText}
+                  disabled={action === "repay" && repayMode === "full"}
+                  onChange={(e) => setAmountText(e.target.value)}
+                  placeholder="0.00"
+                  className="pr-14"
+                />
                 <span className="text-copy-sm absolute top-1/2 right-3 -translate-y-1/2 text-muted-foreground">{token.symbol}</span>
               </div>
             </Field>
@@ -222,6 +289,9 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
               </Field>
             )}
           </section>
+
+          {collateralWithdraw && collateralChoice && <CollateralWithdrawPanel token={collateralChoice.token} preview={collateralWithdraw} />}
+          {action === "repay" && <DirectRepayInstructions market={market} token={token} />}
 
           {borrow && (
             <section className="space-y-3 rounded-xl border border-border bg-card p-4">
@@ -282,7 +352,11 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
                 ))}
                 <div className="flex items-start justify-between gap-3 border-t border-border pt-1.5">
                   <dt className="text-copy-sm text-muted-foreground">
-                    {action === "borrow" || action === "withdraw" ? "Least you receive on Stellar" : "Least that reaches the market"}
+                    {action === "borrow" || action === "withdraw"
+                      ? "Least you receive on Stellar"
+                      : action === "withdraw-collateral"
+                        ? "You receive in your EVM wallet"
+                        : "Least that reaches the market"}
                   </dt>
                   <dd className="font-mono-num text-right text-[12.5px] font-medium">
                     {formatUnits(quote.minimumResult, token.decimals).text} {token.symbol}
@@ -315,7 +389,7 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
             </ul>
           </div>
 
-          {market.env === "fixture" && (
+          {market.env === "fixture" && action !== "withdraw-collateral" && (
             <div className="space-y-2 rounded-lg border border-dashed border-attention/40 p-3">
               <p className="text-label">Simulated run</p>
               <p className="text-copy-sm text-muted-foreground">Walks through tracking with fake events. No wallet is used and no funds move.</p>
@@ -325,6 +399,7 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
                   [
                     ["success", "Everything succeeds"],
                     ["action-fails", `The ${ACTION_LABEL[action].toLowerCase()} on the lending chain fails`],
+                    ...(payout === "stellar" ? [["return-fails", "The transfer back to Stellar fails"] as const] : []),
                   ] as const
                 ).map(([value, label]) => (
                   <label key={value} className="text-copy-sm flex items-center gap-2">

@@ -4,7 +4,17 @@
 import type { LegKind, LegStatus, Operation, OperationKind, OperationLeg } from "./lifecycle"
 import type { ChainId } from "../lending/lib/identity"
 
+export type FailureReason =
+  | "insufficient-gas"
+  | "trustline-missing"
+  | "already-minted"
+  | "intent-expired"
+  | "relayer-outage"
+  | "protocol-paused"
+  | "reverted"
+
 export type TrackedLeg = OperationLeg & {
+  reason?: FailureReason
   // Highest update sequence applied to this leg.
   sequence: number
   updatedAt: string | null
@@ -30,6 +40,7 @@ export type LegUpdate = {
   status: LegStatus
   sequence: number
   txHash?: string
+  reason?: FailureReason
   observedAt: string
 }
 
@@ -62,6 +73,7 @@ export function applyLegUpdate(op: TrackedOperation, update: LegUpdate): Tracked
     sequence: update.sequence,
     updatedAt: update.observedAt,
     txHash: update.txHash ?? leg.txHash,
+    reason: update.status === "failed" ? (update.reason ?? "reverted") : undefined,
   }
   return { ...op, legs: op.legs.map((l, i) => (i === update.legIndex ? next : l)) }
 }

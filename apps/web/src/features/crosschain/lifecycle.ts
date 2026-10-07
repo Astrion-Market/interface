@@ -49,6 +49,11 @@ export function operationStatus(op: Operation): OperationStatus {
     const minted = op.legs.find((leg) => leg.kind === "destination-mint")
     if (failed.kind === "protocol-action" && minted?.status === "confirmed")
       return { state: "needs-action", label: `Funds available on ${CHAIN_NAME[failed.chain]}` }
+    if (failed.kind === "return-transfer")
+      return {
+        state: "needs-action",
+        label: op.kind === "borrow" ? "Borrowed; USDC not yet sent to Stellar" : "Withdrawn; USDC not yet sent to Stellar",
+      }
     return { state: "needs-action", label: `${LEG_LABEL[failed.kind]} needs attention` }
   }
 

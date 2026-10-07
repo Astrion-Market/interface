@@ -114,7 +114,7 @@ function ActionGroup({
   )
 }
 
-const REVIEWABLE: Array<LendingAction> = ["lend", "withdraw", "borrow", "repay"]
+const REVIEWABLE: Array<LendingAction> = ["lend", "withdraw", "borrow", "repay", "withdraw-collateral"]
 
 function pick(actions: Array<ActionAvailability>, wanted: Array<LendingAction>) {
   return actions.filter((a) => wanted.includes(a.action))
