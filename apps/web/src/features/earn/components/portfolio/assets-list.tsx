@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button } from "@workspace/ui/components/button"
-import { Badge } from "@workspace/ui/components/badge"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { useUserGmPositions, useUserGlvPositions, useUserSO4Stats } from "../../hooks/use-earn-data"
 import { withdrawGM, withdrawGLV, unstakeSO4 } from "../../lib/earn"

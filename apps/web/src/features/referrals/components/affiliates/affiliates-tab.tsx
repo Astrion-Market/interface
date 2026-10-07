@@ -4,7 +4,7 @@ import { Skeleton } from "@workspace/ui/components/skeleton"
 import { cn } from "@workspace/ui/lib/utils"
 import { useAffiliateStats, useAffiliateReferrals, type TimePeriod } from "../../hooks/use-referrals-data"
 import { createAffiliateCode, validateReferralCode } from "../../lib/referrals"
-import { getTierByLevel, getTierFromVolume, getNextTier, TIERS } from "../../data/tiers"
+import { getTierByLevel, getNextTier, TIERS } from "../../data/tiers"
 import { TimePeriodFilter } from "../shared/time-period-filter"
 import { StatChartCard } from "../shared/stat-chart-card"
 
@@ -23,7 +23,7 @@ function fmtAddr(addr: string) {
 
 // ── Create code wizard ──────────────────────────────────────────────────────
 
-function CreateCodeForm({ onSuccess }: { onSuccess: () => void }) {
+function CreateCodeForm() {
   const [code, setCode] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [pending, setPending] = useState(false)
@@ -37,7 +37,6 @@ function CreateCodeForm({ onSuccess }: { onSuccess: () => void }) {
     try {
       // TODO: pass real wallet account from wallet context
       await createAffiliateCode("DUMMY_ACCOUNT", code.toUpperCase().trim())
-      onSuccess()
     } finally {
       setPending(false)
     }
@@ -241,12 +240,10 @@ function ReferralsTable() {
 export function AffiliatesTab() {
   const [period, setPeriod] = useState<TimePeriod>("total")
   const { data: stats, isLoading } = useAffiliateStats(period)
-  const [showCreate, setShowCreate] = useState(false)
-
   const hasCode = Boolean(stats?.code)
 
   if (!hasCode && !isLoading) {
-    return <CreateCodeForm onSuccess={() => setShowCreate(false)} />
+    return <CreateCodeForm />
   }
 
   return (

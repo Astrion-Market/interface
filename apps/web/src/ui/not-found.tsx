@@ -52,15 +52,15 @@ const LINKS = [
     tone: "bg-[#2DD4BF]",
   },
   {
-    label: "Open trade",
-    to: "/trade",
-    desc: "Swap and route supported assets",
+    label: "View positions",
+    to: "/portfolio",
+    desc: "Review supplied assets, collateral, and debt",
     tone: "bg-[#F59E0B]",
   },
   {
     label: "View dashboard",
     to: "/dashboard",
-    desc: "Check balances and active positions",
+    desc: "See where your funds are and what needs attention",
     tone: "bg-[#A78BFA]",
   },
 ] as const
@@ -147,16 +147,16 @@ export function NotFound() {
           <div className="text-copy-sm mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-muted-foreground">
             <span>Need another path?</span>
             <Link
-              to="/earn"
+              to="/activity"
               className="font-medium text-foreground underline-offset-4 hover:text-primary hover:underline"
             >
-              Go to earn
+              Go to activity
             </Link>
             <Link
-              to="/portfolio"
+              to="/docs"
               className="font-medium text-foreground underline-offset-4 hover:text-primary hover:underline"
             >
-              Go to portfolio
+              Learn how it works
             </Link>
           </div>
         </section>

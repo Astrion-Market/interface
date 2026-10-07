@@ -1,6 +1,5 @@
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
-import { cn } from "@workspace/ui/lib/utils"
 import { useDistributions, useAffiliateStats } from "../../hooks/use-referrals-data"
 import { claimDistribution } from "../../lib/referrals"
 

@@ -145,8 +145,14 @@ export function AdditionalOpportunitiesTab() {
         title="Referrals"
         description="Share your referral code to earn fee discounts and rebates. Referrers receive a percentage of their referees' trading fees, paid in USDC every epoch."
         action={
-          <Button size="sm" variant="outline" className="h-8 text-[12px]" asChild>
-            <Link to="/referrals">Go to Referrals →</Link>
+          <Button
+            size="sm"
+            variant="outline"
+            className="h-8 text-[12px]"
+            nativeButton={false}
+            render={<Link to="/referrals" />}
+          >
+            Go to Referrals →
           </Button>
         }
       >
