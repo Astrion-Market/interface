@@ -33,12 +33,21 @@ export function DataFreshness({
     </time>
   )
   const from = source ? ` from ${source}` : ""
+  // A reading from the future means a clock or source error; never call it fresh.
+  const future = updatedAt !== null && updatedAt.getTime() - now > 60_000
 
   if (state === "unavailable" || !updatedAt) {
     return (
       <StatusBadge tone="risk">
         Data unavailable{from}
         {time && <>, last read {time}</>}
+      </StatusBadge>
+    )
+  }
+  if (future) {
+    return (
+      <StatusBadge tone="attention">
+        Timestamp ahead of your clock{from}
       </StatusBadge>
     )
   }

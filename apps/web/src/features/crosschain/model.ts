@@ -37,7 +37,11 @@ export function marketPathId(ref: MarketRef): string {
 // Globally unique, case-insensitive key. Two markets that share token
 // symbols still get different keys because the on-chain identity differs.
 export function marketKey(ref: MarketRef): string {
-  return `${ref.chain}:${ref.protocol}:${marketPathId(ref).toLowerCase()}`
+  return marketKeyFromPath(ref.chain, ref.protocol, marketPathId(ref))
+}
+
+export function marketKeyFromPath(chain: string, protocol: string, pathId: string): string {
+  return `${chain}:${protocol}:${pathId.toLowerCase()}`
 }
 
 export type Rate = {
@@ -194,15 +198,22 @@ function capReached(cap: Cap | null, used: bigint | null): boolean {
 // Every reason an action is blocked, most general first. An action is only
 // available when the route is enabled, the data is readable, the address is
 // verified, and the protocol itself allows it.
-export function actionAvailability(
-  market: Market,
-  route: RouteAvailability | undefined
-): Array<ActionAvailability> {
+export function blockingReasons(market: Market, route: RouteAvailability | undefined): Array<string> {
   const general: Array<string> = []
   if (!route) general.push("No route is configured for this chain and protocol.")
   else if (!route.enabled) general.push(route.reason ?? "This route is disabled.")
   if (!market.verified) general.push("Addresses are not yet verified against a deployment manifest.")
   if (market.dataState === "unavailable") general.push("Market data could not be read.")
+  if (market.protocol === "morpho-blue" && !market.approved)
+    general.push("This market is not on Astrion's approved list.")
+  return general
+}
+
+export function actionAvailability(
+  market: Market,
+  route: RouteAvailability | undefined
+): Array<ActionAvailability> {
+  const general = blockingReasons(market, route)
 
   return marketActions(market).map((action) => {
     const reasons = [...general]
@@ -215,8 +226,6 @@ export function actionAvailability(
       if (action === "borrow" && capReached(market.borrowCap, market.totalBorrowed))
         reasons.push("The borrow cap is reached.")
     }
-    if (market.protocol === "morpho-blue" && !market.approved)
-      reasons.push("This market is not on Astrion's approved list.")
     if (market.protocol === "compound-v3" && market.paused.includes(action))
       reasons.push("Paused by Compound governance.")
     return { action, available: reasons.length === 0, reasons }

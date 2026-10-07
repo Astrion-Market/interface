@@ -45,13 +45,6 @@ export function MarketsPage({
 
   return (
     <div className="px-4 py-5 sm:px-6 sm:py-6">
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-foreground">Markets</h1>
-        <p className="mt-0.5 text-[13px] text-muted-foreground">
-          Compare lending and borrowing opportunities across all markets
-        </p>
-      </div>
-
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <MetricCard
           label="Total TVL"

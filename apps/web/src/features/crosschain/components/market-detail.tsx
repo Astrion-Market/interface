@@ -4,7 +4,7 @@ import { StatusBadge } from "@workspace/ui/components/status-badge"
 import { AddressText } from "../../lending/components/primitives/address-text"
 import { DataFreshness } from "../../lending/components/primitives/data-freshness"
 import { ChainBadge, ProtocolBadge } from "../../lending/components/primitives/identity-badge"
-import { ACTION_LABEL, actionAvailability } from "../model"
+import { ACTION_LABEL, actionAvailability, blockingReasons, loanToken } from "../model"
 import { displayAmount, displayBps, displayCap, displayRate } from "./format"
 import { PreviewNotice } from "./preview-notice"
 import type {
@@ -39,9 +39,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function AmountStat({ label, raw, market, hint }: { label: string; raw: bigint | null; market: Market; hint?: string }) {
-  const token =
-    market.protocol === "aave-v3" ? market.asset : market.protocol === "morpho-blue" ? market.loanToken : market.baseToken
-  const { text, exact } = displayAmount(raw, token)
+  const { text, exact } = displayAmount(raw, loanToken(market))
   return <Stat label={label} value={<span title={exact}>{text}</span>} hint={hint} muted={raw === null} />
 }
 
@@ -53,10 +51,13 @@ function ActionGroup({
   title,
   description,
   actions,
+  shared,
 }: {
   title: string
   description?: string
   actions: Array<ActionAvailability>
+  // Reasons that block every action; listed once above the groups.
+  shared: Array<string>
 }) {
   if (actions.length === 0) return null
   return (
@@ -68,20 +69,21 @@ function ActionGroup({
       <ul className="space-y-2">
         {actions.map((a) => {
           const reasonId = `reason-${a.action}`
+          const own = a.reasons.filter((r) => !shared.includes(r))
           return (
             <li key={a.action} className="space-y-1">
               <Button
                 variant="outline"
                 className="h-8 w-full justify-between"
                 disabled={!a.available}
-                aria-describedby={a.available ? undefined : reasonId}
+                aria-describedby={a.available ? undefined : own.length > 0 ? `${reasonId} shared-reasons` : "shared-reasons"}
               >
                 {ACTION_LABEL[a.action]}
                 {!a.available && <span className="text-label-xs text-muted-foreground">Unavailable</span>}
               </Button>
-              {!a.available && (
-                <ul id={reasonId} className="text-label-xs list-disc space-y-0.5 pl-4 font-normal text-muted-foreground">
-                  {a.reasons.map((r) => (
+              {own.length > 0 && (
+                <ul id={reasonId} className="text-label-xs list-disc space-y-0.5 pl-4 font-normal text-attention">
+                  {own.map((r) => (
                     <li key={r}>{r}</li>
                   ))}
                 </ul>
@@ -100,10 +102,20 @@ function pick(actions: Array<ActionAvailability>, wanted: Array<LendingAction>) 
 
 function ActionPanel({ market, route }: { market: Market; route: RouteAvailability | undefined }) {
   const actions = actionAvailability(market, route)
-  const lendAsset =
-    market.protocol === "aave-v3" ? market.asset.symbol : market.protocol === "morpho-blue" ? market.loanToken.symbol : market.baseToken.symbol
+  const shared = blockingReasons(market, route)
+  const lendAsset = loanToken(market).symbol
   return (
     <aside className="space-y-5 rounded-xl border border-border bg-card p-4 lg:sticky lg:top-4">
+      {shared.length > 0 && (
+        <div className="rounded-lg bg-muted/60 px-3 py-2.5">
+          <p className="text-label">Actions are disabled</p>
+          <ul id="shared-reasons" className="text-copy-sm mt-1 list-disc space-y-0.5 pl-4 text-muted-foreground">
+            {shared.map((r) => (
+              <li key={r}>{r}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       <ActionGroup
         title={`Lend ${lendAsset}`}
         description={
@@ -114,6 +126,7 @@ function ActionPanel({ market, route }: { market: Market; route: RouteAvailabili
               : "Supplied assets can also back a borrow when collateral is enabled."
         }
         actions={pick(actions, ["lend", "withdraw"])}
+        shared={shared}
       />
       <ActionGroup
         title={market.protocol === "aave-v3" ? `Borrow ${lendAsset}` : "Borrow against collateral"}
@@ -125,6 +138,7 @@ function ActionPanel({ market, route }: { market: Market; route: RouteAvailabili
               : undefined
         }
         actions={pick(actions, ["post-collateral", "withdraw-collateral", "borrow", "repay"])}
+        shared={shared}
       />
     </aside>
   )
@@ -244,7 +258,37 @@ function CompoundBody({ market }: { market: CompoundComet }) {
       </Section>
       <Section title="Collateral assets">
         <p className="text-copy-sm text-muted-foreground">Collateral backs a borrow and earns no interest.</p>
-        <div className="overflow-x-auto rounded-lg border border-border">
+        <ul className="space-y-2 sm:hidden">
+          {market.collaterals.map((c) => {
+            const cap = displayCap({ kind: "limit", amount: c.supplyCap }, c.totalSupplied, c.token)
+            return (
+              <li key={c.token.address} className="rounded-lg border border-border bg-card p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-label">{c.token.symbol}</span>
+                  <span className="text-label-xs text-muted-foreground">Earns no interest</span>
+                </div>
+                <dl className="font-mono-num mt-2 grid grid-cols-2 gap-2 text-[13px]">
+                  <div>
+                    <dt className="text-label-xs font-sans text-muted-foreground uppercase">Borrow factor</dt>
+                    <dd>{displayBps(c.borrowCollateralFactorBps)}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-label-xs font-sans text-muted-foreground uppercase">Liquidation factor</dt>
+                    <dd>{displayBps(c.liquidateCollateralFactorBps)}</dd>
+                  </div>
+                  <div className="col-span-2">
+                    <dt className="text-label-xs font-sans text-muted-foreground uppercase">Supply cap used</dt>
+                    <dd className="flex flex-wrap items-center gap-2">
+                      {cap.text}
+                      {cap.reached && <StatusBadge tone="attention">Cap reached</StatusBadge>}
+                    </dd>
+                  </div>
+                </dl>
+              </li>
+            )
+          })}
+        </ul>
+        <div className="hidden overflow-x-auto rounded-lg border border-border sm:block">
           <table className="w-full min-w-[560px] text-left">
             <thead className="text-label-xs bg-muted/40 text-muted-foreground uppercase">
               <tr>

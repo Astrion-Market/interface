@@ -199,9 +199,9 @@ function parseMarket(raw: unknown, path: string, tokens: Map<string, Token>, env
 
   const ref = { protocol, chain, comet: address(o.comet, `${path}.comet`) }
   const base = token(o.baseToken, tokens, chain, `${path}.baseToken`)
-  const collaterals = arr(o.collaterals, `${path}.collaterals`).map((raw, i): CometCollateral => {
+  const collaterals = arr(o.collaterals, `${path}.collaterals`).map((entry, i): CometCollateral => {
     const p = `${path}.collaterals[${i}]`
-    const c = obj(raw, p)
+    const c = obj(entry, p)
     if ("rate" in c || "supplyRate" in c)
       throw new FixtureError(p, "Compound III collateral earns no interest and must not carry a rate")
     const collateralToken = token(c.token, tokens, chain, `${p}.token`)
@@ -239,9 +239,9 @@ export function parseMarketFixture(raw: unknown): MarketFixture {
   const env = oneOf(root.env, ["fixture", "testnet", "mainnet"] as const, "fixture.env")
 
   const tokens = new Map<string, Token>()
-  for (const [id, raw] of Object.entries(obj(root.tokens, "fixture.tokens"))) {
+  for (const [id, entry] of Object.entries(obj(root.tokens, "fixture.tokens"))) {
     const p = `fixture.tokens.${id}`
-    const t = obj(raw, p)
+    const t = obj(entry, p)
     const decimals = t.decimals
     if (!Number.isInteger(decimals) || (decimals as number) < 0 || (decimals as number) > 36)
       throw new FixtureError(`${p}.decimals`, "expected integer decimals 0-36")
@@ -253,15 +253,15 @@ export function parseMarketFixture(raw: unknown): MarketFixture {
     })
   }
 
-  const routes = arr(root.routes, "fixture.routes").map((raw, i): RouteAvailability => {
+  const routes = arr(root.routes, "fixture.routes").map((entry, i): RouteAvailability => {
     const p = `fixture.routes[${i}]`
-    const r = obj(raw, p)
+    const r = obj(entry, p)
     const enabled = bool(r.enabled, `${p}.enabled`)
     const reason = maybe(r.reason, `${p}.reason`, str)
     if (!enabled && !reason) throw new FixtureError(`${p}.reason`, "a disabled route needs a reason")
     return {
       chain: oneOf(r.chain, EXECUTION_CHAIN_IDS, `${p}.chain`),
-      protocol: oneOf(r.protocol, PROTOCOL_IDS, `${p}.protocol`) as ProtocolId,
+      protocol: oneOf(r.protocol, PROTOCOL_IDS, `${p}.protocol`),
       enabled,
       reason,
     }
