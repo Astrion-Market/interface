@@ -2,11 +2,12 @@ import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { cn } from "@workspace/ui/lib/utils"
-import { useAffiliateStats, useAffiliateReferrals, type TimePeriod } from "../../hooks/use-referrals-data"
+import {  useAffiliateReferrals, useAffiliateStats } from "../../hooks/use-referrals-data"
 import { createAffiliateCode, validateReferralCode } from "../../lib/referrals"
-import { getTierByLevel, getNextTier, TIERS } from "../../data/tiers"
+import { TIERS, getNextTier, getTierByLevel } from "../../data/tiers"
 import { TimePeriodFilter } from "../shared/time-period-filter"
 import { StatChartCard } from "../shared/stat-chart-card"
+import type {TimePeriod} from "../../hooks/use-referrals-data";
 
 function fmtUsd(v: number) {
   return new Intl.NumberFormat("en-US", {

@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button } from "@workspace/ui/components/button"
-import { useDistributions, useAffiliateStats } from "../../hooks/use-referrals-data"
+import { useAffiliateStats, useDistributions } from "../../hooks/use-referrals-data"
 import { claimDistribution } from "../../lib/referrals"
 
 function fmtUsd(v: number) {

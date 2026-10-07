@@ -1,3 +1,3 @@
 import type { Position } from "../types/lending"
 
-export const MOCK_POSITIONS: Position[] = []
+export const MOCK_POSITIONS: Array<Position> = []

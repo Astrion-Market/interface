@@ -7,7 +7,7 @@ type Props = {
   onFilterChange: (v: FilterType) => void
 }
 
-const FILTERS: { label: string; value: FilterType }[] = [
+const FILTERS: Array<{ label: string; value: FilterType }> = [
   { label: "All Markets", value: "all" },
   { label: "Isolated Risk", value: "isolated" },
 ]

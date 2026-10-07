@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router"
 import { Button } from "@workspace/ui/components/button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { useUserSO4Stats } from "../../hooks/use-earn-data"
-import { vestEsSO4, compoundRewards } from "../../lib/earn"
+import { compoundRewards, vestEsSO4 } from "../../lib/earn"
 
 function fmtToken(v: number, symbol: string) {
   return `${v.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 4 })} ${symbol}`

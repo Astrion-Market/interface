@@ -6,7 +6,7 @@ type InsightRow = {
   sub?: string
 }
 
-const PROTOCOL_STATS: InsightRow[] = [
+const PROTOCOL_STATS: Array<InsightRow> = [
   { label: "Protocol TVL", value: "-", sub: "Total Value Locked" },
   { label: "Total Borrowed", value: "-", sub: "Across all markets" },
   { label: "Active Markets", value: "-" },
@@ -39,7 +39,7 @@ export function MarketInsights() {
           Top Earning Markets
         </p>
         <div className="space-y-2">
-          {([] as { symbol: string; apy: number }[]).length === 0 ? (
+          {([] as Array<{ symbol: string; apy: number }>).length === 0 ? (
             <p className="text-[12px] text-muted-foreground/60">No data available</p>
           ) : null}
         </div>
@@ -57,7 +57,7 @@ export function MarketInsights() {
           Utilization
         </p>
         <div className="space-y-2.5">
-          {([] as { symbol: string; utilization: number }[]).map((m) => (
+          {([] as Array<{ symbol: string; utilization: number }>).map((m) => (
             <div key={m.symbol}>
               <div className="mb-1 flex justify-between text-[11px]">
                 <span className="text-muted-foreground">{m.symbol}</span>
@@ -71,7 +71,7 @@ export function MarketInsights() {
               </div>
             </div>
           ))}
-          {([] as unknown[]).length === 0 && (
+          {([] as Array<unknown>).length === 0 && (
             <p className="text-[12px] text-muted-foreground/60">No data available</p>
           )}
         </div>

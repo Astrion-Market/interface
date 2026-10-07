@@ -11,7 +11,7 @@ export type TradeFees = {
   priceImpactUsd: number       // market impact (positive = rebate, negative = cost)
   executionFeeUsd: number      // keeper execution gas cost
   totalFeesUsd: number
-  feesBreakdown: { label: string; valueUsd: number }[]
+  feesBreakdown: Array<{ label: string; valueUsd: number }>
 }
 
 // TODO: Read positionFeeFactor from useMarketsInfo once DataStore read is live

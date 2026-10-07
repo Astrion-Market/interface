@@ -206,15 +206,15 @@ export function LendingTransactionDialog({
     const pos = account?.position
     switch (action) {
       case "withdraw":
-        return pos && account
+        return account && pos
           ? { raw: pos.suppliedRaw, decimals: account.loanDecimals, shares: true }
           : null
       case "repay":
-        return pos && account
+        return account && pos
           ? { raw: pos.borrowedRaw, decimals: account.loanDecimals, shares: true }
           : null
       case "withdraw_collateral":
-        return pos && account
+        return account && pos
           ? {
               raw: pos.collateralRaw,
               decimals: account.collateralDecimals,

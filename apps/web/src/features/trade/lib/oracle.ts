@@ -85,7 +85,7 @@ type GmxTicker = {
   updatedAt: number
 }
 
-export async function fetchTokenPrices(): Promise<TokenPrice[]> {
+export async function fetchTokenPrices(): Promise<Array<TokenPrice>> {
   // Try Binance first
   try {
     const syms = JSON.stringify(Object.values(BINANCE_SYMBOL))
@@ -93,7 +93,7 @@ export async function fetchTokenPrices(): Promise<TokenPrice[]> {
       `${BINANCE_BASE}/api/v3/ticker/bookTicker?symbols=${encodeURIComponent(syms)}`,
     )
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const tickers = (await res.json()) as BinanceBookTicker[]
+    const tickers = (await res.json()) as Array<BinanceBookTicker>
 
     const liveMap = new Map<string, TokenPrice>()
     for (const t of tickers) {
@@ -113,7 +113,7 @@ export async function fetchTokenPrices(): Promise<TokenPrice[]> {
   try {
     const res = await fetch(`${GMX_BASE}/prices/tickers`)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const tickers = (await res.json()) as GmxTicker[]
+    const tickers = (await res.json()) as Array<GmxTicker>
 
     const liveMap = new Map<string, TokenPrice>()
     for (const t of tickers) {
@@ -137,7 +137,7 @@ export async function fetchOracleCandles(
   symbol: string,
   period: string,
   limit = 500,
-): Promise<OhlcBar[]> {
+): Promise<Array<OhlcBar>> {
   // Try Binance first: klines are oldest-first, prices are strings, times in ms
   const binanceSym = BINANCE_SYMBOL[symbol]
   const binancePeriod = BINANCE_PERIOD[period]
@@ -150,7 +150,7 @@ export async function fetchOracleCandles(
       })
       const res = await fetch(`${BINANCE_BASE}/api/v3/klines?${params}`)
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
-      const raw = (await res.json()) as (string | number)[][]
+      const raw = (await res.json()) as Array<Array<string | number>>
       // Binance klines: [openTime_ms, open, high, low, close, vol, ...] oldest-first
       return raw.map((c) => ({
         time: Math.floor(Number(c[0]) / 1000),
@@ -173,7 +173,7 @@ export async function fetchOracleCandles(
     })
     const res = await fetch(`${GMX_BASE}/prices/candles?${params}`)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const json = (await res.json()) as { candles: number[][] }
+    const json = (await res.json()) as { candles: Array<Array<number>> }
     // Reverse to get oldest-first
     return json.candles
       .map(([time, open, high, low, close]) => ({ time, open, high, low, close }))
@@ -231,7 +231,7 @@ export async function fetch24hPriceDelta(symbol: string): Promise<PriceDelta24h 
   try {
     const res = await fetch(`${GMX_BASE}/prices/24h`)
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
-    const all = (await res.json()) as GmxDayCandle[]
+    const all = (await res.json()) as Array<GmxDayCandle>
     const c = all.find((x) => x.tokenSymbol === symbol)
     if (!c) return DUMMY_24H[symbol] ?? null
     const deltaPercentage = c.open > 0 ? ((c.close - c.open) / c.open) * 100 : 0
@@ -251,7 +251,7 @@ export async function fetch24hPriceDelta(symbol: string): Promise<PriceDelta24h 
 
 // ─── Fallback dummy data ─────────────────────────────────────────────────────
 
-const DUMMY_PRICES: TokenPrice[] = [
+const DUMMY_PRICES: Array<TokenPrice> = [
   { symbol: "BTC",  address: "BTC",  minPrice: 80_000,  maxPrice: 80_050,  updatedAt: Date.now() },
   { symbol: "ETH",  address: "ETH",  minPrice: 2_300,   maxPrice: 2_302,   updatedAt: Date.now() },
   { symbol: "XLM",  address: "XLM",  minPrice: 0.167,   maxPrice: 0.1672,  updatedAt: Date.now() },
@@ -264,9 +264,9 @@ const DUMMY_24H: Record<string, PriceDelta24h> = {
   XLM: { symbol: "XLM", open: 0.158,  high: 0.169,  low: 0.157,  close: 0.167,  deltaPercentage: 5.70, deltaPercentageStr: "+5.70%" },
 }
 
-function generateDummyBars(symbol: string, _period: string, limit: number): OhlcBar[] {
+function generateDummyBars(symbol: string, _period: string, limit: number): Array<OhlcBar> {
   const seed = DUMMY_PRICES.find((p) => p.symbol === symbol)?.minPrice ?? 100
-  const bars: OhlcBar[] = []
+  const bars: Array<OhlcBar> = []
   const intervalSec = 5 * 60
   let price = seed
   let t = Math.floor(Date.now() / 1000) - limit * intervalSec

@@ -1,7 +1,7 @@
 import { MOCK_MARKETS } from "../../data/mock-markets"
+import { MetricCard } from "../shared/metric-card"
 import { RiskWarningBanner } from "./risk-warning-banner"
 import { IsolatedMarketRow } from "./isolated-market-row"
-import { MetricCard } from "../shared/metric-card"
 
 export function IsolatedMarketsPage() {
   const markets = MOCK_MARKETS.filter((m) => m.type === "isolated")

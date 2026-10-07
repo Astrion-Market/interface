@@ -24,7 +24,8 @@ export type SidecarOrder = {
 }
 
 // Per-market collateral selection (long and short can use different collateral tokens)
-type CollateralsByMarket = Record<string, { long?: string; short?: string }>
+// Not every market has a stored choice yet, so lookups can miss.
+type CollateralsByMarket = Partial<Record<string, { long?: string; short?: string }>>
 
 // Advanced UI options: toggle TP/SL inline inputs and expert-mode fields
 type AdvancedOptions = {
@@ -50,7 +51,7 @@ export type TradeState = {
   // Trigger price (Limit / Stop-Loss orders)
   triggerPrice: string
   // Sidecar TP/SL orders attached to the parent order
-  sidecarOrders: SidecarOrder[]
+  sidecarOrders: Array<SidecarOrder>
   // Advanced display toggles
   advanced: AdvancedOptions
 }
@@ -120,7 +121,7 @@ export function useTradeState() {
   )
 
   // Available trade modes per type (Swap can't do Trigger)
-  const availableTradeModes: TradeMode[] = useMemo(
+  const availableTradeModes: Array<TradeMode> = useMemo(
     () =>
       state.tradeType === "Swap"
         ? ["Market", "Limit"]
@@ -137,7 +138,7 @@ export function useTradeState() {
   // When trade type changes, reset mode if unavailable
   const setTradeType = useCallback(
     (tradeType: TradeType) => {
-      const modes: TradeMode[] =
+      const modes: Array<TradeMode> =
         tradeType === "Swap" ? ["Market", "Limit"] : ["Market", "Limit", "Trigger"]
       const mode = modes.includes(state.tradeMode) ? state.tradeMode : modes[0]
       update({ tradeType, tradeMode: mode })
@@ -157,8 +158,8 @@ export function useTradeState() {
   const setToTokenAddress = useCallback(
     (address: string) => {
       const markets = getMarketsForIndexToken(address)
-      const marketAddress = markets[0]?.address ?? state.marketAddress
-      const market = markets[0]
+      const market = markets.at(0)
+      const marketAddress = market?.address ?? state.marketAddress
 
       const collaterals = { ...state.collaterals }
       if (market) {

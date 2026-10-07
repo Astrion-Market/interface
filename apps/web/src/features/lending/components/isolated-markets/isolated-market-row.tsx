@@ -1,6 +1,6 @@
 import { toast } from "sonner"
-import type { Market } from "../../types/lending"
 import { AssetIcon } from "../shared/asset-icon"
+import type { Market } from "../../types/lending"
 
 type Props = { market: Market }
 

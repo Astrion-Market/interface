@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
-import { BINANCE_SYMBOL, BINANCE_PERIOD, fetchOracleCandles, type OhlcBar } from "../lib/oracle"
+import { BINANCE_PERIOD, BINANCE_SYMBOL,  fetchOracleCandles } from "../lib/oracle"
+import type {OhlcBar} from "../lib/oracle";
 
 type BinanceKlineMsg = {
   e: "kline"
@@ -41,6 +42,9 @@ export function useLiveBar(symbol: string | undefined, period: string): OhlcBar 
     // copy captured by closure, so the old effect's callbacks can never see
     // `mounted = true` after cleanup even if the new effect has already started.
     let mounted = true
+    // Read through a function: cleanup can flip `mounted` during an await,
+    // which TypeScript's narrowing cannot see.
+    const isMounted = () => mounted
     let usingPoll = false
     let gotFirstWsMessage = false
     let reconnectTimer: ReturnType<typeof setTimeout> | null = null
@@ -59,14 +63,14 @@ export function useLiveBar(symbol: string | undefined, period: string): OhlcBar 
       usingPoll = true
 
       async function tick() {
-        if (!mounted) return
+        if (!isMounted()) return
         if (!isHiddenRef.current) {
           try {
             const bars = await fetchOracleCandles(symbol!, period, 1)
-            if (mounted && bars.length > 0) setLiveBar(bars[bars.length - 1])
+            if (isMounted() && bars.length > 0) setLiveBar(bars[bars.length - 1])
           } catch { /* silent retry */ }
         }
-        if (mounted) pollTimerRef.current = setTimeout(tick, POLL_MS)
+        if (isMounted()) pollTimerRef.current = setTimeout(tick, POLL_MS)
       }
 
       pollTimerRef.current = setTimeout(tick, POLL_MS)

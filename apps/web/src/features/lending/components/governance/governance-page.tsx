@@ -1,7 +1,7 @@
 import { toast } from "sonner"
 import { MOCK_PROPOSALS } from "../../data/mock-governance"
-import { ProposalCard } from "./proposal-card"
 import { MetricCard } from "../shared/metric-card"
+import { ProposalCard } from "./proposal-card"
 
 export function GovernancePage() {
   const proposals = MOCK_PROPOSALS

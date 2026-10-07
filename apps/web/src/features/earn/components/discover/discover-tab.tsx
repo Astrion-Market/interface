@@ -1,8 +1,8 @@
-import { useState, useMemo } from "react"
+import { useMemo, useState } from "react"
 import { cn } from "@workspace/ui/lib/utils"
 import { Button } from "@workspace/ui/components/button"
 import { usePoolsApy } from "../../hooks/use-earn-data"
-import { depositGM, depositGLV } from "../../lib/earn"
+import { depositGLV, depositGM } from "../../lib/earn"
 
 type Filter = "all" | "glv" | "gm"
 type SortKey = "apy" | "tvl"
