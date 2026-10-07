@@ -53,6 +53,8 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
   const evm = useEvmWallet()
   const [all, setAll] = useState<Array<TrackedOperation>>([])
   const loaded = useRef(false)
+  const allRef = useRef(all)
+  allRef.current = all
   const timers = useRef<Array<ReturnType<typeof setTimeout>>>([])
 
   useEffect(() => {
@@ -97,34 +99,28 @@ export function OperationsProvider({ children }: { children: ReactNode }) {
           updatedAt: null,
         })),
       }
-      let duplicate = false
-      setAll((ops) => {
-        const result = registerOperation(ops, op)
-        duplicate = result.duplicate
-        return result.ops
-      })
-      if (duplicate) return { id, duplicate }
+      if (registerOperation(allRef.current, op).duplicate) return { id, duplicate: true }
+      setAll((ops) => registerOperation(ops, op).ops)
 
-      // Each leg is submitted, then confirmed; the protocol action may fail.
+      // Each leg is submitted, then confirmed. If the protocol action fails,
+      // the legs after it are not needed.
       const steps: Array<Omit<LegUpdate, "operationId" | "observedAt">> = []
+      let failed = false
       op.legs.forEach((leg, legIndex) => {
-        const fails = input.scenario === "action-fails" && leg.kind === "protocol-action"
-        steps.push({ legIndex, status: "submitted", sequence: 1, txHash: `simulated-${id}-${legIndex}` })
-        steps.push({ legIndex, status: fails ? "failed" : "confirmed", sequence: 2 })
-        if (fails) {
-          // Nothing after a failed action runs.
-          for (let rest = legIndex + 1; rest < op.legs.length; rest++)
-            steps.push({ legIndex: rest, status: "not-needed", sequence: 1 })
+        if (failed) {
+          steps.push({ legIndex, status: "not-needed", sequence: 1 })
+          return
         }
+        steps.push({ legIndex, status: "submitted", sequence: 1, txHash: `simulated-${id}-${legIndex}` })
+        failed = input.scenario === "action-fails" && leg.kind === "protocol-action"
+        steps.push({ legIndex, status: failed ? "failed" : "confirmed", sequence: 2 })
       })
-      const cut = steps.findIndex((s) => s.status === "failed")
-      const run = cut === -1 ? steps : steps.slice(0, cut + 1 + (op.legs.length - 1 - (steps[cut].legIndex)))
-      run.forEach((step, i) => {
+      steps.forEach((step, i) => {
         timers.current.push(
           setTimeout(() => apply({ ...step, operationId: id, observedAt: new Date().toISOString() }), 1200 * (i + 1))
         )
       })
-      return { id, duplicate }
+      return { id, duplicate: false }
     },
     [apply, currentOwnerKey]
   )

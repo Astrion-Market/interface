@@ -13,6 +13,7 @@ import { Route as VideoDemoRouteImport } from './routes/video-demo'
 import { Route as VideDemoRouteImport } from './routes/vide-demo'
 import { Route as TradeRouteImport } from './routes/trade'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ReviewRouteImport } from './routes/review'
 import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PitchDeckRouteImport } from './routes/pitch-deck'
@@ -50,6 +51,11 @@ const TradeRoute = TradeRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ReferralsRoute = ReferralsRouteImport.update({
@@ -162,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
   '/referrals': typeof ReferralsRoute
+  '/review': typeof ReviewRoute
   '/settings': typeof SettingsRoute
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
@@ -186,6 +193,7 @@ export interface FileRoutesByTo {
   '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
   '/referrals': typeof ReferralsRoute
+  '/review': typeof ReviewRoute
   '/settings': typeof SettingsRoute
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
@@ -211,6 +219,7 @@ export interface FileRoutesById {
   '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
   '/referrals': typeof ReferralsRoute
+  '/review': typeof ReviewRoute
   '/settings': typeof SettingsRoute
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
@@ -237,6 +246,7 @@ export interface FileRouteTypes {
     | '/pitch-deck'
     | '/portfolio'
     | '/referrals'
+    | '/review'
     | '/settings'
     | '/trade'
     | '/vide-demo'
@@ -261,6 +271,7 @@ export interface FileRouteTypes {
     | '/pitch-deck'
     | '/portfolio'
     | '/referrals'
+    | '/review'
     | '/settings'
     | '/trade'
     | '/vide-demo'
@@ -285,6 +296,7 @@ export interface FileRouteTypes {
     | '/pitch-deck'
     | '/portfolio'
     | '/referrals'
+    | '/review'
     | '/settings'
     | '/trade'
     | '/vide-demo'
@@ -310,6 +322,7 @@ export interface RootRouteChildren {
   PitchDeckRoute: typeof PitchDeckRoute
   PortfolioRoute: typeof PortfolioRoute
   ReferralsRoute: typeof ReferralsRoute
+  ReviewRoute: typeof ReviewRoute
   SettingsRoute: typeof SettingsRoute
   TradeRoute: typeof TradeRoute
   VideDemoRoute: typeof VideDemoRoute
@@ -346,6 +359,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/referrals': {
@@ -494,6 +514,7 @@ const rootRouteChildren: RootRouteChildren = {
   PitchDeckRoute: PitchDeckRoute,
   PortfolioRoute: PortfolioRoute,
   ReferralsRoute: ReferralsRoute,
+  ReviewRoute: ReviewRoute,
   SettingsRoute: SettingsRoute,
   TradeRoute: TradeRoute,
   VideDemoRoute: VideDemoRoute,
