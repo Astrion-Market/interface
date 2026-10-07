@@ -40,7 +40,7 @@ We are committed to providing a welcoming and inclusive experience for everyone.
 | Tool | Version | Install |
 |---|---|---|
 | [Bun](https://bun.sh) | ≥ 1.3 | `curl -fsSL https://bun.sh/install \| bash` |
-| [Node.js](https://nodejs.org) | ≥ 22.18 | `nvm install 22` or download from nodejs.org |
+| [Node.js](https://nodejs.org) | ≥ 22.22 | `nvm install 22` or download from nodejs.org |
 | [Git](https://git-scm.com) | latest | Platform-specific |
 
 ### Fork and clone
@@ -272,7 +272,8 @@ apps/web/src/
 │   ├── trade/          # Trading interface
 │   └── referrals/      # Referral program
 │
-├── routes/             # TanStack Router file-based routes
+├── routes/             # Route modules, listed in src/routes.ts
+├── root.tsx            # Document shell, providers, error boundary
 ├── styles/             # Global CSS and design tokens
 └── ui/                 # Shared UI components
     ├── Navbar.tsx       # App + landing navbar

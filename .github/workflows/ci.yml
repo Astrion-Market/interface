@@ -20,7 +20,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Unit tests run TypeScript directly with node --test (needs Node 22.18+).
+      # React Router 8 needs Node 22.22+; unit tests run TypeScript directly with node --test.
       - name: Setup Node
         uses: actions/setup-node@v4
         with:

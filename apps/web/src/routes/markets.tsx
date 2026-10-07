@@ -2,11 +2,11 @@ import { useEffect, useRef } from "react"
 import { useNavigate, useSearchParams } from "react-router"
 import { cn } from "@workspace/ui/lib/utils"
 import { MarketExplorer } from "../features/crosschain/components/market-explorer"
-import type { ExplorerFilters } from "../features/crosschain/components/market-explorer"
 import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { MarketsPage } from "../features/lending/components/markets/markets-page"
 import { STELLAR_NETWORK_LABEL } from "../features/lending/lib/network"
 import { parseMarketSearch, toSearch } from "../features/lending/lib/route-params"
+import type { ExplorerFilters } from "../features/crosschain/components/market-explorer"
 
 function VenueTabs({ stellar, onChange }: { stellar: boolean; onChange: (stellar: boolean) => void }) {
   const tabs = [

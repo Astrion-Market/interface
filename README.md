@@ -79,8 +79,9 @@ and bridge costs remain visible parts of the planned experience.
 
 ## Getting started
 
-Use Bun `1.3.13`, as specified in `package.json`, and Node.js 22.18 or newer (unit
-tests run TypeScript directly with `node --test`).
+Use Bun `1.4.2`, as specified in `package.json`, and Node.js 22.22 or newer
+(required by React Router 8; unit tests also run TypeScript directly with
+`node --test`).
 
 ```bash
 git clone https://github.com/Astrion-Market/interface.git
@@ -130,7 +131,8 @@ apps/web/src/
   features/crosschain/  # Cross-chain model, fixture client, checks, tracking, views
   features/lending/     # Existing Soroban readers, mutations, and lending screens
   features/wallet/      # Stellar wallet integration and EVM sessions (evm/)
-  routes/            # TanStack file-based routes
+  routes/            # Route modules (table in src/routes.ts)
+  root.tsx           # Document shell, providers, error boundary
   styles/            # App styles
   ui/                # Shared app UI and landing sections
 apps/web/e2e/        # Playwright journeys with a mocked EVM wallet
@@ -141,9 +143,10 @@ docs/
   ALPHA.md           # Alpha status, route matrix, limitations, evidence index
 ```
 
-The existing stack is React 19, Vite 7, TanStack Router/Query, Tailwind CSS 4,
-TypeScript, Stellar SDK, and Stellar Wallets Kit, managed with Bun and Turborepo.
-The revamp builds on this stack.
+The stack is React 19, React Router 8 (framework mode with server rendering),
+Vite 8, TanStack Query, Tailwind CSS 4, TypeScript 6, Stellar SDK 17, and Stellar
+Wallets Kit, managed with Bun and Turborepo. `bun run build` produces
+`apps/web/build/`; serve it with `bun run --cwd apps/web start`.
 
 ## Roadmap and contributions
 

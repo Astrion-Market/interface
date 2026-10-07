@@ -7,7 +7,8 @@ been implemented. See [product scope](PRODUCT.md) for route availability.
 
 ## Current integration
 
-The application uses React, TanStack Router/Query, and the shared `packages/ui`
+The application uses React, React Router (framework mode with server rendering),
+TanStack Query, and the shared `packages/ui`
 components. Lending reads simulate Soroban calls; writes prepare, simulate, sign,
 submit, and poll Stellar transactions. Wallet signing uses Stellar Wallets Kit.
 
