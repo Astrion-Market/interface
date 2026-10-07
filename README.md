@@ -16,6 +16,8 @@
   <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
+![Astrion landing page in dark mode](screenshots/hero.png)
+
 ## Direction
 
 Astrion is shifting from its Stellar-native lending implementation toward a
@@ -50,8 +52,6 @@ limitations, and an evidence index.
 | Soroban lending     | The earlier isolated markets with supply, collateral, borrow, repay, and withdrawal; defaults to Stellar testnet |
 | Production status   | No reviewed cross-chain deployment exists                                                                        |
 
-![Borrow review on preview data](screenshots/borrow-review.png)
-
 These statements describe source capabilities, not a fresh verification that every
 configured testnet contract is currently available. A testnet deployment, a fork
 test, a fixture, and a mainnet transaction are different forms of evidence.
@@ -59,6 +59,40 @@ test, a fixture, and a mainnet transaction are different forms of evidence.
 See the [capability matrix](docs/PRODUCT.md#capability-matrix) for the planned
 routes and the [architecture](docs/ARCHITECTURE.md) for ownership, execution, and
 recovery boundaries.
+
+## Screenshots
+
+All screens below run on preview data with every route disabled. See
+[docs/ALPHA.md](docs/ALPHA.md) for what is live and what is planned.
+
+**Markets.** Aave V3, Morpho Blue, and Compound III on Base and Ethereum, with
+action, chain, protocol, and rate filters. Unknown data never shows as zero.
+
+![Markets explorer](screenshots/markets.png)
+
+**Market detail.** A Morpho Blue market's full identity, rates, liquidity, and
+why each action is unavailable.
+
+![Morpho market detail](screenshots/market-detail.png)
+
+**Review.** Collateral, risk after the borrow, a fee quote with expiry, the
+ordered signatures, and route checks with specific fixes.
+
+![Borrow review](screenshots/borrow-review.png)
+
+**Recovery.** A simulated supply that failed after the USDC arrived, with the
+recommended next step and what a retry would resubmit.
+
+![Recovery after a failed supply](screenshots/recovery.png)
+
+**Positions.** A labeled sample account: per-position risk, values counted
+once, and a partial-data state for a failed read.
+
+![Sample portfolio](screenshots/portfolio.png)
+
+<p align="center">
+  <img src="screenshots/mobile-review.png" alt="Full repayment on a phone" width="320" />
+</p>
 
 ## Planned user journeys
 
