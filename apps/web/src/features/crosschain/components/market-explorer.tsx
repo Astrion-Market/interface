@@ -179,11 +179,12 @@ export function MarketExplorer({
   onFiltersChange,
 }: {
   filters: ExplorerFilters
-  onFiltersChange: (next: ExplorerFilters) => void
+  // Only the changed filters; the caller merges them into the current URL so
+  // quick successive clicks never work from a stale copy.
+  onFiltersChange: (patch: Partial<ExplorerFilters>) => void
 }) {
   const { data, error, isLoading } = useCrosschainMarkets()
   const [showUnapproved, setShowUnapproved] = useState(false)
-  const set = (patch: Partial<ExplorerFilters>) => onFiltersChange({ ...filters, ...patch })
 
   if (isLoading) {
     return (
@@ -223,7 +224,7 @@ export function MarketExplorer({
         <Segmented
           label="Action"
           value={filters.action}
-          onChange={(action) => set({ action })}
+          onChange={(action) => onFiltersChange({ action })}
           options={[
             { value: undefined, label: "All" },
             { value: "lend", label: "Lend" },
@@ -233,19 +234,19 @@ export function MarketExplorer({
         <Segmented
           label="Chain"
           value={filters.chain}
-          onChange={(chain) => set({ chain })}
+          onChange={(chain) => onFiltersChange({ chain })}
           options={[{ value: undefined, label: "All" }, ...EXECUTION_CHAIN_IDS.map((c) => ({ value: c, label: CHAINS[c].label }))]}
         />
         <Segmented
           label="Protocol"
           value={filters.protocol}
-          onChange={(protocol) => set({ protocol })}
+          onChange={(protocol) => onFiltersChange({ protocol })}
           options={[{ value: undefined, label: "All" }, ...PROTOCOL_IDS.map((p) => ({ value: p, label: protocolLabel(p) }))]}
         />
         <Segmented
           label="Sort"
           value={filters.sort}
-          onChange={(sort) => set({ sort })}
+          onChange={(sort) => onFiltersChange({ sort })}
           options={[
             { value: undefined, label: "Default" },
             { value: "lend-rate", label: "Highest lend rate" },

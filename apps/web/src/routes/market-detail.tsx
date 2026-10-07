@@ -1,4 +1,4 @@
-import { data } from "react-router"
+import { data as routeData } from "react-router"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { ErrorState } from "@workspace/ui/components/state-panel"
 import { MarketDetail } from "../features/crosschain/components/market-detail"
@@ -13,7 +13,7 @@ import type { Route } from "./+types/market-detail"
 // Syntactic check only; an unknown but well-formed ID renders a notice.
 export function loader({ params }: Route.LoaderArgs) {
   if (!isSupportedDetailRoute(params.chain, params.protocol, params.marketId, "market"))
-    throw data(null, { status: 404 })
+    throw routeData(null, { status: 404 })
   return null
 }
 

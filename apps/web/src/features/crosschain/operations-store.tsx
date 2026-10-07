@@ -51,26 +51,31 @@ function load(): Array<TrackedOperation> {
 export function OperationsProvider({ children }: { children: ReactNode }) {
   const stellar = useWallet()
   const evm = useEvmWallet()
-  const [all, setAll] = useState<Array<TrackedOperation>>([])
-  const loaded = useRef(false)
+  // null until the device cache has been read. Saving waits for that, so a
+  // re-run effect (React StrictMode) can never overwrite stored operations.
+  const [stored, setStored] = useState<Array<TrackedOperation> | null>(null)
+  const all = useMemo(() => stored ?? [], [stored])
+  const setAll = useCallback(
+    (update: (ops: Array<TrackedOperation>) => Array<TrackedOperation>) => setStored((ops) => update(ops ?? [])),
+    []
+  )
   const allRef = useRef(all)
   allRef.current = all
   const timers = useRef<Array<ReturnType<typeof setTimeout>>>([])
 
   useEffect(() => {
-    setAll(load())
-    loaded.current = true
+    setStored((ops) => ops ?? load())
     return () => timers.current.forEach(clearTimeout)
   }, [])
 
   useEffect(() => {
-    if (!loaded.current) return
+    if (stored === null) return
     try {
-      localStorage.setItem(STORAGE_KEY, serializeOperations(all))
+      localStorage.setItem(STORAGE_KEY, serializeOperations(stored))
     } catch {
       /* storage unavailable: tracking still works for this tab */
     }
-  }, [all])
+  }, [stored])
 
   const currentOwnerKey = ownerKey({ stellar: stellar.address, evm: evm.session.account })
 

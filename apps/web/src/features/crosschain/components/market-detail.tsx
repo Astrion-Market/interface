@@ -1,14 +1,13 @@
 import { Link } from "react-router"
-import { toSearch } from "../../lending/lib/route-params"
 import { Button } from "@workspace/ui/components/button"
 import { StatusBadge } from "@workspace/ui/components/status-badge"
+import { toSearch } from "../../lending/lib/route-params"
 import { AddressText } from "../../lending/components/primitives/address-text"
 import { DataFreshness } from "../../lending/components/primitives/data-freshness"
 import { ChainBadge, ProtocolBadge } from "../../lending/components/primitives/identity-badge"
 import { ACTION_LABEL, actionAvailability, blockingReasons, loanToken } from "../model"
 import { displayAmount, displayBps, displayCap, displayRate } from "./format"
 import { PreviewNotice } from "./preview-notice"
-import type { ComposerAction } from "./transaction-composer"
 import type {
   AaveReserve,
   ActionAvailability,
