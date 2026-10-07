@@ -1,5 +1,9 @@
+import { SOROBAN_NETWORK_PASSPHRASE } from "../../lib/astrion-contracts"
+
+// Scoped by network so a build pointed at another Stellar network never reuses
+// cached balances or debt from the previous one.
 export const lendingQueryKeys = {
-  all: ["lending"] as const,
+  all: ["lending", SOROBAN_NETWORK_PASSPHRASE] as const,
   markets: () => [...lendingQueryKeys.all, "markets"] as const,
   market: (marketId: string) =>
     [...lendingQueryKeys.markets(), marketId] as const,

@@ -26,8 +26,8 @@ const MATRIX: Array<{
   {
     protocol: "compound-v3",
     status: {
-      base: { text: "Proposed", tone: "neutral" },
-      ethereum: { text: "Proposed", tone: "neutral" },
+      base: { text: "Planned", tone: "neutral" },
+      ethereum: { text: "After Base", tone: "neutral" },
     },
   },
 ]

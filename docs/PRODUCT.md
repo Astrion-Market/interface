@@ -11,9 +11,8 @@ centers on discovering a market, understanding collateral and costs, signing wit
 the right wallet, and following each transaction through completion or recovery.
 
 The first release target is Base with Aave V3, followed by Morpho Blue and
-provisionally Compound III. Compound III is the proposed third integration and
-still needs maintainer confirmation before implementation. Ethereum follows the
-Base integration gates. Protocol and chain support is always specific to a
+Compound III. Maintainers confirmed Compound III as the third integration on
+2026-10-07. Ethereum follows the Base integration gates. Protocol and chain support is always specific to a
 market, asset, action, and environment.
 
 ## Current capability
@@ -35,14 +34,14 @@ All six combinations below are **planned**. The status describes Astrion's
 integration, not whether the external protocol exists on the chain. Individual
 market addresses, parameters, and supported actions require verification.
 
-| Protocol/version | Execution chain | Proposed lending product                            | Proposed borrowing product                    | Astrion status                                |
-| ---------------- | --------------- | --------------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| Aave V3          | Base            | Supply native USDC to an approved reserve           | Borrow USDC against approved collateral       | Planned first alpha route                     |
-| Morpho Blue      | Base            | Supply USDC as the loan asset in an approved market | Post that market's collateral and borrow USDC | Planned after first route                     |
-| Compound III     | Base            | Supply native USDC to an approved USDC-base Comet   | Post eligible collateral and borrow base USDC | Proposed third protocol; confirmation pending |
-| Aave V3          | Ethereum        | Supply native USDC to an approved reserve           | Borrow USDC against approved collateral       | Planned after Base gates                      |
-| Morpho Blue      | Ethereum        | Supply USDC as the loan asset in an approved market | Post that market's collateral and borrow USDC | Planned after Base gates                      |
-| Compound III     | Ethereum        | Supply native USDC to an approved USDC-base Comet   | Post eligible collateral and borrow base USDC | Proposed third protocol; confirmation pending |
+| Protocol/version | Execution chain | Proposed lending product                            | Proposed borrowing product                    | Astrion status            |
+| ---------------- | --------------- | --------------------------------------------------- | --------------------------------------------- | ------------------------- |
+| Aave V3          | Base            | Supply native USDC to an approved reserve           | Borrow USDC against approved collateral       | Planned first alpha route |
+| Morpho Blue      | Base            | Supply USDC as the loan asset in an approved market | Post that market's collateral and borrow USDC | Planned after first route |
+| Compound III     | Base            | Supply native USDC to an approved USDC-base Comet   | Post eligible collateral and borrow base USDC | Planned after first route |
+| Aave V3          | Ethereum        | Supply native USDC to an approved reserve           | Borrow USDC against approved collateral       | Planned after Base gates  |
+| Morpho Blue      | Ethereum        | Supply USDC as the loan asset in an approved market | Post that market's collateral and borrow USDC | Planned after Base gates  |
+| Compound III     | Ethereum        | Supply native USDC to an approved USDC-base Comet   | Post eligible collateral and borrow base USDC | Planned after Base gates  |
 
 Version scope is intentional: Aave V4, Morpho vault supply, Morpho fixed-rate
 products, and Compound V2 are separate integration decisions. Discovery APIs must
@@ -142,8 +141,8 @@ counts. Naming a funding program or protocol does not imply sponsorship.
 
 ## Deferred work and open decisions
 
-- Confirm Compound III and the exact approved markets, liquidity requirements,
-  and risk modes on each execution chain.
+- Confirm the exact approved markets, liquidity requirements, and risk modes on
+  each execution chain.
 - Reconcile the proposed account ownership, transaction schemas, and recovery
   API with the contracts implementation before enabling writes.
 - Set route limits, gas sponsorship policy, application fees if any, operating

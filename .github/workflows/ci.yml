@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   ci:
-    name: Lint · Typecheck · Build
+    name: Lint · Typecheck · Test · Build
     runs-on: ubuntu-latest
 
     steps:
@@ -41,6 +41,9 @@ jobs:
 
       - name: Typecheck
         run: bun typecheck
+
+      - name: Test
+        run: bun run test
 
       - name: Build
         run: bun build

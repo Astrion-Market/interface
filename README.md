@@ -24,7 +24,7 @@ USDC to markets on Base and Ethereum, borrow against eligible collateral there,
 and receive or repay USDC through Stellar.
 
 The first target is **Aave V3 on Base**, followed by **Morpho Blue** and
-**provisionally Compound III**. Ethereum is the second execution chain. Each
+**Compound III**. Ethereum is the second execution chain. Each
 market and action needs its own integration and release checks; naming a protocol
 here does not mean it is available in Astrion or imply a partnership.
 
