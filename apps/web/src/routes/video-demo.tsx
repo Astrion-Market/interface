@@ -1,9 +1,7 @@
-import { Link, createFileRoute } from "@tanstack/react-router"
+import { Link } from "react-router"
 import { useState } from "react"
 
-export const Route = createFileRoute("/video-demo")({ component: VideoDemoPage })
-
-function VideoDemoPage() {
+export default function VideoDemoPage() {
   const [hasVideo, setHasVideo] = useState(false)
 
   return (

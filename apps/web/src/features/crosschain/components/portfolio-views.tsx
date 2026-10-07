@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router"
+import { Link, href } from "react-router"
 import { Button } from "@workspace/ui/components/button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { EmptyState, ErrorState } from "@workspace/ui/components/state-panel"
@@ -56,8 +56,7 @@ function PositionCard({ row }: { row: PositionRow }) {
         <div className="space-y-1">
           <ProtocolBadge protocol={row.market.protocol} chain={row.market.ref.chain} />
           <Link
-            to="/markets/$chain/$protocol/$marketId"
-            params={{ chain: row.market.ref.chain, protocol: row.market.protocol, marketId: marketPathId(row.market.ref) }}
+            to={href("/markets/:chain/:protocol/:marketId", { chain: row.market.ref.chain, protocol: row.market.protocol, marketId: marketPathId(row.market.ref) })}
             className="text-label block hover:underline"
           >
             {row.market.name}
@@ -126,7 +125,7 @@ function InTransit() {
           const status = operationStatus(op)
           return (
             <li key={op.id} className="flex flex-wrap items-center justify-between gap-2 px-4 py-2.5">
-              <Link to="/activity/$operationId" params={{ operationId: op.id }} className="text-label hover:underline">
+              <Link to={href("/activity/:operationId", { operationId: op.id })} className="text-label hover:underline">
                 {op.kind[0].toUpperCase() + op.kind.slice(1)} {formatUnits(op.amount, 6, { maxFractionDigits: 2 }).text} USDC
               </Link>
               <span className="flex gap-1.5">
@@ -166,7 +165,7 @@ function Attention({ view }: { view: PortfolioView }) {
 function NoReaders({ title, sampleTo }: { title: string; sampleTo: "/portfolio" | "/dashboard" }) {
   const evm = useEvmWallet()
   const sampleLink = (
-    <Button variant="outline" nativeButton={false} render={<Link to={sampleTo} search={{ sample: true }} />}>
+    <Button variant="outline" nativeButton={false} render={<Link to={`${sampleTo}?sample=true`} />}>
       Preview with a sample account
     </Button>
   )
@@ -274,7 +273,7 @@ export function OverviewPage({ sample }: { sample: boolean }) {
             </li>
           ))}
         </ul>
-        <Button variant="outline" nativeButton={false} render={<Link to="/portfolio" search={{ sample: true }} />}>
+        <Button variant="outline" nativeButton={false} render={<Link to="/portfolio?sample=true" />}>
           View positions
         </Button>
       </section>

@@ -43,3 +43,7 @@ project-asset
 test-results/
 playwright-report/
 blob-report/
+
+# React Router
+.react-router/
+build/

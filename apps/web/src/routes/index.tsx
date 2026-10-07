@@ -1,4 +1,3 @@
-import { createFileRoute } from "@tanstack/react-router"
 
 import "../styles/landing.css"
 
@@ -12,9 +11,7 @@ import { Risks } from "../ui/landing/infrastructure"
 import { FinalCTA } from "../ui/landing/final-cta"
 import { Footer } from "../ui/landing/footer"
 
-export const Route = createFileRoute("/")({ component: LandingPage })
-
-function LandingPage() {
+export default function LandingPage() {
   return (
     <div className="font-trading min-h-svh bg-background text-foreground antialiased">
       <Navbar variant="landing" />

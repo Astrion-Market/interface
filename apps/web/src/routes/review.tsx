@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { useSearchParams } from "react-router"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { ErrorState } from "@workspace/ui/components/state-panel"
 import { TransactionComposer } from "../features/crosschain/components/transaction-composer"
@@ -7,20 +7,12 @@ import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { RouteNotice } from "../features/lending/components/navigation/route-notice"
 import type { ComposerAction } from "../features/crosschain/components/transaction-composer"
 
-type ReviewSearch = { market?: string; action?: ComposerAction }
-
 const ACTIONS: ReadonlyArray<ComposerAction> = ["lend", "borrow", "repay", "withdraw", "withdraw-collateral"]
 
-export const Route = createFileRoute("/review")({
-  validateSearch: (search: Record<string, unknown>): ReviewSearch => ({
-    market: typeof search.market === "string" ? search.market.toLowerCase() : undefined,
-    action: ACTIONS.find((a) => a === search.action),
-  }),
-  component: Page,
-})
-
-function Page() {
-  const { market: key, action } = Route.useSearch()
+export default function Page() {
+  const [search] = useSearchParams()
+  const key = search.get("market")?.toLowerCase()
+  const action = ACTIONS.find((a) => a === search.get("action"))
   const { data, error, isLoading } = useCrosschainMarkets()
   const market = data?.markets.find((m) => m.key === key)
 

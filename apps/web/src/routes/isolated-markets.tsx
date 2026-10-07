@@ -1,11 +1,5 @@
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import { redirect } from "react-router"
 
-export const Route = createFileRoute("/isolated-markets")({
-  beforeLoad: () => {
-    throw redirect({
-      to: "/markets",
-      search: { type: "isolated" },
-      replace: true,
-    })
-  },
-})
+export function loader() {
+  return redirect("/markets?venue=stellar&type=isolated")
+}

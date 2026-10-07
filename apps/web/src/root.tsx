@@ -1,21 +1,14 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import { useState } from "react"
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, isRouteErrorResponse } from "react-router"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster } from "sonner"
 import appCss from "@workspace/ui/globals.css?url"
-import { ThemeProvider } from "../ui/theme-provider"
-import { OperationsProvider } from "../features/crosschain/operations-store"
-import { EvmWalletProvider } from "../features/wallet/evm/evm-wallet-provider"
-import { WalletProvider } from "../features/wallet/wallet-provider"
-import { NotFound } from "../ui/not-found"
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 30, // 30s: prices refresh frequently
-      refetchOnWindowFocus: true,
-    },
-  },
-})
+import { ThemeProvider } from "./ui/theme-provider"
+import { OperationsProvider } from "./features/crosschain/operations-store"
+import { EvmWalletProvider } from "./features/wallet/evm/evm-wallet-provider"
+import { WalletProvider } from "./features/wallet/wallet-provider"
+import { NotFound } from "./ui/not-found"
+import type { Route } from "./+types/root"
 
 // Update this to your production domain before going live.
 const SITE_URL = "https://astrion.market"
@@ -66,11 +59,8 @@ const JSON_LD = {
   ],
 }
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+export const meta: Route.MetaFunction = () => [
+
       { title: TITLE },
 
       // ── Core SEO ────────────────────────────────────────────────
@@ -116,8 +106,10 @@ export const Route = createRootRoute({
         content:
           "Astrion: Lend across chains. Bring your liquidity home. Cross-chain lending from Stellar, in development.",
       },
-    ],
-    links: [
+]
+
+export const links: Route.LinksFunction = () => [
+
       // ── Icons ───────────────────────────────────────────────────
       { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
@@ -141,11 +133,7 @@ export const Route = createRootRoute({
 
       // ── App CSS ─────────────────────────────────────────────────
       { rel: "stylesheet", href: appCss },
-    ],
-  }),
-  notFoundComponent: NotFound,
-  shellComponent: RootDocument,
-})
+]
 
 // Minified blocking script: runs synchronously before first paint.
 // Reads localStorage and sets dark/light class on <html> so CSS variables
@@ -153,7 +141,7 @@ export const Route = createRootRoute({
 const THEME_SCRIPT =
   `(function(){try{var t=localStorage.getItem('astrion-theme');var d=t==='dark'||((!t||t==='system')&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.add(d?'dark':'light')}catch(e){}})()` as const
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     // suppressHydrationWarning: the blocking script adds a class before React
     // hydrates, so the server-rendered HTML and client DOM will differ on the
@@ -162,7 +150,10 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <head>
         {/* Must be first: runs before any CSS is applied */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-        <HeadContent />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <Meta />
+        <Links />
         {/* JSON-LD structured data */}
         <script
           type="application/ld+json"
@@ -170,18 +161,54 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         />
       </head>
       <body>
-        <QueryClientProvider client={queryClient}>
-          <ThemeProvider>
-            <WalletProvider>
-              <EvmWalletProvider>
-                <OperationsProvider>{children}</OperationsProvider>
-              </EvmWalletProvider>
-            </WalletProvider>
-            <Toaster richColors position="bottom-right" />
-          </ThemeProvider>
-        </QueryClientProvider>
+        {children}
+        <ScrollRestoration />
         <Scripts />
       </body>
     </html>
+  )
+}
+
+export default function App() {
+  // One client per app instance: a module-level client would share cached
+  // data between server-rendered requests.
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            staleTime: 1000 * 30, // 30s: prices refresh frequently
+            refetchOnWindowFocus: true,
+          },
+        },
+      })
+  )
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <WalletProvider>
+          <EvmWalletProvider>
+            <OperationsProvider>
+              <Outlet />
+            </OperationsProvider>
+          </EvmWalletProvider>
+        </WalletProvider>
+        <Toaster richColors position="bottom-right" />
+      </ThemeProvider>
+    </QueryClientProvider>
+  )
+}
+
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  if (isRouteErrorResponse(error) && error.status === 404) return <NotFound />
+  const message = isRouteErrorResponse(error) ? `${error.status} ${error.statusText}` : "Something went wrong"
+  return (
+    <main className="mx-auto max-w-xl px-4 py-16">
+      <h1 className="text-heading-page">{message}</h1>
+      <p className="text-copy-sm mt-2 text-muted-foreground">Reload the page, or go back to the markets.</p>
+      <a href="/markets" className="text-copy-sm mt-4 inline-block text-primary underline-offset-2 hover:underline">
+        Go to markets
+      </a>
+    </main>
   )
 }

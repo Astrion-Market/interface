@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { Link } from "@tanstack/react-router"
+import { Link, NavLink } from "react-router"
+import { cn } from "@workspace/ui/lib/utils"
 import {
   Sheet,
   SheetContent,
@@ -113,18 +114,15 @@ export function Navbar({ variant }: { variant: "landing" | "app" }) {
         <Logo />
         <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
           {PRIMARY_NAV_ITEMS.map(({ label, to }) => (
-            <Link
+            <NavLink
               key={to}
               to={to}
-              activeOptions={{ includeSearch: false }}
-              className="text-[13px] text-muted-foreground hover:text-foreground"
-              activeProps={{
-                className: "font-medium text-foreground",
-                "aria-current": "page",
-              }}
+              className={({ isActive }) =>
+                cn("text-[13px] text-muted-foreground hover:text-foreground", isActive && "font-medium text-foreground")
+              }
             >
               {label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <div className="flex items-center gap-2">
@@ -163,19 +161,16 @@ export function Navbar({ variant }: { variant: "landing" | "app" }) {
               </SheetDescription>
               <nav aria-label="Primary" className="mt-4 flex flex-col gap-2">
                 {PRIMARY_NAV_ITEMS.map(({ label, to }) => (
-                  <Link
+                  <NavLink
                     key={to}
                     to={to}
                     onClick={() => setMobileOpen(false)}
-                    activeOptions={{ includeSearch: false }}
-                    className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
-                    activeProps={{
-                      className: "bg-accent text-foreground",
-                      "aria-current": "page",
-                    }}
+                    className={({ isActive }) =>
+                cn("rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground", isActive && "bg-accent text-foreground")
+              }
                   >
                     {label}
-                  </Link>
+                  </NavLink>
                 ))}
               </nav>
               <nav aria-label="Stellar" className="mt-3 border-t border-border pt-3">

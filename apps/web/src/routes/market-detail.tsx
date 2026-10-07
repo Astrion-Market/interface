@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router"
+import { data } from "react-router"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { ErrorState } from "@workspace/ui/components/state-panel"
 import { MarketDetail } from "../features/crosschain/components/market-detail"
@@ -8,24 +8,17 @@ import { useCrosschainMarkets } from "../features/crosschain/use-crosschain-mark
 import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { RouteNotice } from "../features/lending/components/navigation/route-notice"
 import { isSupportedDetailRoute } from "../features/lending/lib/route-params"
+import type { Route } from "./+types/market-detail"
 
-export const Route = createFileRoute("/markets_/$chain/$protocol/$marketId")({
-  beforeLoad: ({ params }) => {
-    if (
-      !isSupportedDetailRoute(
-        params.chain,
-        params.protocol,
-        params.marketId,
-        "market"
-      )
-    )
-      throw notFound()
-  },
-  component: Page,
-  notFoundComponent: NotRecognized,
-})
+// Syntactic check only; an unknown but well-formed ID renders a notice.
+export function loader({ params }: Route.LoaderArgs) {
+  if (!isSupportedDetailRoute(params.chain, params.protocol, params.marketId, "market"))
+    throw data(null, { status: 404 })
+  return null
+}
 
-function NotRecognized() {
+
+export function ErrorBoundary() {
   return (
     <AppLayout>
       <RouteNotice title="Market link not recognized">
@@ -35,8 +28,7 @@ function NotRecognized() {
   )
 }
 
-function Page() {
-  const params = Route.useParams()
+export default function Page({ params }: Route.ComponentProps) {
   const { data, error, isLoading } = useCrosschainMarkets()
 
   if (isLoading) {

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "@tanstack/react-router"
+import { Link, href } from "react-router"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 import { EmptyState, ErrorState } from "@workspace/ui/components/state-panel"
 import { StatusBadge } from "@workspace/ui/components/status-badge"
@@ -133,8 +133,7 @@ function MarketRow({ market, route, action }: { market: Market; route: RouteAvai
           <ChainBadge chain={market.ref.chain} size="sm" />
         </div>
         <Link
-          to="/markets/$chain/$protocol/$marketId"
-          params={{ chain: market.ref.chain, protocol: market.protocol, marketId: marketPathId(market.ref) }}
+          to={href("/markets/:chain/:protocol/:marketId", { chain: market.ref.chain, protocol: market.protocol, marketId: marketPathId(market.ref) })}
           className="text-label block text-foreground after:absolute after:inset-0 focus-visible:underline focus-visible:outline-none"
         >
           {market.name}

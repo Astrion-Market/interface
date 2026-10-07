@@ -1,34 +1,27 @@
-import { createFileRoute, notFound } from "@tanstack/react-router"
+import { data } from "react-router"
 import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { RouteNotice } from "../features/lending/components/navigation/route-notice"
 import { isSupportedDetailRoute } from "../features/lending/lib/route-params"
+import type { Route } from "./+types/position-detail"
 
-export const Route = createFileRoute(
-  "/portfolio_/$chain/$protocol/$positionId"
-)({
-  beforeLoad: ({ params }) => {
-    if (
-      !isSupportedDetailRoute(
-        params.chain,
-        params.protocol,
-        params.positionId,
-        "position"
-      )
-    )
-      throw notFound()
-  },
-  component: Page,
-  notFoundComponent: () => (
+// Syntactic check only; an unknown but well-formed ID renders a notice.
+export function loader({ params }: Route.LoaderArgs) {
+  if (!isSupportedDetailRoute(params.chain, params.protocol, params.positionId, "position"))
+    throw data(null, { status: 404 })
+  return null
+}
+
+export function ErrorBoundary() {
+  return (
     <AppLayout>
       <RouteNotice title="Position link not recognized">
         <p>Check the chain, protocol, and identifier in this link.</p>
       </RouteNotice>
     </AppLayout>
-  ),
-})
+  )
+}
 
-function Page() {
-  const params = Route.useParams()
+export default function Page({ params }: Route.ComponentProps) {
   return (
     <AppLayout>
       <RouteNotice title="Position details are not available yet">

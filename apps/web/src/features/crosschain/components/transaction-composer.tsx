@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react"
-import { Link, useNavigate } from "@tanstack/react-router"
+import { Link, href, useNavigate } from "react-router"
 import { StrKey } from "@stellar/stellar-sdk"
 import { Button } from "@workspace/ui/components/button"
 import { Input } from "@workspace/ui/components/input"
@@ -166,8 +166,7 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6">
       <Link
-        to="/markets/$chain/$protocol/$marketId"
-        params={{ chain: market.ref.chain, protocol: market.protocol, marketId: market.key.split(":")[2] }}
+        to={href("/markets/:chain/:protocol/:marketId", { chain: market.ref.chain, protocol: market.protocol, marketId: market.key.split(":")[2] })}
         className="text-copy-sm text-primary underline-offset-2 hover:underline"
       >
         ← {market.name}
@@ -427,7 +426,7 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
                     amount: request.amount,
                     scenario,
                   })
-                  void navigate({ to: "/activity/$operationId", params: { operationId: result.id } })
+                  void navigate(href("/activity/:operationId", { operationId: result.id }))
                 }}
               >
                 Run simulation

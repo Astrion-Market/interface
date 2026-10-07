@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router"
+import { Link, href } from "react-router"
 import { Button } from "@workspace/ui/components/button"
 import { EmptyState } from "@workspace/ui/components/state-panel"
 import { StatusBadge } from "@workspace/ui/components/status-badge"
@@ -92,8 +92,7 @@ export function ActivityList() {
               <li key={op.id} className="relative flex flex-wrap items-center justify-between gap-3 px-4 py-3 hover:bg-muted/40">
                 <div className="min-w-0">
                   <Link
-                    to="/activity/$operationId"
-                    params={{ operationId: op.id }}
+                    to={href("/activity/:operationId", { operationId: op.id })}
                     className="text-label after:absolute after:inset-0 focus-visible:underline focus-visible:outline-none"
                   >
                     {KIND_LABEL[op.kind]} {amountText(op)}

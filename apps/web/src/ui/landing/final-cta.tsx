@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router"
+import { Link } from "react-router"
 import { Button } from "@workspace/ui/components/button"
 
 export function FinalCTA() {

@@ -1,8 +1,6 @@
-import { Link, createFileRoute } from "@tanstack/react-router"
+import { Link } from "react-router"
 import { StatusBadge } from "@workspace/ui/components/status-badge"
 import { AppLayout } from "../features/lending/components/layout/app-layout"
-
-export const Route = createFileRoute("/docs")({ component: Page })
 
 const TOPICS: Array<{ id: string; title: string; body: Array<string> }> = [
   {
@@ -64,7 +62,7 @@ const TOPICS: Array<{ id: string; title: string; body: Array<string> }> = [
   },
 ]
 
-function Page() {
+export default function Page() {
   return (
     <AppLayout>
       <div className="mx-auto max-w-3xl space-y-8 px-4 py-8 sm:px-6">

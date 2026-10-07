@@ -2,13 +2,12 @@
 
 import { Button } from "@workspace/ui/components/button"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { useServerFn } from "@tanstack/react-start"
 import { toast } from "sonner"
 import { ConnectWalletButton } from "../../wallet/connect-wallet-button"
 import { useWallet } from "../../wallet/wallet-provider"
 import { lendingQueryKeys } from "../../lending/hooks/queries/query-keys"
 import { TOKENS } from "../../lending/lib/astrion-contracts"
-import { dripTestAsset } from "../lib/usdc-faucet"
+import { requestDrip } from "../lib/usdc-faucet"
 import type { FaucetAssetSymbol } from "../lib/usdc-faucet"
 
 type FaucetAsset = {
@@ -55,14 +54,13 @@ export function FaucetPage() {
 function FaucetAssetCard({ asset }: { asset: FaucetAsset }) {
   const { address, refreshBalance } = useWallet()
   const queryClient = useQueryClient()
-  const drip = useServerFn(dripTestAsset)
   const mutation = useMutation({
     mutationFn: async () => {
       if (!address) {
         throw new Error("Connect your wallet first")
       }
 
-      return drip({ data: { address, asset: asset.symbol } })
+      return requestDrip(address, asset.symbol)
     },
     onSuccess: async (result) => {
       toast.success(`${result.asset} dripped`, {

@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router"
+import { Link } from "react-router"
+import { toSearch } from "../../lending/lib/route-params"
 import { Button } from "@workspace/ui/components/button"
 import { StatusBadge } from "@workspace/ui/components/status-badge"
 import { AddressText } from "../../lending/components/primitives/address-text"
@@ -82,7 +83,7 @@ function ActionGroup({
                   variant="outline"
                   className="h-8 w-full justify-between"
                   nativeButton={false}
-                  render={<Link to="/review" search={{ market: marketKey, action: a.action as ComposerAction }} />}
+                  render={<Link to={`/review${toSearch({ market: marketKey, action: a.action })}`} />}
                   aria-describedby={a.available ? undefined : own.length > 0 ? `${reasonId} shared-reasons` : "shared-reasons"}
                 >
                   {ACTION_LABEL[a.action]}

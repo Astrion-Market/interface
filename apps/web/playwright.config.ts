@@ -22,7 +22,7 @@ export default defineConfig({
     { name: "mobile-dark", use: { ...devices["Pixel 7"], colorScheme: "dark" } },
   ],
   webServer: {
-    command: `npx vite dev --port ${PORT} --strictPort`,
+    command: `npx react-router dev --port ${PORT} --strictPort`,
     url: `http://localhost:${PORT}/markets`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

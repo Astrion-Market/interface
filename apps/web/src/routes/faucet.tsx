@@ -1,16 +1,14 @@
-import { createFileRoute, redirect } from "@tanstack/react-router"
+import { redirect } from "react-router"
 import { FaucetPage } from "../features/faucet/components/faucet-page"
 import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { IS_STELLAR_TESTNET } from "../features/lending/lib/network"
 
-export const Route = createFileRoute("/faucet")({
-  beforeLoad: () => {
-    if (!IS_STELLAR_TESTNET) throw redirect({ to: "/legacy", replace: true })
-  },
-  component: Page,
-})
+export function loader() {
+  if (!IS_STELLAR_TESTNET) throw redirect("/legacy")
+  return null
+}
 
-function Page() {
+export default function Page() {
   return (
     <AppLayout>
       <FaucetPage />

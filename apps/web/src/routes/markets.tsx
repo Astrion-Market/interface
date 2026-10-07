@@ -1,15 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { useNavigate, useSearchParams } from "react-router"
 import { cn } from "@workspace/ui/lib/utils"
 import { MarketExplorer } from "../features/crosschain/components/market-explorer"
 import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { MarketsPage } from "../features/lending/components/markets/markets-page"
 import { STELLAR_NETWORK_LABEL } from "../features/lending/lib/network"
-import { parseMarketSearch } from "../features/lending/lib/route-params"
-
-export const Route = createFileRoute("/markets")({
-  validateSearch: parseMarketSearch,
-  component: Page,
-})
+import { parseMarketSearch, toSearch } from "../features/lending/lib/route-params"
 
 function VenueTabs({ stellar, onChange }: { stellar: boolean; onChange: (stellar: boolean) => void }) {
   const tabs = [
@@ -37,9 +32,10 @@ function VenueTabs({ stellar, onChange }: { stellar: boolean; onChange: (stellar
   )
 }
 
-function Page() {
-  const search = Route.useSearch()
-  const navigate = Route.useNavigate()
+export default function Page() {
+  const [params] = useSearchParams()
+  const search = parseMarketSearch(Object.fromEntries(params))
+  const navigate = useNavigate()
   const stellar = search.venue === "stellar"
 
   return (
@@ -54,7 +50,7 @@ function Page() {
           </div>
           <VenueTabs
             stellar={stellar}
-            onChange={(next) => void navigate({ search: next ? { venue: "stellar" } : {} })}
+            onChange={(next) => void navigate(next ? "?venue=stellar" : "?")}
           />
         </div>
       </div>
@@ -62,16 +58,14 @@ function Page() {
         <MarketsPage
           filter={search.type ?? "all"}
           onFilterChange={(filter) => {
-            void navigate({
-              search: { venue: "stellar", type: filter === "isolated" ? "isolated" : undefined },
-            })
+            void navigate(toSearch({ venue: "stellar", type: filter === "isolated" ? "isolated" : undefined }))
           }}
         />
       ) : (
         <div className="px-4 py-5 sm:px-6 sm:py-6">
           <MarketExplorer
             filters={search}
-            onFiltersChange={(filters) => void navigate({ search: filters, replace: true })}
+            onFiltersChange={(filters) => void navigate(toSearch(filters) || "?", { replace: true })}
           />
         </div>
       )}

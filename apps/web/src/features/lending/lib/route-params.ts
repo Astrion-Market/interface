@@ -40,3 +40,11 @@ export function isSupportedDetailRoute(
     ? /^0x[\da-fA-F]{64}$/.test(id)
     : /^0x[\da-fA-F]{40}$/.test(id)
 }
+
+// Build a query string from optional values, dropping empty ones.
+export function toSearch(params: Record<string, string | undefined>): string {
+  const query = new URLSearchParams()
+  for (const [key, value] of Object.entries(params)) if (value) query.set(key, value)
+  const text = query.toString()
+  return text ? `?${text}` : ""
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { Link } from "@tanstack/react-router"
+import { Link, NavLink } from "react-router"
+import { cn } from "@workspace/ui/lib/utils"
 import {
   Sheet,
   SheetContent,
@@ -83,16 +84,13 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
       <nav aria-label="Primary" className="flex-1 overflow-y-auto px-2 py-3">
         <div className="space-y-0.5">
           {PRIMARY_NAV_ITEMS.map((item) => (
-            <Link
+            <NavLink
               key={item.to}
               to={item.to}
               onClick={onNavClick}
-              activeOptions={{ includeSearch: false }}
-              className="flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-              activeProps={{
-                className: "bg-accent font-medium text-foreground",
-                "aria-current": "page",
-              }}
+              className={({ isActive }) =>
+                cn("flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground", isActive && "bg-accent font-medium text-foreground")
+              }
             >
               <svg
                 aria-hidden="true"
@@ -106,7 +104,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
                 <path d={item.iconPath} />
               </svg>
               {item.label}
-            </Link>
+            </NavLink>
           ))}
         </div>
       </nav>
@@ -114,41 +112,35 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
         aria-label="Stellar and settings"
         className="space-y-1 border-t border-border px-3 py-3 text-[12px]"
       >
-        <Link
+        <NavLink
           to="/legacy"
           onClick={onNavClick}
-          className="block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground"
-          activeProps={{
-            className: "bg-accent text-foreground",
-            "aria-current": "page",
-          }}
+          className={({ isActive }) =>
+                cn("block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground", isActive && "bg-accent text-foreground")
+              }
         >
           Stellar positions
-        </Link>
+        </NavLink>
         {IS_STELLAR_TESTNET && (
-          <Link
+          <NavLink
             to="/faucet"
             onClick={onNavClick}
-            className="block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground"
-            activeProps={{
-              className: "bg-accent text-foreground",
-              "aria-current": "page",
-            }}
+            className={({ isActive }) =>
+                cn("block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground", isActive && "bg-accent text-foreground")
+              }
           >
             Testnet faucet
-          </Link>
+          </NavLink>
         )}
-        <Link
+        <NavLink
           to="/settings"
           onClick={onNavClick}
-          className="block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground"
-          activeProps={{
-            className: "bg-accent text-foreground",
-            "aria-current": "page",
-          }}
+          className={({ isActive }) =>
+                cn("block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground", isActive && "bg-accent text-foreground")
+              }
         >
           Settings
-        </Link>
+        </NavLink>
       </nav>
       <div className="space-y-2 border-t border-border px-3 py-3">
         <p className="px-2 text-[11px] text-muted-foreground">

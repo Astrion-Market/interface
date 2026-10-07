@@ -1,10 +1,8 @@
-import { Link, createFileRoute } from "@tanstack/react-router"
+import { Link } from "react-router"
 import { AppLayout } from "../features/lending/components/layout/app-layout"
 import { STELLAR_NETWORK_LABEL } from "../features/lending/lib/network"
 
-export const Route = createFileRoute("/legacy")({ component: Page })
-
-function Page() {
+export default function Page() {
   return (
     <AppLayout>
       <section className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
@@ -23,8 +21,7 @@ function Page() {
         </p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2">
           <Link
-            to="/portfolio"
-            search={{ venue: "stellar" }}
+            to="/portfolio?venue=stellar"
             className="rounded-lg border border-border bg-card p-5 hover:border-primary"
           >
             <h2 className="font-medium">Manage positions</h2>
@@ -34,8 +31,7 @@ function Page() {
             </p>
           </Link>
           <Link
-            to="/markets"
-            search={{ venue: "stellar", type: "isolated" }}
+            to="/markets?venue=stellar&type=isolated"
             className="rounded-lg border border-border bg-card p-5 hover:border-primary"
           >
             <h2 className="font-medium">Stellar isolated markets</h2>

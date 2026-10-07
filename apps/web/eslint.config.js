@@ -3,6 +3,6 @@
 import { tanstackConfig } from "@tanstack/eslint-config"
 
 export default [
-  { ignores: [".output/**", ".nitro/**", ".tanstack/**", "dist/**"] },
+  { ignores: ["build/**", ".react-router/**", "dist/**"] },
   ...tanstackConfig,
 ]
