@@ -1,0 +1,95 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - generic [ref=e4]:
+      - link "Astrion" [ref=e5] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e6]
+        - generic [ref=e19]: Astrion
+      - generic [ref=e20]:
+        - button "Connect" [ref=e21] [cursor=pointer]:
+          - img
+          - generic [ref=e22]: Connect
+        - button "Open menu" [ref=e23] [cursor=pointer]:
+          - img [ref=e24]
+    - main [ref=e26]:
+      - generic [ref=e27]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e28] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e29]:
+        - generic [ref=e30]:
+          - heading "Settings" [level=1] [ref=e31]
+          - paragraph [ref=e32]: Configure your Astrion workspace preferences.
+        - region "Wallets" [ref=e34]:
+          - generic [ref=e35]:
+            - heading "Wallets" [level=2] [ref=e36]
+            - paragraph [ref=e37]: Cross-chain lending uses two wallets. Each one signs only on its own chain; connecting both does not let either sign for the other.
+          - generic [ref=e38]:
+            - article [ref=e39]:
+              - generic [ref=e40]:
+                - heading "Stellar wallet" [level=3] [ref=e41]
+                - generic [ref=e42]:
+                  - img [ref=e43]
+                  - text: Not connected
+              - generic [ref=e45]:
+                - generic [ref=e46]:
+                  - term [ref=e47]: Account
+                  - definition [ref=e48]: "-"
+                - generic [ref=e49]:
+                  - term [ref=e50]: Network
+                  - definition [ref=e51]: Stellar Testnet
+                - generic [ref=e52]:
+                  - term [ref=e53]: Signs
+                  - definition [ref=e54]: "Transfers that start on Stellar: lending from Stellar and repaying from Stellar."
+              - button "Connect Stellar" [ref=e56] [cursor=pointer]:
+                - img
+                - generic [ref=e57]: Connect Stellar
+                - img
+            - article [ref=e58]:
+              - generic [ref=e59]:
+                - heading "EVM wallet" [level=3] [ref=e60]
+                - generic [ref=e61]:
+                  - img [ref=e62]
+                  - text: Connected
+              - generic [ref=e65]:
+                - generic [ref=e66]:
+                  - term [ref=e67]: Account
+                  - definition [ref=e68]:
+                    - generic [ref=e69]:
+                      - generic "0x9999000000000000000000000000000000000009" [ref=e70]:
+                        - text: 0x999900…0009
+                        - generic [ref=e71]: "0x9999000000000000000000000000000000000009"
+                      - button "Show full EVM account" [ref=e72] [cursor=pointer]
+                - generic [ref=e73]:
+                  - term [ref=e74]: Network
+                  - definition [ref=e75]: Base Sepolia
+                - generic [ref=e76]:
+                  - term [ref=e77]: Execution account
+                  - definition [ref=e78]: Not created yet. Your EVM wallet will own it, and it holds your lending positions on each chain.
+                - generic [ref=e79]:
+                  - term [ref=e80]: Signs
+                  - definition [ref=e81]: Supplying, borrowing, repaying, and withdrawing on Base and Ethereum, plus transfers back to Stellar.
+              - button "0x9999…0009 Base Sepolia" [ref=e83] [cursor=pointer]:
+                - generic [ref=e84]: 0x9999…0009
+                - generic [ref=e85]: Base Sepolia
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - paragraph [ref=e89]: Theme
+            - paragraph [ref=e90]: "Current appearance: dark"
+          - generic [ref=e91]:
+            - button "System Follow your device preference." [pressed] [ref=e92] [cursor=pointer]:
+              - generic [ref=e94]: System
+              - generic [ref=e96]: Follow your device preference.
+            - button "Dark Use Astrion's dark trading interface." [ref=e97] [cursor=pointer]:
+              - generic [ref=e99]: Dark
+              - generic [ref=e101]: Use Astrion's dark trading interface.
+            - button "Light Use a brighter interface." [ref=e102] [cursor=pointer]:
+              - generic [ref=e104]: Light
+              - generic [ref=e106]: Use a brighter interface.
+  - region "Notifications alt+T"
+```
