@@ -34,7 +34,7 @@ function VideoDemoPage() {
             to="/dashboard"
             className="text-label rounded-md border border-border px-3 py-2 text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
           >
-            Launch app
+            Open the app
           </Link>
         </div>
 
@@ -42,21 +42,21 @@ function VideoDemoPage() {
           <div>
             <div className="font-mono-num text-label-xs inline-flex items-center gap-2 rounded-md border border-border bg-muted/30 px-2.5 py-1 uppercase text-muted-foreground">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              Grant demo
+              Alpha demo
             </div>
             <h1 className="text-display-compact mt-5 max-w-2xl text-foreground">
               Astrion video demo
             </h1>
             <p className="text-copy mt-5 max-w-xl text-muted-foreground">
-              A focused walkthrough of Astrion&apos;s lending experience,
-              protocol surfaces, and Stellar-native credit workflow.
+              A walkthrough of the cross-chain alpha interface on preview data.
+              Routes are not live and no funds move in the demo.
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
               {[
-                ["01", "Supply and borrow markets"],
-                ["02", "Risk-aware position views"],
-                ["03", "Soroban-first product flow"],
+                ["01", "Aave, Morpho, and Compound markets"],
+                ["02", "Review: route, fees, and signatures"],
+                ["03", "Tracking and recovery (simulated)"],
               ].map(([step, label]) => (
                 <div
                   key={step}

@@ -40,7 +40,7 @@ We are committed to providing a welcoming and inclusive experience for everyone.
 | Tool | Version | Install |
 |---|---|---|
 | [Bun](https://bun.sh) | ≥ 1.3 | `curl -fsSL https://bun.sh/install \| bash` |
-| [Node.js](https://nodejs.org) | ≥ 20 | `nvm install 20` or download from nodejs.org |
+| [Node.js](https://nodejs.org) | ≥ 22.18 | `nvm install 22` or download from nodejs.org |
 | [Git](https://git-scm.com) | latest | Platform-specific |
 
 ### Fork and clone
@@ -60,7 +60,7 @@ bun install
 ### Start the dev server
 
 ```bash
-bun dev
+bun run dev
 ```
 
 The app will be available at [http://localhost:3000](http://localhost:3000).
@@ -68,12 +68,32 @@ The app will be available at [http://localhost:3000](http://localhost:3000).
 ### Verify your setup
 
 ```bash
-bun lint        # ESLint
-bun typecheck   # TypeScript
-bun build       # Production build
+bun run lint        # ESLint
+bun run typecheck   # TypeScript
+bun run test        # Unit tests
+bun run build       # Production build
 ```
 
-All three should pass before you submit any changes.
+All four should pass before you submit any changes. Use `bun run`: bare
+`bun build` and `bun test` are Bun's own tools, not these scripts.
+
+### Browser journeys
+
+```bash
+cd apps/web
+bunx playwright install chromium   # once
+bun run test:e2e                   # or PW_CHANNEL=chrome to use installed Chrome
+```
+
+These are mocked UI tests: they inject a fake EVM wallet and use preview data.
+They don't replace protocol fork tests or testnet bridge evidence.
+
+### Preview data
+
+Cross-chain screens read
+`apps/web/src/features/crosschain/fixtures/markets.preview.json` through a strict
+parser. Keep amounts as integer strings, give every disabled route a reason, and
+never mark an entry `verified`. `bun run test` fails on fixture drift.
 
 ---
 
@@ -161,9 +181,10 @@ refactor: extract market card into reusable component
 ### Before opening a PR
 
 - [ ] Your branch is up to date with `main`
-- [ ] `bun lint` passes with no errors
-- [ ] `bun typecheck` passes with no errors
-- [ ] `bun build` completes successfully
+- [ ] `bun run lint` passes with no errors
+- [ ] `bun run typecheck` passes with no errors
+- [ ] `bun run test` passes
+- [ ] `bun run build` completes successfully
 - [ ] You've tested your changes locally in the browser
 
 ### PR template
@@ -203,8 +224,8 @@ Include screenshots for any UI changes (before/after if applicable).
 
 | Rule | Detail |
 |---|---|
-| **Formatter** | Prettier: run `bun format` |
-| **Linter** | ESLint: run `bun lint` |
+| **Formatter** | Prettier: run `bun run format` |
+| **Linter** | ESLint: run `bun run lint` |
 | **Imports** | Use workspace imports (`@workspace/ui/...`) over relative paths when crossing package boundaries |
 | **Comments** | Only for non-obvious intent; the code should be self-documenting |
 | **Types** | Prefer explicit types over `any`. Use TypeScript's type system fully. |

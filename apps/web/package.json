@@ -8,6 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "node --test \"src/**/*.test.ts\"",
+    "test:e2e": "playwright test",
     "test:faucet": "node scripts/test-usdc-faucet.mjs",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",

@@ -38,3 +38,8 @@ implementation-plan.md
 project-asset
 /docs_ui_new.md
 /docs_contracts_new.md
+
+# Playwright output
+test-results/
+playwright-report/
+blob-report/

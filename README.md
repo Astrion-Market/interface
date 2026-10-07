@@ -35,18 +35,22 @@ Stellar. Stellar-only control is a later account and messaging integration.
 
 ## Current implementation
 
-**Cross-chain lending is not implemented in this checkout.** This documentation
-sets the direction; the existing screens still include the earlier Stellar
-product and will be updated in subsequent changes.
+**No cross-chain transaction can be signed yet.** The interface for the alpha is
+built on preview data with every route disabled; contracts, transport, and
+position readers come from the contracts repository. See
+[docs/ALPHA.md](docs/ALPHA.md) for the full status, route matrix, known
+limitations, and an evidence index.
 
-| Area                       | Current state                                                                                                             |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| Stellar wallet             | Connection, restoration, balance reads, and transaction signing through Stellar Wallets Kit                               |
-| Soroban lending            | Isolated-market reads and supply, collateral, borrow, repay, and withdrawal transaction code; defaults to Stellar testnet |
-| Development assets         | Configured custom test USDC/WBTC and a mock oracle; these are not canonical CCTP assets                                   |
-| Interface                  | Existing markets, portfolio, analytics, and other feature screens; some views contain illustrative data                   |
-| EVM and bridge integration | Planned; no EVM wallet connector, CCTP workflow, or Aave/Morpho/Compound execution integration yet                        |
-| Production status          | This repository does not establish a reviewed cross-chain mainnet deployment                                              |
+| Area                | Current state                                                                                                    |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Cross-chain markets | Aave V3, Morpho Blue, and Compound III on Base/Ethereum from a versioned preview fixture; addresses unverified   |
+| Wallets             | Stellar Wallets Kit plus EIP-6963 EVM browser wallets, with network checks, account-switch, and lock handling    |
+| Review and tracking | Route checks, quotes, signature plans, and per-leg tracking with recovery; signing disabled, runs are simulated  |
+| Portfolio           | Per-position risk and partial-data handling on a labeled sample account; live position reads not connected       |
+| Soroban lending     | The earlier isolated markets with supply, collateral, borrow, repay, and withdrawal; defaults to Stellar testnet |
+| Production status   | No reviewed cross-chain deployment exists                                                                        |
+
+![Borrow review on preview data](screenshots/borrow-review.png)
 
 These statements describe source capabilities, not a fresh verification that every
 configured testnet contract is currently available. A testnet deployment, a fork
@@ -75,7 +79,8 @@ and bridge costs remain visible parts of the planned experience.
 
 ## Getting started
 
-Use Bun `1.3.13`, as specified in `package.json`, and Node.js 20 or newer.
+Use Bun `1.3.13`, as specified in `package.json`, and Node.js 22.18 or newer (unit
+tests run TypeScript directly with `node --test`).
 
 ```bash
 git clone https://github.com/Astrion-Market/interface.git
@@ -101,27 +106,39 @@ Changing endpoints alone does not provide a valid deployment for another network
 Keep environment, network passphrase, contracts, and token identities consistent.
 Client-side `VITE_` configuration is public; it must not contain signing secrets.
 
-| Command             | Purpose                                          |
-| ------------------- | ------------------------------------------------ |
-| `bun run dev`       | Start development through Turborepo              |
-| `bun run build`     | Build workspace packages                         |
-| `bun run lint`      | Run ESLint                                       |
-| `bun run typecheck` | Check TypeScript types                           |
-| `bun run format`    | Format files covered by workspace format scripts |
+No extra configuration is needed for the cross-chain screens: they read the
+preview fixture. Add `?sample=true` to `/portfolio` or `/dashboard` for the sample
+account, and use "Run simulation" on a review screen to exercise tracking.
+
+| Command                           | Purpose                                          |
+| --------------------------------- | ------------------------------------------------ |
+| `bun run dev`                     | Start development through Turborepo              |
+| `bun run build`                   | Build workspace packages                         |
+| `bun run lint`                    | Run ESLint                                       |
+| `bun run typecheck`               | Check TypeScript types                           |
+| `bun run test`                    | Unit tests (`node --test`)                       |
+| `bun run --cwd apps/web test:e2e` | Mocked browser journeys and accessibility checks |
+| `bun run format`                  | Format files covered by workspace format scripts |
+
+Always use `bun run <script>`: `bun build` and `bun test` are Bun's own bundler
+and test runner, not these scripts.
 
 ## Repository structure
 
 ```text
 apps/web/src/
-  features/lending/  # Existing Soroban readers, mutations, and lending screens
-  features/wallet/   # Stellar wallet integration
+  features/crosschain/  # Cross-chain model, fixture client, checks, tracking, views
+  features/lending/     # Existing Soroban readers, mutations, and lending screens
+  features/wallet/      # Stellar wallet integration and EVM sessions (evm/)
   routes/            # TanStack file-based routes
   styles/            # App styles
   ui/                # Shared app UI and landing sections
+apps/web/e2e/        # Playwright journeys with a mocked EVM wallet
 packages/ui/         # Shared components and design tokens
 docs/
   PRODUCT.md         # Scope, capability matrix, and rollout criteria
   ARCHITECTURE.md    # Current integration and proposed cross-chain boundaries
+  ALPHA.md           # Alpha status, route matrix, limitations, evidence index
 ```
 
 The existing stack is React 19, Vite 7, TanStack Router/Query, Tailwind CSS 4,
@@ -130,10 +147,11 @@ The revamp builds on this stack.
 
 ## Roadmap and contributions
 
-The next interface work focuses on navigation, shared visual components, revised
-landing content, and chain-aware models. Wallet integration and money-moving
-flows follow reviewed contracts, versioned schemas, and route verification.
-Recovery and position visibility are part of each flow's acceptance criteria.
+The interface for the alpha is in place on preview data. The next work connects it
+to real infrastructure: verified deployment manifests, transaction builders with
+pre-sign simulation, execution accounts, the tracking service, and live market and
+position reads. [docs/ALPHA.md](docs/ALPHA.md#work-packages) lists scoped work
+packages.
 
 See [delivery stages](docs/PRODUCT.md#delivery-stages) and
 [CONTRIBUTING.md](CONTRIBUTING.md) to scope a contribution. The related
