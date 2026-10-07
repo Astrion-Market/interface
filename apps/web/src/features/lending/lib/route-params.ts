@@ -1,3 +1,5 @@
+import { isExecutionChainId, isProtocolId } from "./identity"
+
 export type MarketFilter = "all" | "isolated"
 
 export function parseMarketSearch(search: Record<string, unknown>): {
@@ -14,9 +16,7 @@ export function isSupportedDetailRoute(
   id: string,
   kind: "market" | "position"
 ) {
-  if (chain !== "base" && chain !== "ethereum") return false
-  if (!["aave-v3", "morpho-blue", "compound-v3"].includes(protocol))
-    return false
+  if (!isExecutionChainId(chain) || !isProtocolId(protocol)) return false
   if (kind === "position") return /^[a-zA-Z0-9_-]{1,128}$/.test(id)
   return protocol === "morpho-blue"
     ? /^0x[\da-fA-F]{64}$/.test(id)

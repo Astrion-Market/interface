@@ -7,6 +7,7 @@
     "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
+    "test": "node --test \"src/**/*.test.ts\"",
     "test:faucet": "node scripts/test-usdc-faucet.mjs",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",

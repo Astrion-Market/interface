@@ -28,6 +28,14 @@
     --color-input: var(--input);
     --color-border: var(--border);
     --color-destructive: var(--destructive);
+    --color-success: var(--success);
+    --color-success-surface: var(--success-surface);
+    --color-attention: var(--attention);
+    --color-attention-surface: var(--attention-surface);
+    --color-risk: var(--risk);
+    --color-risk-surface: var(--risk-surface);
+    --color-pending: var(--pending);
+    --color-pending-surface: var(--pending-surface);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
@@ -87,6 +95,16 @@
     --sidebar-accent-foreground: oklch(0.15 0.015 260);
     --sidebar-border: oklch(0.88 0.01 240);
     --sidebar-ring: oklch(0.60 0.14 222);
+    /* Status: confirmed, needs attention, actionable risk, in progress.
+       Always paired with a text label and icon; color is never the only signal. */
+    --success: oklch(0.50 0.13 155);
+    --success-surface: oklch(0.96 0.035 155);
+    --attention: oklch(0.52 0.12 70);
+    --attention-surface: oklch(0.96 0.045 85);
+    --risk: oklch(0.52 0.2 27);
+    --risk-surface: oklch(0.96 0.03 27);
+    --pending: oklch(0.48 0.015 250);
+    --pending-surface: oklch(0.95 0.006 240);
 }
 
 /* ── Dark mode (Astrion: dense black + electric blue) ─────── */
@@ -124,6 +142,14 @@
     --sidebar-accent-foreground: oklch(0.965 0.006 225);
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.72 0.155 222);
+    --success: oklch(0.78 0.14 155);
+    --success-surface: oklch(0.78 0.14 155 / 12%);
+    --attention: oklch(0.82 0.13 80);
+    --attention-surface: oklch(0.82 0.13 80 / 12%);
+    --risk: oklch(0.72 0.17 25);
+    --risk-surface: oklch(0.72 0.17 25 / 14%);
+    --pending: oklch(0.72 0.012 238);
+    --pending-surface: oklch(1 0 0 / 6%);
 }
 
 @layer base {
