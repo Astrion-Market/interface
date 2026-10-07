@@ -52,10 +52,12 @@ export function operationStatus(op: Operation): OperationStatus {
     return { state: "needs-action", label: `${LEG_LABEL[failed.kind]} needs attention` }
   }
 
-  const action = op.legs.find((leg) => leg.kind === "protocol-action")
-  const ret = op.legs.find((leg) => leg.kind === "return-transfer")
-  const actionDone = action?.status === "confirmed"
-  const returnPending = ret !== undefined && ret.status !== "confirmed" && ret.status !== "not-needed"
+  const actionIndex = op.legs.findIndex((leg) => leg.kind === "protocol-action")
+  const actionDone = actionIndex !== -1 && op.legs[actionIndex].status === "confirmed"
+  // Any leg after the action still outstanding means USDC hasn't reached Stellar.
+  const returnPending = op.legs
+    .slice(actionIndex + 1)
+    .some((leg) => leg.status !== "confirmed" && leg.status !== "not-needed")
 
   if (actionDone && returnPending && op.kind === "borrow")
     return { state: "in-progress", label: "Borrow opened; transfer to Stellar pending" }

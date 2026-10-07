@@ -144,3 +144,17 @@ test("a source confirmation alone never completes a lend", () => {
   }
   assert.equal(operationStatus(op).state, "in-progress")
 })
+
+test("a borrow stays pending until USDC lands on Stellar", () => {
+  const op: Operation = {
+    id: "op-3",
+    kind: "borrow",
+    legs: [
+      { kind: "protocol-action", chain: "base", status: "confirmed", txHash: "0x1" },
+      { kind: "return-transfer", chain: "base", status: "confirmed", txHash: "0x2" },
+      { kind: "attestation", chain: "base", status: "submitted", txHash: null },
+      { kind: "destination-mint", chain: "stellar", status: "waiting", txHash: null },
+    ],
+  }
+  assert.equal(operationStatus(op).label, "Borrow opened; transfer to Stellar pending")
+})

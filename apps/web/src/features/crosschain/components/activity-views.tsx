@@ -23,7 +23,8 @@ const KIND_LABEL = { lend: "Lend", borrow: "Borrow", repay: "Repay", withdraw: "
 
 // What the user should know while a leg is outstanding.
 function waitingNote(leg: TrackedLeg, op: TrackedOperation): string | undefined {
-  if (leg.status !== "submitted" && leg.status !== "waiting") return undefined
+  // Only the step in progress gets a note; future steps say nothing yet.
+  if (leg.status !== "submitted") return undefined
   switch (leg.kind) {
     case "source-transfer":
       return "Waiting for the Stellar transaction to confirm."

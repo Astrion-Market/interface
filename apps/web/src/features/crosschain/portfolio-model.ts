@@ -2,9 +2,10 @@
 // account; risk is never pooled; each balance is counted exactly once; and an
 // unknown valuation is excluded from totals and counted, never treated as 0.
 
+import { CHAINS, PROTOCOLS } from "../lending/lib/identity.ts"
 import { cometBaseBalance, priceKey } from "./positions.ts"
 import { aaveHealth, compoundRisk, morphoRisk, usdE8 } from "./risk.ts"
-import type { ExecutionChainId } from "../lending/lib/identity"
+import type { ExecutionChainId, ProtocolId } from "../lending/lib/identity"
 import type { AaveReserve, Market, Token } from "./model"
 import type { Portfolio, PositionRead } from "./positions"
 import type { Prices, RiskReading } from "./risk"
@@ -51,6 +52,11 @@ function holding(token: Token, amount: bigint | null | undefined, prices: Prices
 }
 
 const STALE_MS = 15 * 60_000
+
+export function readLabel(protocol: string, chain: ExecutionChainId) {
+  const name = protocol in PROTOCOLS ? `${PROTOCOLS[protocol as ProtocolId].label} ${PROTOCOLS[protocol as ProtocolId].version}` : protocol
+  return `${name} on ${CHAINS[chain].label}`
+}
 
 export function buildPortfolioView(portfolio: Portfolio, markets: Array<Market>, prices: Prices, now: number): PortfolioView {
   const byKey = new Map(markets.map((m) => [m.key, m]))
@@ -135,21 +141,26 @@ export function buildPortfolioView(portfolio: Portfolio, markets: Array<Market>,
 
   const attention: Array<AttentionItem> = []
   for (const r of portfolio.failedReads)
-    attention.push({ tone: "risk", message: `Positions on ${r.protocol} (${r.chain}) couldn't be read: ${r.reason} Totals may be incomplete.` })
+    attention.push({ tone: "risk", message: `Positions on ${readLabel(r.protocol, r.chain)} couldn't be read: ${r.reason} Totals may be incomplete.` })
   const seenAccountRisk = new Set<string>()
   for (const row of rows) {
     const scopeKey = row.riskScope === "account" ? `${row.market.ref.chain}:${row.market.protocol}` : row.market.key
     if (seenAccountRisk.has(scopeKey)) continue
     seenAccountRisk.add(scopeKey)
-    const where = row.riskScope === "account" ? `Your ${row.market.protocol === "aave-v3" ? "Aave" : row.market.protocol} account on ${row.market.ref.chain}` : row.market.name
+    const where = row.riskScope === "account" ? `Your ${readLabel(row.market.protocol, row.market.ref.chain)} account` : row.market.name
     if (row.risk.level === "at-risk") attention.push({ tone: "risk", message: `${where} is close to liquidation.` })
     else if (row.risk.level === "attention") attention.push({ tone: "attention", message: `${where} needs attention: ${row.risk.metric?.label ?? "risk"} ${row.risk.metric?.value ?? ""}.` })
     else if (row.risk.level === "unknown") attention.push({ tone: "attention", message: `Risk for ${where} is unknown; treat it as at risk until it refreshes.` })
   }
-  for (const row of rows) {
-    if (row.reconciled === false) attention.push({ tone: "risk", message: `${row.market.name} doesn't match the protocol's own records. Don't act on it until it refreshes.` })
-    if (now - Date.parse(row.readAt) > STALE_MS) attention.push({ tone: "attention", message: `${row.market.name} data is more than 15 minutes old.` })
-  }
+  for (const row of rows)
+    if (row.reconciled === false)
+      attention.push({ tone: "risk", message: `${row.market.name} doesn't match the protocol's own records. Don't act on it until it refreshes.` })
+  const stale = rows.filter((row) => now - Date.parse(row.readAt) > STALE_MS).length
+  if (stale > 0)
+    attention.push({
+      tone: "attention",
+      message: `Data for ${stale === rows.length ? "all" : stale} position${stale === 1 ? " is" : "s are"} more than 15 minutes old. Values may have moved.`,
+    })
 
   const chains: Array<ExecutionChainId> = ["base", "ethereum"]
   return {

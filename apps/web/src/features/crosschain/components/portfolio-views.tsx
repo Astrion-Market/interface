@@ -13,7 +13,7 @@ import { useEvmWallet } from "../../wallet/evm/evm-wallet-provider"
 import { operationStatus } from "../lifecycle"
 import { marketPathId } from "../model"
 import { useOperations } from "../operations-store"
-import { buildPortfolioView } from "../portfolio-model"
+import { buildPortfolioView, readLabel } from "../portfolio-model"
 import { formatUsdE8 } from "../risk"
 import { useCrosschainMarkets } from "../use-crosschain-markets"
 import { PreviewNotice } from "./preview-notice"
@@ -221,7 +221,7 @@ export function PositionsPage({ sample }: { sample: boolean }) {
       {view.partial && (
         <ErrorState
           title="Some positions couldn't be read"
-          description={view.failedReads.map((r) => `${r.protocol} on ${r.chain}: ${r.reason}`).join(" ")}
+          description={view.failedReads.map((r) => `${readLabel(r.protocol, r.chain)}: ${r.reason}`).join(" ")}
         />
       )}
       <Totals view={view} />
