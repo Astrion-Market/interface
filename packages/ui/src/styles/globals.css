@@ -89,7 +89,7 @@
     --sidebar-ring: oklch(0.60 0.14 222);
 }
 
-/* ── Dark mode (Astrion: dense black + electric blue) ── */
+/* ── Dark mode (Astrion: dense black + electric blue) ─────── */
 .dark {
     /* Deep product black: intentional, not gray. */
     --background: oklch(0.055 0.006 260);

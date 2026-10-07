@@ -109,14 +109,14 @@ def build_ico(frames: list[Image.Image]) -> bytes:
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── favicon.ico: 16, 32, 48 ─────────────────────────────────
+    # ── favicon.ico: 16, 32, 48 ───────────────────────────────────
     ico_sizes  = [16, 32, 48]
     ico_frames = [make_frame(s) for s in ico_sizes]
     ico_path   = OUT_DIR / "favicon.ico"
     ico_path.write_bytes(build_ico(ico_frames))
     print(f"✓  {ico_path}  ({', '.join(f'{s}×{s}' for s in ico_sizes)})")
 
-    # ── apple-touch-icon.png: 180×180 ───────────────────────────
+    # ── apple-touch-icon.png: 180×180 ─────────────────────────────
     atp = make_frame(180)
     atp_path = OUT_DIR / "apple-touch-icon.png"
     atp.save(atp_path, format="PNG", optimize=True)
