@@ -1,184 +1,15 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "@tanstack/react-router"
-import { toast } from "sonner"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@workspace/ui/components/sheet"
 import { ConnectWalletButton } from "../../../wallet/connect-wallet-button"
-
-type NavItem = {
-  label: string
-  to?:
-    | "/dashboard"
-    | "/markets"
-    | "/portfolio"
-    | "/isolated-markets"
-    | "/analytics"
-    | "/faucet"
-    | "/governance"
-    | "/settings"
-    | "/brand"
-    | "/docs"
-  icon: React.ReactNode
-  comingSoon?: boolean
-}
-
-const NAV_ITEMS: Array<NavItem> = [
-  {
-    label: "Dashboard",
-    to: "/dashboard",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <rect x="3" y="3" width="7" height="7" rx="1" />
-        <rect x="14" y="3" width="7" height="7" rx="1" />
-        <rect x="3" y="14" width="7" height="7" rx="1" />
-        <rect x="14" y="14" width="7" height="7" rx="1" />
-      </svg>
-    ),
-  },
-  {
-    label: "Markets",
-    to: "/markets",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
-        <polyline points="16 7 22 7 22 13" />
-      </svg>
-    ),
-  },
-  {
-    label: "Portfolio",
-    to: "/portfolio",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Isolated Markets",
-    to: "/isolated-markets",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Analytics",
-    to: "/analytics",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <line x1="18" y1="20" x2="18" y2="10" />
-        <line x1="12" y1="20" x2="12" y2="4" />
-        <line x1="6" y1="20" x2="6" y2="14" />
-      </svg>
-    ),
-  },
-  {
-    label: "Governance",
-    to: "/governance",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <path d="M12 2L2 7l10 5 10-5-10-5z" />
-        <path d="M2 17l10 5 10-5" />
-        <path d="M2 12l10 5 10-5" />
-      </svg>
-    ),
-  },
-  {
-    label: "Faucet",
-    to: "/faucet",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <path d="M12 2v6" />
-        <path d="M8 8h8" />
-        <path d="M7 14a5 5 0 0 0 10 0c0-3-5-8-5-8s-5 5-5 8z" />
-      </svg>
-    ),
-  },
-  {
-    label: "Docs",
-    to: "/docs",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-        <polyline points="14 2 14 8 20 8" />
-        <line x1="16" y1="13" x2="8" y2="13" />
-        <line x1="16" y1="17" x2="8" y2="17" />
-      </svg>
-    ),
-  },
-  {
-    label: "Brand",
-    to: "/brand",
-    icon: (
-      <svg
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-      >
-        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-      </svg>
-    ),
-  },
-]
+import { PRIMARY_NAV_ITEMS } from "../../navigation"
+import { IS_STELLAR_TESTNET, STELLAR_NETWORK_LABEL } from "../../lib/network"
 
 function Logo() {
   return (
@@ -245,80 +76,84 @@ function Logo() {
   )
 }
 
-function NavLink({ item, onClick }: { item: NavItem; onClick?: () => void }) {
-  if (item.comingSoon) {
-    return (
-      <button
-        onClick={() => {
-          toast.info("Coming soon")
-          onClick?.()
-        }}
-        className="flex w-full items-center gap-2.5 rounded-md px-3 py-2 text-[13px] text-muted-foreground/50 transition-colors hover:text-muted-foreground"
-      >
-        <span className="shrink-0 opacity-60">{item.icon}</span>
-        {item.label}
-      </button>
-    )
-  }
-  return (
-    <Link
-      to={item.to!}
-      onClick={onClick}
-      className="flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-      activeProps={{
-        className:
-          "flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] bg-accent text-foreground font-medium",
-      }}
-    >
-      <span className="shrink-0">{item.icon}</span>
-      {item.label}
-    </Link>
-  )
-}
-
 function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
   return (
     <>
-      {/* Nav */}
-      <nav className="flex-1 overflow-y-auto px-2 py-3">
+      <nav aria-label="Primary" className="flex-1 overflow-y-auto px-2 py-3">
         <div className="space-y-0.5">
-          {NAV_ITEMS.map((item) => (
-            <NavLink key={item.label} item={item} onClick={onNavClick} />
+          {PRIMARY_NAV_ITEMS.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={onNavClick}
+              activeOptions={{ includeSearch: false }}
+              className="flex items-center gap-2.5 rounded-md px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              activeProps={{
+                className: "bg-accent font-medium text-foreground",
+                "aria-current": "page",
+              }}
+            >
+              <svg
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path d={item.iconPath} />
+              </svg>
+              {item.label}
+            </Link>
           ))}
         </div>
       </nav>
-
-      {/* Bottom: wallet + network */}
-      <div className="space-y-1 border-t border-border px-2 py-3">
-        <div className="flex items-center gap-2 rounded-md px-3 py-2">
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-          <span className="text-[11px] text-muted-foreground">
-            Stellar Testnet
-          </span>
-        </div>
-        <ConnectWalletButton placement="sidebar" />
+      <nav
+        aria-label="Stellar and settings"
+        className="space-y-1 border-t border-border px-3 py-3 text-[12px]"
+      >
+        <Link
+          to="/legacy"
+          onClick={onNavClick}
+          className="block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+          activeProps={{
+            className: "bg-accent text-foreground",
+            "aria-current": "page",
+          }}
+        >
+          Stellar positions
+        </Link>
+        {IS_STELLAR_TESTNET && (
+          <Link
+            to="/faucet"
+            onClick={onNavClick}
+            className="block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground"
+            activeProps={{
+              className: "bg-accent text-foreground",
+              "aria-current": "page",
+            }}
+          >
+            Testnet faucet
+          </Link>
+        )}
         <Link
           to="/settings"
           onClick={onNavClick}
-          className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-[12px] text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+          className="block rounded-md px-2 py-2 text-muted-foreground hover:bg-accent hover:text-foreground"
           activeProps={{
-            className:
-              "flex w-full items-center gap-2 rounded-md bg-accent px-3 py-2 text-[12px] font-medium text-foreground",
+            className: "bg-accent text-foreground",
+            "aria-current": "page",
           }}
         >
-          <svg
-            width="13"
-            height="13"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-          >
-            <circle cx="12" cy="12" r="3" />
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
           Settings
         </Link>
+      </nav>
+      <div className="space-y-2 border-t border-border px-3 py-3">
+        <p className="px-2 text-[11px] text-muted-foreground">
+          {STELLAR_NETWORK_LABEL}
+        </p>
+        <ConnectWalletButton placement="sidebar" />
       </div>
     </>
   )
@@ -327,75 +162,57 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
 export function AppSidebar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)")
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMobileOpen(false)
+    }
+    desktop.addEventListener("change", closeOnDesktop)
+    return () => desktop.removeEventListener("change", closeOnDesktop)
+  }, [])
+
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden h-screen w-56 shrink-0 flex-col border-r border-border bg-background lg:flex">
-        <div className="flex h-14 items-center border-b border-border px-4">
+      <aside className="sticky top-0 hidden h-dvh w-56 shrink-0 flex-col border-r border-border bg-background lg:flex">
+        <div className="flex h-14 shrink-0 items-center border-b border-border px-4">
           <Logo />
         </div>
         <SidebarContent />
       </aside>
-
-      {/* Mobile top bar */}
-      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur-sm lg:hidden">
-        <Logo />
-        <div className="flex items-center gap-2">
-          <ConnectWalletButton placement="mobile" />
-          <button
-            aria-label="Open menu"
-            onClick={() => setMobileOpen(true)}
-            className="flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground"
-          >
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+        <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-between border-b border-border bg-background/95 px-4 backdrop-blur-sm lg:hidden">
+          <Logo />
+          <div className="flex items-center gap-2">
+            <ConnectWalletButton placement="mobile" />
+            <SheetTrigger
+              aria-label="Open menu"
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted-foreground hover:text-foreground"
             >
-              <line x1="3" y1="12" x2="21" y2="12" />
-              <line x1="3" y1="6" x2="21" y2="6" />
-              <line x1="3" y1="18" x2="21" y2="18" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile drawer overlay */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop */}
-          <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
-          />
-          {/* Drawer */}
-          <aside className="absolute inset-y-0 left-0 flex w-64 flex-col border-r border-border bg-background shadow-2xl">
-            <div className="flex h-14 items-center justify-between border-b border-border px-4">
-              <Logo />
-              <button
-                aria-label="Close menu"
-                onClick={() => setMobileOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground"
+              <svg
+                aria-hidden="true"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
               >
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path d="M18 6 6 18M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-            <SidebarContent onNavClick={() => setMobileOpen(false)} />
-          </aside>
+                <path d="M3 6h18M3 12h18M3 18h18" />
+              </svg>
+            </SheetTrigger>
+          </div>
         </div>
-      )}
+        <SheetContent side="left" className="w-72 max-w-[85vw]">
+          <div className="flex h-16 shrink-0 items-center border-b border-border px-4">
+            <Logo />
+          </div>
+          <SheetTitle className="sr-only">Astrion navigation</SheetTitle>
+          <SheetDescription className="sr-only">
+            Markets, positions, activity, and Stellar account tools.
+          </SheetDescription>
+          <SidebarContent onNavClick={() => setMobileOpen(false)} />
+        </SheetContent>
+      </Sheet>
     </>
   )
 }

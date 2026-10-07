@@ -17,6 +17,7 @@ import { Route as ReferralsRouteImport } from './routes/referrals'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as PitchDeckRouteImport } from './routes/pitch-deck'
 import { Route as MarketsRouteImport } from './routes/markets'
+import { Route as LegacyRouteImport } from './routes/legacy'
 import { Route as IsolatedMarketsRouteImport } from './routes/isolated-markets'
 import { Route as GovernanceRouteImport } from './routes/governance'
 import { Route as FaucetRouteImport } from './routes/faucet'
@@ -25,7 +26,10 @@ import { Route as DocsRouteImport } from './routes/docs'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BrandRouteImport } from './routes/brand'
 import { Route as AnalyticsRouteImport } from './routes/analytics'
+import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortfolioChainProtocolPositionIdRouteImport } from './routes/portfolio_.$chain.$protocol.$positionId'
+import { Route as MarketsChainProtocolMarketIdRouteImport } from './routes/markets_.$chain.$protocol.$marketId'
 
 const VideoDemoRoute = VideoDemoRouteImport.update({
   id: '/video-demo',
@@ -65,6 +69,11 @@ const PitchDeckRoute = PitchDeckRouteImport.update({
 const MarketsRoute = MarketsRouteImport.update({
   id: '/markets',
   path: '/markets',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegacyRoute = LegacyRouteImport.update({
+  id: '/legacy',
+  path: '/legacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IsolatedMarketsRoute = IsolatedMarketsRouteImport.update({
@@ -107,14 +116,32 @@ const AnalyticsRoute = AnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActivityRoute = ActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioChainProtocolPositionIdRoute =
+  PortfolioChainProtocolPositionIdRouteImport.update({
+    id: '/portfolio_/$chain/$protocol/$positionId',
+    path: '/portfolio/$chain/$protocol/$positionId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const MarketsChainProtocolMarketIdRoute =
+  MarketsChainProtocolMarketIdRouteImport.update({
+    id: '/markets_/$chain/$protocol/$marketId',
+    path: '/markets/$chain/$protocol/$marketId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
@@ -123,6 +150,7 @@ export interface FileRoutesByFullPath {
   '/faucet': typeof FaucetRoute
   '/governance': typeof GovernanceRoute
   '/isolated-markets': typeof IsolatedMarketsRoute
+  '/legacy': typeof LegacyRoute
   '/markets': typeof MarketsRoute
   '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
@@ -131,9 +159,12 @@ export interface FileRoutesByFullPath {
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
   '/video-demo': typeof VideoDemoRoute
+  '/markets/$chain/$protocol/$marketId': typeof MarketsChainProtocolMarketIdRoute
+  '/portfolio/$chain/$protocol/$positionId': typeof PortfolioChainProtocolPositionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
@@ -142,6 +173,7 @@ export interface FileRoutesByTo {
   '/faucet': typeof FaucetRoute
   '/governance': typeof GovernanceRoute
   '/isolated-markets': typeof IsolatedMarketsRoute
+  '/legacy': typeof LegacyRoute
   '/markets': typeof MarketsRoute
   '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
@@ -150,10 +182,13 @@ export interface FileRoutesByTo {
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
   '/video-demo': typeof VideoDemoRoute
+  '/markets/$chain/$protocol/$marketId': typeof MarketsChainProtocolMarketIdRoute
+  '/portfolio/$chain/$protocol/$positionId': typeof PortfolioChainProtocolPositionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/analytics': typeof AnalyticsRoute
   '/brand': typeof BrandRoute
   '/dashboard': typeof DashboardRoute
@@ -162,6 +197,7 @@ export interface FileRoutesById {
   '/faucet': typeof FaucetRoute
   '/governance': typeof GovernanceRoute
   '/isolated-markets': typeof IsolatedMarketsRoute
+  '/legacy': typeof LegacyRoute
   '/markets': typeof MarketsRoute
   '/pitch-deck': typeof PitchDeckRoute
   '/portfolio': typeof PortfolioRoute
@@ -170,11 +206,14 @@ export interface FileRoutesById {
   '/trade': typeof TradeRoute
   '/vide-demo': typeof VideDemoRoute
   '/video-demo': typeof VideoDemoRoute
+  '/markets_/$chain/$protocol/$marketId': typeof MarketsChainProtocolMarketIdRoute
+  '/portfolio_/$chain/$protocol/$positionId': typeof PortfolioChainProtocolPositionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/activity'
     | '/analytics'
     | '/brand'
     | '/dashboard'
@@ -183,6 +222,7 @@ export interface FileRouteTypes {
     | '/faucet'
     | '/governance'
     | '/isolated-markets'
+    | '/legacy'
     | '/markets'
     | '/pitch-deck'
     | '/portfolio'
@@ -191,9 +231,12 @@ export interface FileRouteTypes {
     | '/trade'
     | '/vide-demo'
     | '/video-demo'
+    | '/markets/$chain/$protocol/$marketId'
+    | '/portfolio/$chain/$protocol/$positionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/activity'
     | '/analytics'
     | '/brand'
     | '/dashboard'
@@ -202,6 +245,7 @@ export interface FileRouteTypes {
     | '/faucet'
     | '/governance'
     | '/isolated-markets'
+    | '/legacy'
     | '/markets'
     | '/pitch-deck'
     | '/portfolio'
@@ -210,9 +254,12 @@ export interface FileRouteTypes {
     | '/trade'
     | '/vide-demo'
     | '/video-demo'
+    | '/markets/$chain/$protocol/$marketId'
+    | '/portfolio/$chain/$protocol/$positionId'
   id:
     | '__root__'
     | '/'
+    | '/activity'
     | '/analytics'
     | '/brand'
     | '/dashboard'
@@ -221,6 +268,7 @@ export interface FileRouteTypes {
     | '/faucet'
     | '/governance'
     | '/isolated-markets'
+    | '/legacy'
     | '/markets'
     | '/pitch-deck'
     | '/portfolio'
@@ -229,10 +277,13 @@ export interface FileRouteTypes {
     | '/trade'
     | '/vide-demo'
     | '/video-demo'
+    | '/markets_/$chain/$protocol/$marketId'
+    | '/portfolio_/$chain/$protocol/$positionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityRoute: typeof ActivityRoute
   AnalyticsRoute: typeof AnalyticsRoute
   BrandRoute: typeof BrandRoute
   DashboardRoute: typeof DashboardRoute
@@ -241,6 +292,7 @@ export interface RootRouteChildren {
   FaucetRoute: typeof FaucetRoute
   GovernanceRoute: typeof GovernanceRoute
   IsolatedMarketsRoute: typeof IsolatedMarketsRoute
+  LegacyRoute: typeof LegacyRoute
   MarketsRoute: typeof MarketsRoute
   PitchDeckRoute: typeof PitchDeckRoute
   PortfolioRoute: typeof PortfolioRoute
@@ -249,6 +301,8 @@ export interface RootRouteChildren {
   TradeRoute: typeof TradeRoute
   VideDemoRoute: typeof VideDemoRoute
   VideoDemoRoute: typeof VideoDemoRoute
+  MarketsChainProtocolMarketIdRoute: typeof MarketsChainProtocolMarketIdRoute
+  PortfolioChainProtocolPositionIdRoute: typeof PortfolioChainProtocolPositionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -309,6 +363,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/legacy': {
+      id: '/legacy'
+      path: '/legacy'
+      fullPath: '/legacy'
+      preLoaderRoute: typeof LegacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/isolated-markets': {
       id: '/isolated-markets'
       path: '/isolated-markets'
@@ -365,6 +426,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activity': {
+      id: '/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -372,11 +440,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio_/$chain/$protocol/$positionId': {
+      id: '/portfolio_/$chain/$protocol/$positionId'
+      path: '/portfolio/$chain/$protocol/$positionId'
+      fullPath: '/portfolio/$chain/$protocol/$positionId'
+      preLoaderRoute: typeof PortfolioChainProtocolPositionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/markets_/$chain/$protocol/$marketId': {
+      id: '/markets_/$chain/$protocol/$marketId'
+      path: '/markets/$chain/$protocol/$marketId'
+      fullPath: '/markets/$chain/$protocol/$marketId'
+      preLoaderRoute: typeof MarketsChainProtocolMarketIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityRoute: ActivityRoute,
   AnalyticsRoute: AnalyticsRoute,
   BrandRoute: BrandRoute,
   DashboardRoute: DashboardRoute,
@@ -385,6 +468,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaucetRoute: FaucetRoute,
   GovernanceRoute: GovernanceRoute,
   IsolatedMarketsRoute: IsolatedMarketsRoute,
+  LegacyRoute: LegacyRoute,
   MarketsRoute: MarketsRoute,
   PitchDeckRoute: PitchDeckRoute,
   PortfolioRoute: PortfolioRoute,
@@ -393,6 +477,8 @@ const rootRouteChildren: RootRouteChildren = {
   TradeRoute: TradeRoute,
   VideDemoRoute: VideDemoRoute,
   VideoDemoRoute: VideoDemoRoute,
+  MarketsChainProtocolMarketIdRoute: MarketsChainProtocolMarketIdRoute,
+  PortfolioChainProtocolPositionIdRoute: PortfolioChainProtocolPositionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

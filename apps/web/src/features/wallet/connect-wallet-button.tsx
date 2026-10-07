@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@workspace/ui/components/dropdown-menu"
 import { cn } from "@workspace/ui/lib/utils"
+import { STELLAR_NETWORK_LABEL } from "../lending/lib/network"
 import { useWallet } from "./wallet-provider"
 
 type ConnectWalletButtonPlacement = "header" | "sidebar" | "mobile"
@@ -107,7 +108,7 @@ export function ConnectWalletButton({
             {address}
           </p>
           <p className="mt-1 text-[11px] text-muted-foreground">
-            Stellar Testnet
+            {STELLAR_NETWORK_LABEL}
           </p>
         </div>
         <DropdownMenuSeparator />

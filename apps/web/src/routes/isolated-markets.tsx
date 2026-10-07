@@ -1,13 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router"
-import { AppLayout } from "../features/lending/components/layout/app-layout"
-import { IsolatedMarketsPage } from "../features/lending/components/isolated-markets/isolated-markets-page"
+import { createFileRoute, redirect } from "@tanstack/react-router"
 
-export const Route = createFileRoute("/isolated-markets")({ component: Page })
-
-function Page() {
-  return (
-    <AppLayout>
-      <IsolatedMarketsPage />
-    </AppLayout>
-  )
-}
+export const Route = createFileRoute("/isolated-markets")({
+  beforeLoad: () => {
+    throw redirect({
+      to: "/markets",
+      search: { type: "isolated" },
+      replace: true,
+    })
+  },
+})

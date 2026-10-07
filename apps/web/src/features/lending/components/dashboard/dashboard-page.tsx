@@ -15,7 +15,7 @@ export function DashboardPage() {
       {/* Main content */}
       <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6">
         <div className="mb-5">
-          <h1 className="text-xl font-semibold text-foreground">Dashboard</h1>
+          <h1 className="text-xl font-semibold text-foreground">Overview</h1>
           <p className="mt-0.5 text-[13px] text-muted-foreground">
             Your lending positions at a glance
           </p>
@@ -38,8 +38,8 @@ export function DashboardPage() {
       </div>
 
       {/* Right insights panel — full-width on mobile, fixed sidebar on xl */}
-      <div className="border-t border-border px-4 py-5 sm:px-6 xl:w-64 xl:shrink-0 xl:overflow-y-auto xl:border-l xl:border-t-0 xl:px-4 xl:py-6">
-        <p className="mb-4 text-[11px] font-medium uppercase tracking-widest text-muted-foreground">
+      <div className="border-t border-border px-4 py-5 sm:px-6 xl:w-64 xl:shrink-0 xl:overflow-y-auto xl:border-t-0 xl:border-l xl:px-4 xl:py-6">
+        <p className="mb-4 text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
           Market Insights
         </p>
         <MarketInsights />

@@ -1,11 +1,26 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "@tanstack/react-router"
-import { Button } from "@workspace/ui/components/button"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+  SheetTrigger,
+} from "@workspace/ui/components/sheet"
+import { PRIMARY_NAV_ITEMS } from "../features/lending/navigation"
+import { ConnectWalletButton } from "../features/wallet/connect-wallet-button"
 import { ThemeToggle } from "./theme-toggle"
 
 function AstrionMark({ size = 30 }: { size?: number }) {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 56" width={size} height={size} fill="none" className="pointer-events-none shrink-0">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 56 56"
+      width={size}
+      height={size}
+      fill="none"
+      className="pointer-events-none shrink-0"
+    >
       <defs>
         <linearGradient id="nl" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stopColor="#6CB6FF" />
@@ -19,12 +34,32 @@ function AstrionMark({ size = 30 }: { size?: number }) {
       <g transform="translate(2 2)">
         <circle cx="26" cy="26" r="24" fill="url(#ng)" />
         {/* Main orbital ring */}
-        <ellipse cx="26" cy="26" rx="20" ry="20" stroke="rgba(77,168,255,0.40)" strokeWidth="1.2" />
+        <ellipse
+          cx="26"
+          cy="26"
+          rx="20"
+          ry="20"
+          stroke="rgba(77,168,255,0.40)"
+          strokeWidth="1.2"
+        />
         {/* Tilted equatorial ring */}
-        <ellipse cx="26" cy="26" rx="20" ry="8" stroke="url(#nl)" strokeWidth="1.4" transform="rotate(-22 26 26)" />
+        <ellipse
+          cx="26"
+          cy="26"
+          rx="20"
+          ry="8"
+          stroke="url(#nl)"
+          strokeWidth="1.4"
+          transform="rotate(-22 26 26)"
+        />
         {/* Constellation lines */}
-        <path d="M11 18 L26 26 L41 14 M26 26 L34 40 M26 26 L16 36"
-          stroke="url(#nl)" strokeWidth="1.4" strokeLinecap="round" opacity="0.9" />
+        <path
+          d="M11 18 L26 26 L41 14 M26 26 L34 40 M26 26 L16 36"
+          stroke="url(#nl)"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
         <g fill="url(#nl)">
           {/* Large 4-point star top-right */}
           <path d="M41 7 L43.0 13.8 L49 15 L43.0 16.2 L41 23 L39.0 16.2 L33 15 L39.0 13.8 Z" />
@@ -57,165 +92,105 @@ function Logo() {
   )
 }
 
-const LANDING_LINKS = [
-  { label: "Markets", href: "/markets" },
-  { label: "Analytics", href: "/analytics" },
-  { label: "Governance", href: "/governance" },
-  { label: "Docs", href: "/docs" },
-]
-
-const APP_LINKS: Array<{ label: string; to: "/trade" | "/earn" | "/referrals" | "/docs" | null }> = [
-  { label: "Trade", to: "/trade" },
-  { label: "Earn", to: "/earn" },
-  { label: "Referrals", to: "/referrals" },
-  { label: "Stats", to: null },
-  { label: "Docs", to: "/docs" },
-]
-
-type Props = {
-  variant: "landing" | "app"
-}
-
-export function Navbar({ variant }: Props) {
+export function Navbar({ variant }: { variant: "landing" | "app" }) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const isApp = variant === "app"
 
+  useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1024px)")
+    const closeOnDesktop = () => {
+      if (desktop.matches) setMobileOpen(false)
+    }
+    desktop.addEventListener("change", closeOnDesktop)
+    return () => desktop.removeEventListener("change", closeOnDesktop)
+  }, [])
+
   return (
-    <nav className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md backdrop-saturate-150">
+    <header className="sticky top-0 z-40 border-b border-border bg-background/80 backdrop-blur-md">
       <div
-        className={`mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 ${
-          isApp ? "h-14 max-w-full" : "h-16 max-w-330"
-        }`}
+        className={`mx-auto flex items-center justify-between gap-3 px-4 sm:px-6 lg:px-8 ${isApp ? "h-14" : "h-16 max-w-330"}`}
       >
         <Logo />
-
-        {/* Desktop links */}
-        <ul className="hidden items-center gap-7 md:flex">
-          {isApp
-            ? APP_LINKS.map(({ label, to }) => (
-                <li key={label}>
-                  {to ? (
-                    <Link
-                      to={to}
-                      className="text-[13.5px] text-muted-foreground transition-colors hover:text-foreground"
-                      activeProps={{ className: "text-[13.5px] text-foreground" }}
-                    >
-                      {label}
-                    </Link>
-                  ) : (
-                    <span className="cursor-default text-[13.5px] text-muted-foreground/40">
-                      {label}
-                    </span>
-                  )}
-                </li>
-              ))
-            : LANDING_LINKS.map(({ label, href }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    className="text-[13.5px] font-normal text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-        </ul>
-
-        {/* Actions */}
+        <nav aria-label="Primary" className="hidden items-center gap-6 lg:flex">
+          {PRIMARY_NAV_ITEMS.map(({ label, to }) => (
+            <Link
+              key={to}
+              to={to}
+              activeOptions={{ includeSearch: false }}
+              className="text-[13px] text-muted-foreground hover:text-foreground"
+              activeProps={{
+                className: "font-medium text-foreground",
+                "aria-current": "page",
+              }}
+            >
+              {label}
+            </Link>
+          ))}
+        </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button variant="outline" className="h-9.5 px-4 text-[13.5px]">
-            Connect
-          </Button>
-          {!isApp && (
-            <Button
-              variant="default"
-              className="hidden h-9.5 gap-2 px-4 text-[13.5px] sm:inline-flex"
-              onClick={() => { window.location.href = "/dashboard" }}
+          {isApp ? (
+            <ConnectWalletButton />
+          ) : (
+            <Link
+              to="/dashboard"
+              className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
             >
               Launch app
-              <span className="transition-transform group-hover:translate-x-0.5">→</span>
-            </Button>
+            </Link>
           )}
-
-          {/* Mobile hamburger */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            aria-label="Open menu"
-            onClick={() => setMobileOpen((v) => !v)}
-          >
-            {mobileOpen ? (
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetTrigger
+              aria-label="Open menu"
+              className="flex h-9 w-9 items-center justify-center rounded-md border border-border lg:hidden"
+            >
               <svg
+                aria-hidden="true"
                 width="18"
                 height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="2"
-                strokeLinecap="round"
               >
-                <path d="M18 6 6 18M6 6l12 12" />
+                <path d="M3 6h18M3 12h18M3 18h18" />
               </svg>
-            ) : (
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-              >
-                <path d="M3 12h18M3 6h18M3 18h18" />
-              </svg>
-            )}
-          </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-72 max-w-[85vw] p-5">
+              <SheetTitle>Astrion navigation</SheetTitle>
+              <SheetDescription>
+                Explore lending markets and manage positions.
+              </SheetDescription>
+              <nav aria-label="Primary" className="mt-4 flex flex-col gap-2">
+                {PRIMARY_NAV_ITEMS.map(({ label, to }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    onClick={() => setMobileOpen(false)}
+                    activeOptions={{ includeSearch: false }}
+                    className="rounded-md px-3 py-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
+                    activeProps={{
+                      className: "bg-accent text-foreground",
+                      "aria-current": "page",
+                    }}
+                  >
+                    {label}
+                  </Link>
+                ))}
+              </nav>
+              <nav aria-label="Stellar" className="mt-3 border-t border-border pt-3">
+                <Link
+                  to="/legacy"
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-3 py-3 text-sm text-muted-foreground"
+                >
+                  Stellar positions
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-
-      {/* Mobile dropdown */}
-      {mobileOpen && (
-        <div className="border-t border-border bg-background px-4 pb-4 md:hidden">
-          <ul className="flex flex-col gap-1 pt-2">
-            {isApp
-              ? APP_LINKS.map(({ label, to }) => (
-                  <li key={label}>
-                    {to ? (
-                      <Link
-                        to={to}
-                        className="block rounded py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                        onClick={() => setMobileOpen(false)}
-                      >
-                        {label}
-                      </Link>
-                    ) : (
-                      <span className="block rounded py-2 text-sm text-muted-foreground/40">
-                        {label}
-                      </span>
-                    )}
-                  </li>
-                ))
-              : LANDING_LINKS.map(({ label, href }) => (
-                  <li key={label}>
-                    <a
-                      href={href}
-                      className="block rounded py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {label}
-                    </a>
-                  </li>
-                ))}
-          </ul>
-          {!isApp && (
-            <Button variant="default" className="mt-3 w-full gap-2">
-              Launch app →
-            </Button>
-          )}
-        </div>
-      )}
-    </nav>
+    </header>
   )
 }

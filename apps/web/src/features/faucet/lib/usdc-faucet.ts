@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start"
 import { Address } from "@stellar/stellar-sdk"
 import { TOKENS } from "../../lending/lib/astrion-contracts"
+import { IS_STELLAR_TESTNET } from "../../lending/lib/network"
 
 export type FaucetAssetSymbol = "USDC" | "WBTC"
 
@@ -129,5 +130,8 @@ export const dripTestAsset = createServerFn({ method: "POST" })
     asset: assertValidAsset(data.asset),
   }))
   .handler(async ({ data }) => {
+    if (!IS_STELLAR_TESTNET) {
+      throw new Error("The faucet is only available on Stellar testnet")
+    }
     return mintWithStellarCli(data.address, data.asset)
   })

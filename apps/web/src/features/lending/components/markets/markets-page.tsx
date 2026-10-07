@@ -7,13 +7,12 @@ import { MetricCard } from "../shared/metric-card"
 import { MarketCard } from "./market-card"
 import { MarketFilters } from "./market-filters"
 import type { Market } from "../../types/lending"
-
-type FilterType = "all" | "isolated"
+import type { MarketFilter } from "../../lib/route-params"
 
 function filterMarkets(
   markets: Array<Market>,
   search: string,
-  filter: FilterType
+  filter: MarketFilter
 ) {
   return markets.filter((m) => {
     const matchesSearch =
@@ -25,9 +24,14 @@ function filterMarkets(
   })
 }
 
-export function MarketsPage() {
+export function MarketsPage({
+  filter,
+  onFilterChange,
+}: {
+  filter: MarketFilter
+  onFilterChange: (filter: MarketFilter) => void
+}) {
   const [search, setSearch] = useState("")
-  const [filter, setFilter] = useState<FilterType>("all")
   const {
     data: markets = [],
     error,
@@ -89,7 +93,7 @@ export function MarketsPage() {
           search={search}
           onSearchChange={setSearch}
           filter={filter}
-          onFilterChange={setFilter}
+          onFilterChange={onFilterChange}
         />
         <span className="text-[12px] text-muted-foreground">
           {filtered.length} market{filtered.length !== 1 ? "s" : ""}
@@ -136,33 +140,32 @@ export function MarketsPage() {
         </div>
       )}
 
-      {(filter === "all" || filter === "isolated") &&
-        isolatedMarkets.length > 0 && (
-          <div className="mt-6 flex items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              className="mt-0.5 shrink-0 text-amber-500"
-            >
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-              <line x1="12" y1="9" x2="12" y2="13" />
-              <line x1="12" y1="17" x2="12.01" y2="17" />
-            </svg>
-            <div>
-              <p className="text-[12px] font-medium text-amber-500">
-                Isolated Market Risk
-              </p>
-              <p className="mt-0.5 text-[11px] text-muted-foreground">
-                Isolated markets have separate liquidity, borrow caps, and
-                liquidation rules.
-              </p>
-            </div>
+      {isolatedMarkets.length > 0 && (
+        <div className="mt-6 flex items-start gap-3 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.5"
+            className="mt-0.5 shrink-0 text-amber-500"
+          >
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+            <line x1="12" y1="9" x2="12" y2="13" />
+            <line x1="12" y1="17" x2="12.01" y2="17" />
+          </svg>
+          <div>
+            <p className="text-[12px] font-medium text-amber-500">
+              Isolated Market Risk
+            </p>
+            <p className="mt-0.5 text-[11px] text-muted-foreground">
+              Isolated markets have separate liquidity, borrow caps, and
+              liquidation rules.
+            </p>
           </div>
-        )}
+        </div>
+      )}
     </div>
   )
 }

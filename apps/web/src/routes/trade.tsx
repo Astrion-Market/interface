@@ -1,4 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router"
-import { TradePage } from "../features/trade/components/TradePage"
+import { AppLayout } from "../features/lending/components/layout/app-layout"
+import { ArchivedFeature } from "../features/lending/components/navigation/route-notice"
 
-export const Route = createFileRoute("/trade")({ component: TradePage })
+export const Route = createFileRoute("/trade")({ component: Page })
+
+function Page() {
+  return (
+    <AppLayout>
+      <ArchivedFeature title="Trade" />
+    </AppLayout>
+  )
+}

@@ -27,6 +27,31 @@ testnet-oriented integration. They must not be repurposed as canonical USDC or
 cross-chain deployment records. Existing read-error filtering and query keys need
 explicit partial-data and network scoping work during the model migration.
 
+## Navigation and route availability
+
+The app sidebar and landing header share the same primary destinations on desktop
+and mobile: Overview (`/dashboard`), Markets (`/markets`), Positions
+(`/portfolio`), Activity (`/activity`), and Learn (`/docs`). The existing Stellar
+market and position controls remain available; `/legacy` provides an explicit
+entry for managing those balances during the transition.
+
+| URL                                                          | Current behavior                                                                                                                                          |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `/isolated-markets`                                          | Redirects to `/markets?type=isolated`; the filter survives reload and browser navigation                                                                  |
+| `/activity`                                                  | Explains that cross-chain tracking is not available; does not fabricate an empty transaction history                                                      |
+| `/markets/$chain/$protocol/$marketId`                        | Validated detail scaffold; no protocol reads or writes yet                                                                                                |
+| `/portfolio/$chain/$protocol/$positionId`                    | Validated detail scaffold; no claim of position ownership or balance                                                                                      |
+| `/earn`, `/trade`, `/referrals`, `/governance`, `/analytics` | Retired-area notices with links back to lending and existing Stellar positions                                                                            |
+| `/faucet`                                                    | Available only with the exact Stellar testnet network passphrase; other environments redirect to `/legacy`, and the server mint handler also rejects them |
+
+Detail paths currently accept `base` or `ethereum` and `aave-v3`, `morpho-blue`,
+or `compound-v3`. Market identifiers have address or Morpho market-ID syntax;
+position IDs are bounded opaque strings. These checks only validate a link's
+shape. Verified registries and ownership checks are still required before any
+future execution. The generated TanStack route tree comes from the existing Vite
+plugin; detail routes use non-nested files to avoid rendering the market/position
+list as a parent layout. [TanStack routing concepts](https://tanstack.com/router/latest/docs/routing/routing-concepts).
+
 ## Proposed execution model
 
 ```mermaid
