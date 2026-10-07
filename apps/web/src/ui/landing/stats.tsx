@@ -1,47 +1,29 @@
-import { StatusBadge } from "@workspace/ui/components/status-badge"
-import type { StatusTone } from "@workspace/ui/components/status-badge"
+import { LineIcon } from "./illustrations"
+import type { IconName } from "./illustrations"
 
-const STATUS: Array<{ label: string; tone: StatusTone; badge: string; body: string }> = [
-  {
-    label: "Today",
-    tone: "neutral",
-    badge: "Stellar testnet",
-    body: "The app runs Astrion's earlier Stellar lending markets on testnet with test assets. Cross-chain routes are not live yet.",
-  },
-  {
-    label: "First route",
-    tone: "pending",
-    badge: "In development",
-    body: "Lend Stellar USDC into Aave V3 on Base, then add borrowing, repayment, and withdrawal back to Stellar.",
-  },
-  {
-    label: "You will need",
-    tone: "attention",
-    badge: "Two wallets",
-    body: "A Stellar wallet and an EVM wallet you control. The EVM wallet owns the account that holds your lending position.",
-  },
+const STATUS: Array<{ icon: IconName; title: string; body: string }> = [
+  { icon: "flask", title: "Testnet today", body: "Cross-chain routes aren't live yet." },
+  { icon: "route", title: "Aave on Base first", body: "Morpho and Compound follow." },
+  { icon: "wallets", title: "Two wallets", body: "Stellar plus an EVM wallet." },
 ]
 
 export function AlphaStatus() {
   return (
     <section aria-label="Product status" className="px-4 pb-4 pt-4 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[1320px]">
-        <div className="grid grid-cols-1 overflow-hidden border border-border bg-card md:grid-cols-3">
-          {STATUS.map(({ label, tone, badge, body }, i) => (
-            <div
-              key={label}
-              className={`p-6 sm:p-8 ${i < STATUS.length - 1 ? "border-b border-border md:border-b-0 md:border-r" : ""}`}
-            >
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <p className="font-mono-num text-label-xs uppercase text-muted-foreground">
-                  {label}
-                </p>
-                <StatusBadge tone={tone}>{badge}</StatusBadge>
+        <ul className="grid grid-cols-1 gap-px overflow-hidden border border-border bg-border sm:grid-cols-3">
+          {STATUS.map(({ icon, title, body }) => (
+            <li key={title} className="flex items-center gap-4 bg-card p-5 sm:p-6">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <LineIcon name={icon} />
+              </span>
+              <div>
+                <p className="text-label text-foreground">{title}</p>
+                <p className="text-copy-sm text-muted-foreground">{body}</p>
               </div>
-              <p className="text-copy-sm mt-3 text-foreground/85">{body}</p>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )

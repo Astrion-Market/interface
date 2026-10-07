@@ -1,13 +1,11 @@
 import { Link } from "@tanstack/react-router"
 import { Button } from "@workspace/ui/components/button"
-import { StatusBadge } from "@workspace/ui/components/status-badge"
-import { StepTimeline } from "@workspace/ui/components/step-timeline"
-import { RouteSummary } from "../../features/lending/components/primitives/route-summary"
+import { RouteIllustration } from "./illustrations"
 
 function OrbitalBackground() {
   return (
     <svg
-      className="pointer-events-none absolute inset-0 h-full w-full"
+      className="pointer-events-none absolute inset-0 hidden h-full w-full lg:block"
       viewBox="0 0 1200 620"
       preserveAspectRatio="xMidYMid slice"
       fill="none"
@@ -102,46 +100,6 @@ function OrbitalBackground() {
   )
 }
 
-function RoutePreview() {
-  return (
-    <div className="w-full max-w-[500px] space-y-4 rounded-xl border border-border bg-card p-4 shadow-2xl sm:p-5">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-label text-foreground">Example: lend from Stellar</p>
-        <StatusBadge tone="neutral">Preview, not live</StatusBadge>
-      </div>
-      <RouteSummary
-        legs={[
-          { kind: "origin", chain: "stellar", asset: "USDC" },
-          { kind: "destination", chain: "base", protocol: "aave-v3", action: "Lend" },
-        ]}
-      />
-      <StepTimeline
-        aria-label="Example lending progress"
-        steps={[
-          {
-            id: "sign",
-            label: "Sign on Stellar",
-            description: "Your Stellar wallet approves the USDC transfer.",
-            status: "complete",
-          },
-          {
-            id: "transfer",
-            label: "Transfer to Base",
-            description: "Circle CCTP moves native USDC. Progress stays visible if you reload.",
-            status: "current",
-          },
-          {
-            id: "supply",
-            label: "Supply on Aave V3",
-            description: "Earning starts once the supply is confirmed on Base.",
-            status: "pending",
-          },
-        ]}
-      />
-    </div>
-  )
-}
-
 export function Hero() {
   return (
     <section className="hero-glow relative overflow-hidden px-4 pb-16 pt-20 sm:px-6 sm:pb-20 sm:pt-28 lg:px-8 lg:pb-28 lg:pt-32">
@@ -154,7 +112,7 @@ export function Hero() {
           <div>
             <span className="font-mono-num text-label-xs inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 uppercase text-muted-foreground backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" style={{ animation: "pulseDot 2.4s ease-in-out infinite" }} />
-              Cross-chain alpha · In development
+              In development · Testnet today
             </span>
 
             <h1 className="text-display-compact font-trading mt-6 text-foreground">
@@ -172,16 +130,8 @@ export function Hero() {
               </span>
             </h1>
 
-            <p className="text-copy mt-5 max-w-[520px] text-muted-foreground sm:text-[16px]">
-              Astrion is building one place for Stellar users to lend USDC into
-              Aave, Morpho, and Compound markets on Base and Ethereum, borrow
-              against collateral there, and receive USDC back on Stellar.
-            </p>
-
-            <p className="text-copy-sm mt-4 max-w-[520px] text-muted-foreground">
-              <span className="font-medium text-foreground">First planned route:</span>{" "}
-              Stellar USDC to Aave V3 on Base. The alpha will need a Stellar
-              wallet and an EVM wallet you control.
+            <p className="text-copy mt-5 max-w-[460px] text-muted-foreground sm:text-[17px]">
+              Lend into Aave, Morpho, and Compound from your Stellar wallet.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -204,12 +154,9 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right: example route */}
-          <div
-            className="flex justify-center lg:justify-end"
-            style={{ animation: "floatUp 5s ease-in-out infinite" }}
-          >
-            <RoutePreview />
+          {/* Right: route illustration */}
+          <div className="flex justify-center lg:justify-end">
+            <RouteIllustration />
           </div>
         </div>
       </div>

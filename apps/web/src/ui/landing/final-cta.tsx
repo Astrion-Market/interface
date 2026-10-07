@@ -12,10 +12,6 @@ export function FinalCTA() {
           Lend across chains.<br className="hidden sm:block" />{" "}
           <span className="text-primary">From Stellar.</span>
         </h2>
-        <p className="text-copy mx-auto mt-5 max-w-[460px] text-muted-foreground">
-          Try the current app on Stellar testnet, read how the cross-chain
-          routes will work, or help build them on GitHub.
-        </p>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
           <Button
             variant="default"
@@ -31,11 +27,11 @@ export function FinalCTA() {
             nativeButton={false}
             render={<Link to="/docs" />}
           >
-            Learn how it works
+            Read the docs
           </Button>
         </div>
         <p className="text-copy-sm mt-6 text-muted-foreground">
-          In development · Testnet today · Not available on mainnet
+          In development · Testnet today
         </p>
       </div>
     </section>
