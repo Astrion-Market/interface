@@ -8,7 +8,7 @@ type Props = {
 }
 
 export function PortfolioSummary({ summary, isLoading, isConnected }: Props) {
-  const fallback = isLoading ? "Syncing" : "—"
+  const fallback = isLoading ? "Syncing" : "-"
   const metrics = [
     { label: "Net Worth", value: summary?.netWorth ?? fallback },
     { label: "Net APY", value: summary?.netApy ?? fallback, accent: true },

@@ -24,7 +24,7 @@ const STEPS = [
   {
     num: "03",
     title: "Monitor & Manage",
-    body: "Watch your health factor in real time. Repay, supply more, or withdraw — all with the same single-click UX.",
+    body: "Watch your health factor in real time. Repay, supply more, or withdraw, all with the same single-click UX.",
     terminal: [
       { t: "→ health factor: 1.85" },
       { t: "→ liq. price: $0.078 XLM" },

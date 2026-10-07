@@ -1,8 +1,8 @@
 const STATS = [
-  { label: "Total Value Locked",  value: "—",  sub: "At protocol launch" },
-  { label: "Active Markets",      value: "—",  sub: "Core + Isolated" },
-  { label: "Total Suppliers",     value: "—",  sub: "Unique wallets" },
-  { label: "Protocol Revenue",    value: "—",  sub: "Lifetime fees" },
+  { label: "Total Value Locked",  value: "-",  sub: "At protocol launch" },
+  { label: "Active Markets",      value: "-",  sub: "Core + Isolated" },
+  { label: "Total Suppliers",     value: "-",  sub: "Unique wallets" },
+  { label: "Protocol Revenue",    value: "-",  sub: "Lifetime fees" },
 ]
 
 export function Stats() {

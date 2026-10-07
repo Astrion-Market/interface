@@ -190,7 +190,7 @@ export type IsolatedPosition = {
   market: string
   loanAsset: string
   collateralAsset: string
-  // Raw supply shares / borrow shares — pass as `shares` for max withdraw/repay
+  // Raw supply shares / borrow shares: pass as `shares` for max withdraw/repay
   // (avoids interest-accrual dust between quote and submit).
   supplyShares: bigint
   borrowShares: bigint

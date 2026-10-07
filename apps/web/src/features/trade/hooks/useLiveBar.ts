@@ -19,7 +19,7 @@ const RECONNECT_MS = 2000
 /**
  * Real-time bar feed for the chart.
  *
- * Primary:  Binance WebSocket (@kline stream) — updates within ~200 ms of each trade.
+ * Primary:  Binance WebSocket (@kline stream): updates within ~200 ms of each trade.
  * Fallback: GMX oracle polled every 1.5 s (auto-activates if WS fails within 4 s).
  *
  * Uses a per-effect `mounted` closure variable (not a shared ref) so that
@@ -29,7 +29,7 @@ const RECONNECT_MS = 2000
 export function useLiveBar(symbol: string | undefined, period: string): OhlcBar | null {
   const [liveBar, setLiveBar] = useState<OhlcBar | null>(null)
 
-  // These refs are fine to share — they hold the *current* WS handle and poll timer
+  // These refs are fine to share; they hold the *current* WS handle and poll timer
   // so cleanup can reach them from the returned teardown function.
   const wsRef = useRef<WebSocket | null>(null)
   const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)

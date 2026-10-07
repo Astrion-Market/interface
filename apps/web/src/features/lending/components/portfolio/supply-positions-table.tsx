@@ -83,7 +83,7 @@ export function SupplyPositionsTable({ positions }: Props) {
                         </span>
                       </span>
                     ) : (
-                      <span className="text-muted-foreground">—</span>
+                      <span className="text-muted-foreground">-</span>
                     )}
                   </td>
                   <td className="px-4 py-3">

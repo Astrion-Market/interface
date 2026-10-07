@@ -1,4 +1,4 @@
-// Pure math helpers — no blockchain calls, no side effects
+// Pure math helpers: no blockchain calls, no side effects
 // These are blockchain-agnostic and can be ported straight from GMX's utils/increase.ts etc.
 
 /** Apply slippage to acceptable price */

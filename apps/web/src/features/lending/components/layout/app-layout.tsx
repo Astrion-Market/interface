@@ -15,7 +15,7 @@ export function AppLayout({ children }: Props) {
         Skip to content
       </a>
       <AppSidebar />
-      {/* Content — top padding on mobile for fixed header; no padding on desktop */}
+      {/* Content: top padding on mobile for fixed header; no padding on desktop */}
       <main
         id="main-content"
         tabIndex={-1}

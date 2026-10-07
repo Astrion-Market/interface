@@ -8,7 +8,7 @@ const TRUST = [
     ),
     title: "Audited Contracts",
     body: "All protocol contracts go through third-party security audits before deployment. Audit reports are public.",
-    stat: "Audits: —",
+    stat: "Audits: -",
   },
   {
     icon: (
@@ -29,7 +29,7 @@ const TRUST = [
       </svg>
     ),
     title: "Stellar Native",
-    body: "Built for Soroban — Stellar's smart contract platform. Sub-5s finality, low fees, and a proven validator network.",
+    body: "Built for Soroban, Stellar's smart contract platform. Sub-5s finality, low fees, and a proven validator network.",
     stat: "Soroban",
   },
   {
@@ -40,7 +40,7 @@ const TRUST = [
       </svg>
     ),
     title: "Open Source",
-    body: "The full protocol — contracts, frontend, SDK — is open source and publicly verifiable on GitHub.",
+    body: "The full protocol (contracts, frontend, SDK) is open source and publicly verifiable on GitHub.",
     stat: "Apache 2.0",
   },
 ]
@@ -58,7 +58,7 @@ export function Infrastructure() {
           </h2>
           <p className="mt-3 max-w-[520px] text-[14px] leading-relaxed text-muted-foreground">
             Every decision in Astrion's design prioritizes safety.
-            From isolated market boundaries to oracle transparency — the system is built to fail gracefully.
+            From isolated market boundaries to oracle transparency, the system is built to fail gracefully.
           </p>
         </div>
 

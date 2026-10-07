@@ -9,7 +9,7 @@ import { NotFound } from "../ui/not-found"
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 30, // 30s — prices refresh frequently
+      staleTime: 1000 * 30, // 30s: prices refresh frequently
       refetchOnWindowFocus: true,
     },
   },
@@ -18,7 +18,7 @@ const queryClient = new QueryClient({
 // Update this to your production domain before going live.
 const SITE_URL = "https://astrion.market"
 const SITE_NAME = "astrion.market"
-const TITLE = "Astrion — Hybrid Lending on Stellar"
+const TITLE = "Astrion: Hybrid Lending on Stellar"
 const DESCRIPTION =
   "The foundational credit infrastructure layer for Stellar. Supply, borrow, and earn yield with institutional-grade UX on Soroban."
 const OG_IMAGE = `${SITE_URL}/og-image.svg`
@@ -99,7 +99,7 @@ export const Route = createRootRoute({
       {
         property: "og:image:alt",
         content:
-          "Astrion — Hybrid Lending on Stellar · Supply, borrow, and earn yield on Soroban",
+          "Astrion: Hybrid Lending on Stellar · Supply, borrow, and earn yield on Soroban",
       },
 
       // ── Twitter / X Card ────────────────────────────────────────
@@ -112,7 +112,7 @@ export const Route = createRootRoute({
       {
         name: "twitter:image:alt",
         content:
-          "Astrion — Hybrid Lending on Stellar · Supply, borrow, and earn yield on Soroban",
+          "Astrion: Hybrid Lending on Stellar · Supply, borrow, and earn yield on Soroban",
       },
     ],
     links: [
@@ -145,7 +145,7 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
-// Minified blocking script — runs synchronously before first paint.
+// Minified blocking script: runs synchronously before first paint.
 // Reads localStorage and sets dark/light class on <html> so CSS variables
 // resolve correctly before React hydrates. Prevents the flash of wrong theme.
 const THEME_SCRIPT =
@@ -158,7 +158,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     // class attribute of <html>. This suppresses the expected mismatch warning.
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Must be first — runs before any CSS is applied */}
+        {/* Must be first: runs before any CSS is applied */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
         <HeadContent />
         {/* JSON-LD structured data */}

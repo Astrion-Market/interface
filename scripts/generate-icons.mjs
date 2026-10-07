@@ -33,7 +33,7 @@ async function main() {
     console.log(`✓ ${name} (${size}×${size})`)
   }
 
-  // Also generate favicon.ico (32×32 PNG wrapped — browsers accept PNG in .ico)
+  // Also generate favicon.ico (32×32 PNG wrapped: browsers accept PNG in .ico)
   const icoBuf = await sharp(svgSource, { density: 400 })
     .resize(32, 32)
     .png()

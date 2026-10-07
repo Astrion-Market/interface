@@ -165,7 +165,7 @@ export function LendingTransactionDialog({
   const isBusy = mutation.isPending || isConnecting
   const activeMarket = markets?.find((item) => item.id === market.id)
   // Price (USD) of the token this action moves. Borrow/lend use the loan asset,
-  // collateral actions use the collateral asset — they are different assets, so
+  // collateral actions use the collateral asset; they are different assets, so
   // the market-row oracle price (collateral) is only a fallback for display.
   const movedTokenPrice = account
     ? wadToNumber(

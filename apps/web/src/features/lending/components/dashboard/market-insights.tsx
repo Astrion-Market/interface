@@ -7,9 +7,9 @@ type InsightRow = {
 }
 
 const PROTOCOL_STATS: InsightRow[] = [
-  { label: "Protocol TVL", value: "—", sub: "Total Value Locked" },
-  { label: "Total Borrowed", value: "—", sub: "Across all markets" },
-  { label: "Active Markets", value: "—" },
+  { label: "Protocol TVL", value: "-", sub: "Total Value Locked" },
+  { label: "Total Borrowed", value: "-", sub: "Across all markets" },
+  { label: "Active Markets", value: "-" },
 ]
 
 export function MarketInsights() {

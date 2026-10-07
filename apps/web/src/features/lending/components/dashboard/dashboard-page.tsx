@@ -30,14 +30,14 @@ export function DashboardPage() {
             title="Active Positions"
             description="Your current supply and borrow positions"
           />
-          {/* Table wrapper — horizontal scroll on small screens */}
+          {/* Table wrapper: horizontal scroll on small screens */}
           <div className="overflow-x-auto">
             <ActivePositionsTable positions={positions} />
           </div>
         </div>
       </div>
 
-      {/* Right insights panel — full-width on mobile, fixed sidebar on xl */}
+      {/* Right insights panel: full-width on mobile, fixed sidebar on xl */}
       <div className="border-t border-border px-4 py-5 sm:px-6 xl:w-64 xl:shrink-0 xl:overflow-y-auto xl:border-t-0 xl:border-l xl:px-4 xl:py-6">
         <p className="mb-4 text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
           Market Insights

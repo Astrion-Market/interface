@@ -30,7 +30,7 @@ export async function depositGM(
   _amountUsd: number,
 ): Promise<string> {
   // TODO: Call ExchangeRouter.createDeposit({ market, longTokenAmount, shortTokenAmount })
-  //   Deposit is two-sided — user provides long + short tokens in current pool ratio
+  //   Deposit is two-sided: user provides long + short tokens in current pool ratio
   const toastId = toast.loading(`Depositing into ${poolName}…`)
   await fakeTxDelay()
   toast.success("GM deposit submitted", { id: toastId, description: "Tx: DUMMY (not real)" })
@@ -55,7 +55,7 @@ export async function depositGLV(
   _amountUsd: number,
 ): Promise<string> {
   // TODO: Call GlvRouter.createDeposit({ glv, longTokenAmount, shortTokenAmount })
-  //   GLV deposits route through underlying GM pools — vault picks the optimal pool
+  //   GLV deposits route through underlying GM pools: vault picks the optimal pool
   const toastId = toast.loading(`Depositing into ${vaultName}…`)
   await fakeTxDelay()
   toast.success("GLV deposit submitted", { id: toastId, description: "Tx: DUMMY (not real)" })

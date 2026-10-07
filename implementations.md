@@ -1,4 +1,4 @@
-# Astrion — Implementation Plan
+# Astrion: Implementation Plan
 
 Hybrid lending protocol UI on Stellar / Soroban.
 Stack: Vite + TanStack Router + React 19 + TailwindCSS v4 + Sonner + @workspace/ui

@@ -26,7 +26,7 @@ export function ChartHeader({ symbol, onSelectToken }: Props) {
       <div className="flex flex-col">
         <span className="text-xs text-muted-foreground">Price</span>
         <span className="font-mono font-medium">
-          {midPrice > 0 ? `$${midPrice.toLocaleString("en-US", { maximumFractionDigits: 4 })}` : "—"}
+          {midPrice > 0 ? `$${midPrice.toLocaleString("en-US", { maximumFractionDigits: 4 })}` : "-"}
         </span>
       </div>
 
@@ -42,7 +42,7 @@ export function ChartHeader({ symbol, onSelectToken }: Props) {
                 : "font-mono text-muted-foreground"
           }
         >
-          {delta?.deltaPercentageStr ?? "—"}
+          {delta?.deltaPercentageStr ?? "-"}
         </span>
       </div>
 
@@ -50,7 +50,7 @@ export function ChartHeader({ symbol, onSelectToken }: Props) {
       <div className="flex flex-col">
         <span className="text-xs text-muted-foreground">24h High</span>
         <span className="font-mono">
-          {delta?.high ? `$${delta.high.toLocaleString()}` : "—"}
+          {delta?.high ? `$${delta.high.toLocaleString()}` : "-"}
         </span>
       </div>
 
@@ -58,7 +58,7 @@ export function ChartHeader({ symbol, onSelectToken }: Props) {
       <div className="flex flex-col">
         <span className="text-xs text-muted-foreground">24h Low</span>
         <span className="font-mono">
-          {delta?.low ? `$${delta.low.toLocaleString()}` : "—"}
+          {delta?.low ? `$${delta.low.toLocaleString()}` : "-"}
         </span>
       </div>
     </div>

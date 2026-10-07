@@ -13,7 +13,7 @@ export function RiskWarningBanner() {
         <p className="text-[13px] font-semibold text-amber-400">Isolated Market Risk</p>
         <p className="text-[12px] text-muted-foreground leading-relaxed">
           Isolated markets use separate liquidity pools, borrow caps, and liquidation rules from Core Markets.
-          Each market carries independent risk — a failure in one does not affect the rest of the protocol.
+          Each market carries independent risk: a failure in one does not affect the rest of the protocol.
           Carefully review the risk parameters before supplying or borrowing.
         </p>
         <ul className="mt-1 space-y-0.5 text-[11px] text-muted-foreground">

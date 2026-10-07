@@ -6,7 +6,7 @@ function fakeTxDelay(ms = 1500): Promise<void> {
 
 export async function setTraderReferralCode(_account: string, code: string): Promise<string> {
   // TODO: Call ReferralsRouter.setTraderReferralCodeByUser(bytes32(code)) on Soroban
-  //   1. Verify code exists via ReferralsReader.getCodeOwner(code) — must not be zero address
+  //   1. Verify code exists via ReferralsReader.getCodeOwner(code): must not be zero address
   //   2. Build and sign transaction
   //   3. Submit and poll for SUCCESS
   const toastId = toast.loading(`Joining with code "${code}"…`)
@@ -22,7 +22,7 @@ export async function createAffiliateCode(_account: string, code: string): Promi
   // TODO: Call ReferralsRouter.registerCode(bytes32(code)) on Soroban
   //   1. Check code availability: ReferralsReader.getCodeOwner(code) === zero address
   //   2. Build registerCode instruction, sign, submit
-  //   3. Poll until SUCCESS — code becomes active immediately
+  //   3. Poll until SUCCESS: code becomes active immediately
   const toastId = toast.loading(`Registering code "${code}"…`)
   await fakeTxDelay()
   toast.success(`Code "${code}" registered!`, {

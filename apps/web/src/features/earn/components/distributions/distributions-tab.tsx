@@ -111,7 +111,7 @@ export function DistributionsTab() {
                       <StatusBadge status={row.status} />
                     </td>
                     <td className="px-5 py-3.5 text-right">
-                      <span className="font-mono text-muted-foreground/50">—</span>
+                      <span className="font-mono text-muted-foreground/50">-</span>
                     </td>
                   </tr>
                 ))

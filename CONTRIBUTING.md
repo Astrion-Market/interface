@@ -83,13 +83,13 @@ All three should pass before you submit any changes.
 main ← PR ← your-branch
 ```
 
-1. **Sync** — pull the latest `main`
-2. **Branch** — create a feature/fix branch off `main`
-3. **Code** — make your changes
-4. **Check** — run lint + typecheck
-5. **Commit** — write a conventional commit message
-6. **Push** — push your branch
-7. **PR** — open a pull request against `main`
+1. **Sync**: pull the latest `main`
+2. **Branch**: create a feature/fix branch off `main`
+3. **Code**: make your changes
+4. **Check**: run lint + typecheck
+5. **Commit**: write a conventional commit message
+6. **Push**: push your branch
+7. **PR**: open a pull request against `main`
 
 ---
 
@@ -203,10 +203,10 @@ Include screenshots for any UI changes (before/after if applicable).
 
 | Rule | Detail |
 |---|---|
-| **Formatter** | Prettier — run `bun format` |
-| **Linter** | ESLint — run `bun lint` |
+| **Formatter** | Prettier: run `bun format` |
+| **Linter** | ESLint: run `bun lint` |
 | **Imports** | Use workspace imports (`@workspace/ui/...`) over relative paths when crossing package boundaries |
-| **Comments** | Only for non-obvious intent — the code should be self-documenting |
+| **Comments** | Only for non-obvious intent; the code should be self-documenting |
 | **Types** | Prefer explicit types over `any`. Use TypeScript's type system fully. |
 
 ### React conventions
@@ -214,7 +214,7 @@ Include screenshots for any UI changes (before/after if applicable).
 - Use functional components exclusively
 - Use named exports (no default exports)
 - Co-locate component files with their feature
-- Keep components focused — one responsibility per component
+- Keep components focused: one responsibility per component
 - Extract hooks into `hooks/` directories within feature folders
 
 ### File naming

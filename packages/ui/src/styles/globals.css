@@ -60,7 +60,7 @@
     --card-foreground: oklch(0.13 0.012 258);
     --popover: oklch(1 0.001 250);
     --popover-foreground: oklch(0.13 0.012 258);
-    /* Electric blue — matches logo gradient midpoint */
+    /* Electric blue: matches logo gradient midpoint */
     --primary: oklch(0.50 0.175 222);
     --primary-foreground: oklch(0.985 0.005 220);
     --secondary: oklch(0.94 0.01 240);
@@ -89,7 +89,7 @@
     --sidebar-ring: oklch(0.60 0.14 222);
 }
 
-/* ── Dark mode (Astrion — dense black + electric blue) ── */
+/* ── Dark mode (Astrion: dense black + electric blue) ── */
 .dark {
     /* Deep product black: intentional, not gray. */
     --background: oklch(0.055 0.006 260);
@@ -98,7 +98,7 @@
     --card-foreground: oklch(0.965 0.006 225);
     --popover: oklch(0.085 0.008 260);
     --popover-foreground: oklch(0.965 0.006 225);
-    /* Vivid electric blue — #6CB6FF range */
+    /* Vivid electric blue: #6CB6FF range */
     --primary: oklch(0.72 0.155 222);
     --primary-foreground: oklch(0.045 0.006 260);
     --secondary: oklch(0.125 0.01 260);

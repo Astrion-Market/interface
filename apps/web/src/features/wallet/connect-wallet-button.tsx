@@ -32,10 +32,10 @@ function truncateAddress(address: string) {
 }
 
 function formatXlmBalance(balance: string | null) {
-  if (!balance) return "—"
+  if (!balance) return "-"
 
   const amount = Number(balance)
-  if (!Number.isFinite(amount)) return "—"
+  if (!Number.isFinite(amount)) return "-"
 
   return `${new Intl.NumberFormat("en-US", {
     maximumFractionDigits: 4,

@@ -8,7 +8,7 @@
   50%       { transform: translateY(-6px); }
 }
 
-/* Hero ambient glow — Astrion electric blue / cyan */
+/* Hero ambient glow: Astrion electric blue / cyan */
 .hero-glow::before {
   content: "";
   position: absolute;

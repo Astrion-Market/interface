@@ -3,7 +3,7 @@ export type GmPool = {
   name: string
   longToken: string
   shortToken: string
-  /** Annualized yield % — replace with live usePerformanceAnnualized when on-chain */
+  /** Annualized yield %: replace with live usePerformanceAnnualized when on-chain */
   apy: number
   tvlUsd: number
   longPct: number

@@ -1,5 +1,5 @@
 // Stellar / Soroban contract interaction layer
-// Every function here is a DUMMY — they just toast + resolve after a fake delay.
+// Every function here is a DUMMY: they just toast + resolve after a fake delay.
 // TODO: Replace with real Stellar SDK + Soroban contract calls when contracts are deployed.
 //
 // Contract equivalents to build:
@@ -138,7 +138,7 @@ export async function claimFundingFees(
 //
 // GMX v2 replaced individual order txns with a single `sendBatchOrderTxn` that
 // batches create/update/cancel in one multicall. On Stellar, Soroban supports
-// multi-operation transactions natively — use this pattern when contracts are live.
+// multi-operation transactions natively: use this pattern when contracts are live.
 
 export type BatchOrderParams = {
   createOrders?: IncreaseOrderParams[]
@@ -180,7 +180,7 @@ export type SidecarOrderParams = {
   isLong: boolean
   type: "takeProfit" | "stopLoss"
   triggerPrice: number
-  sizePct: number           // 0–100 — fraction of position to close on trigger
+  sizePct: number           // 0–100: fraction of position to close on trigger
   indexToken: string
 }
 

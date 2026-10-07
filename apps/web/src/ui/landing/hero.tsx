@@ -29,7 +29,7 @@ function OrbitalBackground() {
         stroke="url(#ob-grad)" strokeWidth="0.6" opacity="0.07"
       />
 
-      {/* Tilted orbital A — main equatorial ring (matches logo motif) */}
+      {/* Tilted orbital A: main equatorial ring (matches logo motif) */}
       <ellipse
         cx="860" cy="310" rx="300" ry="110"
         stroke="url(#ob-grad)" strokeWidth="0.8" opacity="0.10"
@@ -59,7 +59,7 @@ function OrbitalBackground() {
         <line x1="630" y1="170" x2="1050" y2="175" />
       </g>
 
-      {/* Constellation nodes — large 4-pointed stars */}
+      {/* Constellation nodes: large 4-pointed stars */}
       {/* Top-right star */}
       <path
         d="M1050 175 L1052.6 182.8 L1060 175 L1052.6 167.2 Z
@@ -79,7 +79,7 @@ function OrbitalBackground() {
         fill="url(#ob-grad)" opacity="0.30"
       />
 
-      {/* Small orbital nodes — circles */}
+      {/* Small orbital nodes: circles */}
       <circle cx="860" cy="310" r="3.5" fill="url(#ob-grad)" opacity="0.55" />
       <circle cx="630" cy="170" r="2.2" fill="url(#ob-grad)" opacity="0.40" />
       <circle cx="1050" cy="175" r="1.8" fill="url(#ob-grad)" opacity="0.35" />
@@ -89,7 +89,7 @@ function OrbitalBackground() {
       <circle cx="980" cy="250" r="1.0" fill="url(#ob-grad)" opacity="0.18" />
       <circle cx="730" cy="390" r="0.9" fill="url(#ob-grad)" opacity="0.15" />
 
-      {/* Faint far-field dots — left side */}
+      {/* Faint far-field dots: left side */}
       <circle cx="180" cy="120" r="1.1" fill="#6CB6FF" opacity="0.08" />
       <circle cx="80"  cy="300" r="0.9" fill="#22D3EE" opacity="0.06" />
       <circle cx="240" cy="490" r="1.0" fill="#6CB6FF" opacity="0.07" />
@@ -194,7 +194,7 @@ export function Hero() {
       <div className="relative mx-auto max-w-[1320px]">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
 
-          {/* Left — copy */}
+          {/* Left: copy */}
           <div>
             <span className="font-mono-num text-label-xs inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3 py-1.5 uppercase text-muted-foreground backdrop-blur-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-primary" style={{ animation: "pulseDot 2.4s ease-in-out infinite" }} />
@@ -218,7 +218,7 @@ export function Hero() {
 
             <p className="text-copy mt-5 max-w-[500px] text-muted-foreground sm:text-[16px]">
               Supply assets and earn yield. Borrow against collateral.
-              Astrion is a hybrid lending protocol — institutional-grade,
+              Astrion is a hybrid lending protocol: institutional-grade,
               built on Soroban.
             </p>
 
@@ -236,9 +236,9 @@ export function Hero() {
             </div>
 
             <div className="font-mono-num text-label-xs mt-8 flex flex-wrap items-center gap-4 text-muted-foreground/70">
-              <span><span className="font-medium text-foreground">—</span> TVL</span>
+              <span><span className="font-medium text-foreground">-</span> TVL</span>
               <span className="h-3 w-px bg-border" />
-              <span><span className="font-medium text-foreground">—</span> Markets</span>
+              <span><span className="font-medium text-foreground">-</span> Markets</span>
               <span className="h-3 w-px bg-border" />
               <span><span className="font-medium text-foreground">Non-custodial</span></span>
               <span className="h-3 w-px bg-border" />
@@ -246,7 +246,7 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right — dashboard mockup */}
+          {/* Right: dashboard mockup */}
           <div
             className="flex justify-center lg:justify-end"
             style={{ animation: "floatUp 5s ease-in-out infinite" }}

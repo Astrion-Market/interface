@@ -29,7 +29,7 @@ export function GovernancePage() {
         <MetricCard label="Active Proposals" value={active.length.toString()} accent="green" />
         <MetricCard label="Passed" value={passed.length.toString()} accent="blue" />
         <MetricCard label="Total Proposals" value={proposals.length.toString()} />
-        <MetricCard label="Your Voting Power" value="—" sub="Connect wallet" />
+        <MetricCard label="Your Voting Power" value="-" sub="Connect wallet" />
       </div>
 
       <div className="mb-6 flex items-start gap-3 rounded-lg border border-border bg-muted/30 p-4">

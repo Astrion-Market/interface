@@ -155,7 +155,7 @@ export function TVChartContainer({ symbol, period }: Props) {
       seriesRef.current = null
       priceLineRefs.current.clear()
     }
-  }, []) // mount once — symbol/period changes handled by separate effects below
+  }, []) // mount once: symbol/period changes handled by separate effects below
 
   // ── Clear stale data immediately when symbol or period changes ───────────────
   // This runs BEFORE the candles effect so there is never a window where
@@ -164,7 +164,7 @@ export function TVChartContainer({ symbol, period }: Props) {
     if (!seriesRef.current) return
     seriesRef.current.setData([])
     hasDataRef.current = false
-    // Remove all price lines — they belong to the previous symbol
+    // Remove all price lines; they belong to the previous symbol
     priceLineRefs.current.forEach((pl) => seriesRef.current!.removePriceLine(pl))
     priceLineRefs.current.clear()
   }, [symbol, period])
@@ -185,7 +185,7 @@ export function TVChartContainer({ symbol, period }: Props) {
     try {
       seriesRef.current.update(toChartBar(liveBar))
     } catch {
-      // Live bar occasionally arrives out-of-order during rapid switching — safe to ignore
+      // Live bar occasionally arrives out-of-order during rapid switching: safe to ignore
     }
   }, [liveBar])
 

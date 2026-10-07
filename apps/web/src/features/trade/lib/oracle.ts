@@ -1,4 +1,4 @@
-// Oracle price feed — Binance public REST as primary, GMX oracle as automatic fallback.
+// Oracle price feed: Binance public REST as primary, GMX oracle as automatic fallback.
 //
 // Candle format differences:
 //   Binance klines → oldest-first, prices as strings, times in milliseconds
@@ -138,7 +138,7 @@ export async function fetchOracleCandles(
   period: string,
   limit = 500,
 ): Promise<OhlcBar[]> {
-  // Try Binance first — klines are oldest-first, prices are strings, times in ms
+  // Try Binance first: klines are oldest-first, prices are strings, times in ms
   const binanceSym = BINANCE_SYMBOL[symbol]
   const binancePeriod = BINANCE_PERIOD[period]
   if (binanceSym && binancePeriod) {
@@ -164,7 +164,7 @@ export async function fetchOracleCandles(
     }
   }
 
-  // Fallback: GMX oracle — candles are newest-first, values are plain USD numbers
+  // Fallback: GMX oracle; candles are newest-first, values are plain USD numbers
   try {
     const params = new URLSearchParams({
       tokenSymbol: symbol,

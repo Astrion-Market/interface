@@ -37,7 +37,7 @@ const emptySummary: PortfolioSummary = {
  * Morpho has no protocol-wide pool: each market is queried via
  * `getIsolatedAccount` (position + per-leg oracle prices + lltv) and the results
  * are summed. Lent supply, posted collateral and debt are three distinct
- * dimensions, and health is per-market — there is no global health factor, so we
+ * dimensions, and health is per-market; there is no global health factor, so we
  * surface the worst (lowest) across markets that carry debt.
  */
 export async function getUserPortfolio(user: string): Promise<LendingPortfolio> {

@@ -78,7 +78,7 @@ export function BrandPage() {
       triggerDownload(url, "astrion-profile.png")
       URL.revokeObjectURL(url)
     } catch {
-      toast.error("Failed to export PNG — try downloading the SVG instead.")
+      toast.error("Failed to export PNG. Try downloading the SVG instead.")
     } finally {
       setProfileDownloading(false)
     }
@@ -92,7 +92,7 @@ export function BrandPage() {
       triggerDownload(url, "astrion-x-banner.png")
       URL.revokeObjectURL(url)
     } catch {
-      toast.error("Failed to export PNG — try downloading the SVG instead.")
+      toast.error("Failed to export PNG. Try downloading the SVG instead.")
     } finally {
       setBannerDownloading(false)
     }

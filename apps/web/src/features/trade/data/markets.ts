@@ -1,4 +1,4 @@
-// Market definitions — each market is a pool with an index token, long token, and short token
+// Market definitions: each market is a pool with an index token, long token, and short token
 // TODO: Fetch dynamically from Stellar Soroban contract (Reader contract equivalent)
 
 export type Market = {

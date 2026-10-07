@@ -113,7 +113,7 @@ export function Footer() {
               ))}
             </div>
 
-            {/* Social icons — top right */}
+            {/* Social icons: top right */}
             <div className="flex shrink-0 items-start gap-2">
               {SOCIALS.map(({ label, href, icon }) => (
                 <a
@@ -173,7 +173,7 @@ export function Footer() {
               <span className="h-[5px] w-[5px] rounded-full bg-emerald-400" style={{ animation: "pulseDot 2s ease-in-out infinite" }} />
               <span>All Systems Normal</span>
             </div>
-            <span>© 2026 Astrion Labs — All rights reserved</span>
+            <span>© 2026 Astrion Labs. All rights reserved.</span>
           </div>
         </div>
       </div>

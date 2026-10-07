@@ -79,7 +79,7 @@
   <text x="298" y="394"
         font-family="Inter, ui-sans-serif, system-ui, sans-serif"
         font-size="16" font-weight="400"
-        fill="#8A8F98">Supply, borrow, and earn across Core and Isolated markets — non-custodial.</text>
+        fill="#8A8F98">Supply, borrow, and earn across Core and Isolated markets. Non-custodial.</text>
 
   <!-- Decorative right-side sparkles -->
   <g opacity="0.25" fill="url(#ml)">

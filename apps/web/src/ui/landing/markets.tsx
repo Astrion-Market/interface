@@ -1,15 +1,15 @@
 import { Button } from "@workspace/ui/components/button"
 
 const CORE_MARKETS = [
-  { symbol: "USDC", name: "USD Coin",    supplyApy: "—", borrowApy: "—", util: 0 },
-  { symbol: "XLM",  name: "Stellar",     supplyApy: "—", borrowApy: "—", util: 0 },
-  { symbol: "BTC",  name: "Bitcoin",     supplyApy: "—", borrowApy: "—", util: 0 },
-  { symbol: "EURC", name: "Euro Coin",   supplyApy: "—", borrowApy: "—", util: 0 },
+  { symbol: "USDC", name: "USD Coin",    supplyApy: "-", borrowApy: "-", util: 0 },
+  { symbol: "XLM",  name: "Stellar",     supplyApy: "-", borrowApy: "-", util: 0 },
+  { symbol: "BTC",  name: "Bitcoin",     supplyApy: "-", borrowApy: "-", util: 0 },
+  { symbol: "EURC", name: "Euro Coin",   supplyApy: "-", borrowApy: "-", util: 0 },
 ]
 
 const ISOLATED_MARKETS = [
-  { symbol: "AQUA", name: "Aquarius",    supplyApy: "—", borrowApy: "—", util: 0 },
-  { symbol: "yBTC", name: "Yield BTC",   supplyApy: "—", borrowApy: "—", util: 0 },
+  { symbol: "AQUA", name: "Aquarius",    supplyApy: "-", borrowApy: "-", util: 0 },
+  { symbol: "yBTC", name: "Yield BTC",   supplyApy: "-", borrowApy: "-", util: 0 },
 ]
 
 function MarketRow({

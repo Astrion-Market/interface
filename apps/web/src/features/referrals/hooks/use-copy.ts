@@ -30,7 +30,7 @@ export function useCopy(successMessage = "Copied to clipboard") {
             toast.success(successMessage)
             reset()
           } catch {
-            toast.error("Failed to copy — please copy manually")
+            toast.error("Failed to copy. Please copy manually")
           }
         },
       )

@@ -44,7 +44,7 @@ export function TradeInfoRows({
   if (tradeType === "Swap") {
     return (
       <div className="space-y-1 text-xs">
-        <Row label="Min. receive" value="—" />
+        <Row label="Min. receive" value="-" />
         <Row label="Swap fee" value={formatUsd(fees.positionFeeUsd)} />
         <Row label="Price impact" value={formatUsd(fees.priceImpactUsd)} highlight={fees.priceImpactUsd < 0} />
         <Row label="Execution fee" value={formatUsd(fees.executionFeeUsd)} />
@@ -54,11 +54,11 @@ export function TradeInfoRows({
 
   return (
     <div className="space-y-1 text-xs">
-      <Row label="Entry price" value={entryPrice > 0 ? formatUsd(entryPrice) : "—"} />
-      {tradeMode === "Limit" && <Row label="Limit price" value="—" />}
+      <Row label="Entry price" value={entryPrice > 0 ? formatUsd(entryPrice) : "-"} />
+      {tradeMode === "Limit" && <Row label="Limit price" value="-" />}
       <Row
         label="Liq. price"
-        value={liquidationPrice > 0 ? formatUsd(liquidationPrice) : "—"}
+        value={liquidationPrice > 0 ? formatUsd(liquidationPrice) : "-"}
         highlight
       />
       <Row label="Position fee" value={formatUsd(fees.positionFeeUsd)} />

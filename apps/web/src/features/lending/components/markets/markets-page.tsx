@@ -41,7 +41,7 @@ export function MarketsPage({
 
   const filtered = filterMarkets(markets, search, filter)
   const isolatedMarkets = markets.filter((m) => m.type === "isolated")
-  const totalBorrowed = markets.length === 0 ? "—" : `${markets.length} live`
+  const totalBorrowed = markets.length === 0 ? "-" : `${markets.length} live`
 
   return (
     <div className="px-4 py-5 sm:px-6 sm:py-6">
@@ -55,7 +55,7 @@ export function MarketsPage({
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
         <MetricCard
           label="Total TVL"
-          value="—"
+          value="-"
           sub="All markets combined"
           accent="blue"
         />

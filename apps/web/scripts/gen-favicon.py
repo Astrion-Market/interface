@@ -33,7 +33,7 @@ def svg_pt(x, y, canvas: int, padding: float = 0.10):
 
 
 def make_frame(target: int) -> Image.Image:
-    """Render at 4× then downsample — gives smooth anti-aliased lines."""
+    """Render at 4× then downsample for smooth anti-aliased lines."""
     ss = target * 4
     r  = round(ss * 0.18)
 
@@ -60,7 +60,7 @@ def make_frame(target: int) -> Image.Image:
 def build_ico(frames: list[Image.Image]) -> bytes:
     """
     Manually assemble a multi-size ICO with PNG-encoded image data.
-    PIL's ICO writer drops extra frames in some versions — doing it by hand
+    PIL's ICO writer drops extra frames in some versions, so doing it by hand
     is the only reliable way to guarantee every size is present.
 
     Format:
@@ -109,14 +109,14 @@ def build_ico(frames: list[Image.Image]) -> bytes:
 def main():
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── favicon.ico — 16, 32, 48 ─────────────────────────────────
+    # ── favicon.ico: 16, 32, 48 ─────────────────────────────────
     ico_sizes  = [16, 32, 48]
     ico_frames = [make_frame(s) for s in ico_sizes]
     ico_path   = OUT_DIR / "favicon.ico"
     ico_path.write_bytes(build_ico(ico_frames))
     print(f"✓  {ico_path}  ({', '.join(f'{s}×{s}' for s in ico_sizes)})")
 
-    # ── apple-touch-icon.png — 180×180 ───────────────────────────
+    # ── apple-touch-icon.png: 180×180 ───────────────────────────
     atp = make_frame(180)
     atp_path = OUT_DIR / "apple-touch-icon.png"
     atp.save(atp_path, format="PNG", optimize=True)

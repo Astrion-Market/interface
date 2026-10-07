@@ -82,7 +82,7 @@ export function HealthFactorGauge({ value, size = "md" }: Props) {
       </ChartContainer>
       <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center pt-2">
         <span className={`font-mono font-bold tabular-nums ${fontSize} ${text}`}>
-          {value === null ? "—" : value.toFixed(2)}
+          {value === null ? "-" : value.toFixed(2)}
         </span>
         <span className={`${subFontSize} text-muted-foreground`}>{label}</span>
       </div>

@@ -90,7 +90,7 @@ export function AdditionalOpportunitiesTab() {
       {/* esSO4 Vesting */}
       <SectionCard
         title="esSO4 Vesting"
-        description="Convert esSO4 (escrowed SO4) into SO4 tokens over a 12-month linear vesting period. Tokens unlock gradually — claim anytime."
+        description="Convert esSO4 (escrowed SO4) into SO4 tokens over a 12-month linear vesting period. Tokens unlock gradually, and you can claim anytime."
         action={
           <Button
             size="sm"

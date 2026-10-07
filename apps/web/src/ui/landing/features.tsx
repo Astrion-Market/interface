@@ -1,4 +1,4 @@
-/* Features grid — inspired by dense product feature grids with bordered cells */
+/* Features grid: inspired by dense product feature grids with bordered cells */
 
 function HealthVisual() {
   return (
@@ -139,7 +139,7 @@ export function Features() {
           </h2>
         </div>
 
-        {/* Big feature grid — inspired by the screenshot grid */}
+        {/* Big feature grid: inspired by the screenshot grid */}
         <div className="overflow-hidden border border-border">
           {/* Row 1: 2 large cells */}
           <div className="grid grid-cols-1 sm:grid-cols-2">
@@ -169,7 +169,7 @@ export function Features() {
               <MarketVisual />
               <p className="text-copy-sm mt-4 text-muted-foreground">
                 Stable assets share deep liquidity in Core markets.
-                Volatile or experimental assets live in isolated pools — failure stays contained.
+                Volatile or experimental assets live in isolated pools, so failure stays contained.
               </p>
             </div>
           </div>

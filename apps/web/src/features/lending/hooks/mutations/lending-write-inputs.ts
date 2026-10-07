@@ -45,19 +45,19 @@ export function parseTokenAmount(amount: string, tokenContract: string) {
   return raw
 }
 
-// supply(supplier, assets, on_behalf) — LEND the loan asset.
+// supply(supplier, assets, on_behalf): LEND the loan asset.
 export function supplyArgs(input: MarketWriteInput) {
   const assets = parseTokenAmount(input.amount, input.tokenContract)
   return [addressArg(input.userAddress), i128Arg(assets), addressArg(input.userAddress)]
 }
 
-// supply_collateral(supplier, assets, on_behalf) — POST collateral.
+// supply_collateral(supplier, assets, on_behalf): POST collateral.
 export function supplyCollateralArgs(input: MarketWriteInput) {
   const assets = parseTokenAmount(input.amount, input.tokenContract)
   return [addressArg(input.userAddress), i128Arg(assets), addressArg(input.userAddress)]
 }
 
-// withdraw_collateral(caller, assets, on_behalf, receiver) — health-checked.
+// withdraw_collateral(caller, assets, on_behalf, receiver): health-checked.
 export function withdrawCollateralArgs(input: MarketWriteInput) {
   const assets = parseTokenAmount(input.amount, input.tokenContract)
   return [

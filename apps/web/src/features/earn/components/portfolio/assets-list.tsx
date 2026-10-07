@@ -135,7 +135,7 @@ export function AssetsList() {
                   <td className="px-5 py-3.5">
                     <TypeBadge kind="Staking" />
                   </td>
-                  <td className="px-5 py-3.5 text-right font-mono text-muted-foreground">—</td>
+                  <td className="px-5 py-3.5 text-right font-mono text-muted-foreground">-</td>
                   <td className="px-5 py-3.5 text-right font-mono">
                     {fmtUsd(so4Stats?.stakedValueUsd ?? 0)}
                   </td>

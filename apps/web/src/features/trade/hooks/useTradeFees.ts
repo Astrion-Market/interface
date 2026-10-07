@@ -15,8 +15,8 @@ export type TradeFees = {
 }
 
 // TODO: Read positionFeeFactor from useMarketsInfo once DataStore read is live
-const POSITION_FEE_BPS = 10   // 0.1% — GMX-style
-const PRICE_IMPACT_BPS = 5    // 0.05% — simplified placeholder
+const POSITION_FEE_BPS = 10   // 0.1%: GMX-style
+const PRICE_IMPACT_BPS = 5    // 0.05%: simplified placeholder
 
 export function useTradeFees(params: {
   sizeUsd: number

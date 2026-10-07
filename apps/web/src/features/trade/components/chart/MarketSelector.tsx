@@ -37,7 +37,7 @@ function MarketRow({
         <span className="font-mono text-xs text-foreground">
           {price > 0
             ? `$${price.toLocaleString("en-US", { maximumFractionDigits: 4 })}`
-            : "—"}
+            : "-"}
         </span>
         <span
           className={`w-16 font-mono text-xs ${
@@ -48,7 +48,7 @@ function MarketRow({
                 : "text-muted-foreground"
           }`}
         >
-          {delta?.deltaPercentageStr ?? "—"}
+          {delta?.deltaPercentageStr ?? "-"}
         </span>
       </div>
     </button>

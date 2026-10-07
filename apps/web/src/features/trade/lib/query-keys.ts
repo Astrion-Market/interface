@@ -1,4 +1,4 @@
-// Centralized TanStack Query key factory — keeps cache invalidation consistent
+// Centralized TanStack Query key factory: keeps cache invalidation consistent
 
 export const queryKeys = {
   // Token prices from oracle keeper (or Stellar oracle)

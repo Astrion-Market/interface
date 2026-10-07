@@ -1,4 +1,4 @@
-// Static token list — replace with on-chain fetch from Stellar when contracts are live
+// Static token list: replace with on-chain fetch from Stellar when contracts are live
 
 export type Token = {
   address: string

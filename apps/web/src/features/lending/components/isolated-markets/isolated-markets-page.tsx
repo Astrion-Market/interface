@@ -21,8 +21,8 @@ export function IsolatedMarketsPage() {
 
       <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <MetricCard label="Isolated Markets" value={markets.length.toString()} accent="amber" />
-        <MetricCard label="Total Isolated TVL" value="—" />
-        <MetricCard label="Total Isolated Borrowed" value="—" />
+        <MetricCard label="Total Isolated TVL" value="-" />
+        <MetricCard label="Total Isolated Borrowed" value="-" />
       </div>
 
       {markets.length === 0 ? (

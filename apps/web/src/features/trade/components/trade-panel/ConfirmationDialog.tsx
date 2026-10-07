@@ -82,8 +82,8 @@ export function ConfirmationDialog({
             <>
               <Row label="Size" value={formatUsd(sizeUsd)} />
               <Row label="Leverage" value={`${leverage}×`} />
-              <Row label="Entry price" value={entryPrice > 0 ? formatUsd(entryPrice) : "—"} />
-              <Row label="Liq. price" value={liquidationPrice > 0 ? formatUsd(liquidationPrice) : "—"} />
+              <Row label="Entry price" value={entryPrice > 0 ? formatUsd(entryPrice) : "-"} />
+              <Row label="Liq. price" value={liquidationPrice > 0 ? formatUsd(liquidationPrice) : "-"} />
             </>
           )}
           <Row label="Collateral" value={`${fromAmount || "0"} ${collateralAddress}`} />

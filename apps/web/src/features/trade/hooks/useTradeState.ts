@@ -1,4 +1,4 @@
-// Central trade state — mirrors GMX's useTradeboxState (latest release)
+// Central trade state: mirrors GMX's useTradeboxState (latest release)
 // Persisted to localStorage so selections survive refresh.
 //
 // Key changes vs old fork (useSelectedTradeOption):
@@ -6,7 +6,7 @@
 //   - added `advanced` display options (show TP/SL inputs, advanced mode toggle)
 //   - added `sidecarOrders` concept: TP/SL orders attached to the parent position order
 //   - TODO: migrate to a full Selector context (Redux-style) using reselect + use-context-selector
-//     once state complexity grows — see GMX's SyntheticsStateContext pattern
+//     once state complexity grows: see GMX's SyntheticsStateContext pattern
 
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { MARKETS, getMarketsForIndexToken } from "../data/markets"
@@ -15,7 +15,7 @@ import { INDEX_TOKENS, STABLE_TOKENS } from "../data/tokens"
 export type TradeType = "Long" | "Short" | "Swap"
 export type TradeMode = "Market" | "Limit" | "Trigger"
 
-// Sidecar (attached) TP/SL orders — placed alongside the main increase order
+// Sidecar (attached) TP/SL orders: placed alongside the main increase order
 // TODO: implement full sidecar order creation in stellar.ts once contracts are live
 export type SidecarOrder = {
   type: "takeProfit" | "stopLoss"
@@ -26,7 +26,7 @@ export type SidecarOrder = {
 // Per-market collateral selection (long and short can use different collateral tokens)
 type CollateralsByMarket = Record<string, { long?: string; short?: string }>
 
-// Advanced UI options — toggle TP/SL inline inputs and expert-mode fields
+// Advanced UI options: toggle TP/SL inline inputs and expert-mode fields
 type AdvancedOptions = {
   advancedDisplay: boolean    // show extra fields (slippage, execution fee, etc.)
   limitOrTPSL: boolean        // show TP/SL as part of the order form
@@ -39,7 +39,7 @@ export type TradeState = {
   fromTokenAddress: string
   toTokenAddress: string         // index token for Long/Short, output token for Swap
   marketAddress: string
-  // Collateral per market — GMX v2 key insight: same market can have different collateral tokens
+  // Collateral per market. GMX v2 key insight: same market can have different collateral tokens
   // for long vs short (e.g. BTC market: longs use BTC collateral, shorts use USDC)
   collaterals: CollateralsByMarket
   // Input amounts (raw string so user can type freely)
@@ -216,7 +216,7 @@ export function useTradeState() {
   )
 
   // TP/SL sidecar order setters
-  // TODO: wire into createIncreaseOrder — pass sidecarOrders as attached decrease orders
+  // TODO: wire into createIncreaseOrder; pass sidecarOrders as attached decrease orders
   const addSidecarOrder = useCallback(
     (order: SidecarOrder) => update({ sidecarOrders: [...state.sidecarOrders, order] }),
     [state.sidecarOrders, update],
@@ -230,7 +230,7 @@ export function useTradeState() {
 
   return {
     ...state,
-    collateralAddress,            // derived — always use this instead of state.collaterals directly
+    collateralAddress,            // derived: always use this instead of state.collaterals directly
     tradeFlags,
     availableTradeModes,
     availableMarkets,
