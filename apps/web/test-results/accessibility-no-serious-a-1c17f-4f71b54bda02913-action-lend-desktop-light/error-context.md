@@ -1,0 +1,189 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary [ref=e4]:
+      - link "Astrion" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e7]
+        - generic [ref=e20]: Astrion
+      - navigation "Primary" [ref=e21]:
+        - generic [ref=e22]:
+          - link "Overview" [ref=e23] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e24]
+            - text: Overview
+          - link "Markets" [ref=e26] [cursor=pointer]:
+            - /url: /markets
+            - img [ref=e27]
+            - text: Markets
+          - link "Positions" [ref=e29] [cursor=pointer]:
+            - /url: /portfolio
+            - img [ref=e30]
+            - text: Positions
+          - link "Activity" [ref=e32] [cursor=pointer]:
+            - /url: /activity
+            - img [ref=e33]
+            - text: Activity
+          - link "Learn" [ref=e35] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e36]
+            - text: Learn
+      - navigation "Stellar and settings" [ref=e38]:
+        - link "Stellar positions" [ref=e39] [cursor=pointer]:
+          - /url: /legacy
+        - link "Testnet faucet" [ref=e40] [cursor=pointer]:
+          - /url: /faucet
+        - link "Settings" [ref=e41] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Stellar Testnet
+        - button "Connect Stellar" [ref=e44] [cursor=pointer]:
+          - img
+          - generic [ref=e45]: Connect Stellar
+          - img
+        - button "Connect EVM" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Connect EVM
+          - generic [ref=e48]: ›
+    - main [ref=e49]:
+      - generic [ref=e50]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e51] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e52]:
+        - link "← USDC reserve" [ref=e53] [cursor=pointer]:
+          - /url: /markets/base/aave-v3/0x833589fcd6edb6e08f4c7c32d4f71b54bda02913
+        - generic [ref=e54]:
+          - 'heading "Review: lend USDC" [level=1] [ref=e55]'
+          - paragraph [ref=e56]: Getting a quote needs no wallet signature and moves nothing.
+        - note [ref=e57]:
+          - generic [ref=e58]:
+            - img [ref=e59]
+            - text: Preview data
+          - paragraph [ref=e61]: Illustrative fixture values, not live market data. Addresses are unverified and every action is disabled.
+        - 'figure "Route: Stellar USDC → Aave V3 on Base" [ref=e62]':
+          - generic [ref=e63]: "Route: Stellar USDC → Aave V3 on Base"
+          - list [ref=e64]:
+            - listitem [ref=e65]:
+              - generic [ref=e66]:
+                - generic [ref=e67]: From
+                - generic [ref=e68]:
+                  - generic [ref=e69]:
+                    - generic [ref=e70]: St
+                    - generic [ref=e71]: Stellar
+                  - generic [ref=e72]: USDC
+            - listitem [ref=e73]:
+              - img [ref=e75]
+              - generic [ref=e77]:
+                - generic [ref=e78]: Lending market
+                - generic [ref=e79]:
+                  - generic [ref=e80]:
+                    - generic [ref=e81]: Aa
+                    - generic [ref=e82]:
+                      - text: Aave V3
+                      - generic [ref=e83]: on Base
+                  - generic [ref=e84]: Lend
+          - paragraph [ref=e85]: Interest starts once the supply is confirmed on Base, not while USDC is bridging.
+        - generic [ref=e86]:
+          - generic [ref=e87]:
+            - generic [ref=e89]:
+              - text: Lend amount
+              - generic [ref=e90]:
+                - textbox "Lend amount USDC USDC on Base, up to 6 decimals." [ref=e91]:
+                  - /placeholder: "0.00"
+                - generic [ref=e92]: USDC
+              - generic [ref=e93]: USDC on Base, up to 6 decimals.
+            - generic [ref=e94]:
+              - heading "Route checks" [level=2] [ref=e95]
+              - list "Route checks" [ref=e96]:
+                - listitem [ref=e97]:
+                  - generic [ref=e98]:
+                    - paragraph [ref=e99]: Network environment
+                    - paragraph [ref=e100]: This market is preview data, not a deployed market.
+                    - paragraph [ref=e101]: Choose a market listed for this network.
+                  - generic [ref=e102]:
+                    - img [ref=e103]
+                    - text: Fix needed
+                - listitem [ref=e105]:
+                  - paragraph [ref=e107]: Native USDC
+                  - generic [ref=e108]:
+                    - img [ref=e109]
+                    - text: Ready
+                - listitem [ref=e112]:
+                  - generic [ref=e113]:
+                    - paragraph [ref=e114]: Route and market open
+                    - paragraph [ref=e115]: The Aave on Base route is in development. Actions open after its testnet and fork gates pass. Addresses are not yet verified against a deployment manifest.
+                    - paragraph [ref=e116]: Wait for the route to open or choose another market.
+                  - generic [ref=e117]:
+                    - img [ref=e118]
+                    - text: Fix needed
+                - listitem [ref=e120]:
+                  - generic [ref=e121]:
+                    - paragraph [ref=e122]: Stellar wallet
+                    - paragraph [ref=e123]: Connect the Stellar wallet that holds your USDC.
+                  - generic [ref=e124]:
+                    - img [ref=e125]
+                    - text: Fix needed
+                - listitem [ref=e127]:
+                  - generic [ref=e128]:
+                    - paragraph [ref=e129]: USDC trustline
+                    - paragraph [ref=e130]: Reconnect your Stellar wallet so the account can be read.
+                  - generic [ref=e131]:
+                    - img [ref=e132]
+                    - text: Can't check
+                - listitem [ref=e134]:
+                  - generic [ref=e135]:
+                    - paragraph [ref=e136]: Stellar USDC balance
+                    - paragraph [ref=e137]: Enter an amount.
+                  - generic [ref=e138]:
+                    - img [ref=e139]
+                    - text: Can't check
+                - listitem [ref=e141]:
+                  - generic [ref=e142]:
+                    - paragraph [ref=e143]: EVM wallet
+                    - paragraph [ref=e144]: Connect the EVM wallet that will own your position.
+                  - generic [ref=e145]:
+                    - img [ref=e146]
+                    - text: Fix needed
+                - listitem [ref=e148]:
+                  - generic [ref=e149]:
+                    - paragraph [ref=e150]: Execution account
+                    - paragraph [ref=e151]: Account discovery isn't available yet.
+                    - paragraph [ref=e152]: This check opens when execution accounts are deployed.
+                  - generic [ref=e153]:
+                    - img [ref=e154]
+                    - text: Can't check
+                - listitem [ref=e156]:
+                  - generic [ref=e157]:
+                    - paragraph [ref=e158]: Destination gas
+                    - paragraph [ref=e159]: Gas sponsorship availability is unknown.
+                    - paragraph [ref=e160]: Couldn't read your Base Sepolia ETH balance.
+                  - generic [ref=e161]:
+                    - img [ref=e162]
+                    - text: Can't check
+          - complementary [ref=e164]:
+            - heading "Quote" [level=2] [ref=e166]
+            - button "Get quote" [disabled]
+            - generic [ref=e167]:
+              - button "Sign and submit" [disabled]
+              - list [ref=e168]:
+                - listitem [ref=e169]: Some route checks need attention.
+                - listitem [ref=e170]: Complete the form to get a quote.
+                - listitem [ref=e171]: Signing is turned off until the transaction builders and pre-sign simulation are connected.
+            - generic [ref=e172]:
+              - paragraph [ref=e173]: Simulated run
+              - paragraph [ref=e174]: Walks through tracking with fake events. No wallet is used and no funds move.
+              - group "Scenario" [ref=e175]:
+                - generic [ref=e176]: Scenario
+                - generic [ref=e177]:
+                  - radio "Everything succeeds" [checked] [ref=e178]
+                  - text: Everything succeeds
+                - generic [ref=e179]:
+                  - radio "The lend on the lending chain fails" [ref=e180]
+                  - text: The lend on the lending chain fails
+              - button "Run simulation" [disabled]
+  - region "Notifications alt+T"
+```

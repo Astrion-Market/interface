@@ -1,0 +1,181 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary [ref=e4]:
+      - link "Astrion" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e7]
+        - generic [ref=e20]: Astrion
+      - navigation "Primary" [ref=e21]:
+        - generic [ref=e22]:
+          - link "Overview" [ref=e23] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e24]
+            - text: Overview
+          - link "Markets" [ref=e26] [cursor=pointer]:
+            - /url: /markets
+            - img [ref=e27]
+            - text: Markets
+          - link "Positions" [ref=e29] [cursor=pointer]:
+            - /url: /portfolio
+            - img [ref=e30]
+            - text: Positions
+          - link "Activity" [ref=e32] [cursor=pointer]:
+            - /url: /activity
+            - img [ref=e33]
+            - text: Activity
+          - link "Learn" [ref=e35] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e36]
+            - text: Learn
+      - navigation "Stellar and settings" [ref=e38]:
+        - link "Stellar positions" [ref=e39] [cursor=pointer]:
+          - /url: /legacy
+        - link "Testnet faucet" [ref=e40] [cursor=pointer]:
+          - /url: /faucet
+        - link "Settings" [ref=e41] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Stellar Testnet
+        - button "Connect Stellar" [ref=e44] [cursor=pointer]:
+          - img
+          - generic [ref=e45]: Connect Stellar
+          - img
+        - button "Connect EVM" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Connect EVM
+          - generic [ref=e48]: ›
+    - main [ref=e49]:
+      - generic [ref=e50]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e51] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e52]:
+        - link "← All markets" [ref=e53] [cursor=pointer]:
+          - /url: /markets
+        - generic [ref=e54]:
+          - generic [ref=e55]:
+            - generic [ref=e56]:
+              - generic [ref=e57]: Mo
+              - generic [ref=e58]: Morpho Blue
+            - generic [ref=e59]:
+              - generic [ref=e60]: Ba
+              - generic [ref=e61]: Base
+          - heading "cbETH / USDC · 86% LLTV" [level=1] [ref=e62]
+          - generic [ref=e63]:
+            - img [ref=e64]
+            - text: Stale, updated
+            - time [ref=e66]: 16h ago
+        - note [ref=e67]:
+          - generic [ref=e68]:
+            - img [ref=e69]
+            - text: Preview data
+          - paragraph [ref=e71]: Illustrative fixture values, not live market data. Addresses are unverified and every action is disabled.
+        - generic [ref=e72]:
+          - generic [ref=e73]:
+            - generic [ref=e74]:
+              - heading "Market identity" [level=2] [ref=e75]
+              - paragraph [ref=e76]: A Morpho Blue market is defined by all five parameters below. Markets with the same tokens but a different oracle or LLTV are separate markets with separate risk.
+              - generic [ref=e77]:
+                - generic [ref=e78]:
+                  - term [ref=e79]: Loan asset (lend and borrow)
+                  - definition [ref=e80]: USDC
+                - generic [ref=e81]:
+                  - term [ref=e82]: Collateral asset (post only)
+                  - definition [ref=e83]: cbETH
+                  - paragraph [ref=e84]: Earns no interest
+                - generic [ref=e85]:
+                  - term [ref=e86]: LLTV
+                  - definition [ref=e87]: 86%
+                  - paragraph [ref=e88]: Liquidation loan-to-value
+                - generic [ref=e89]:
+                  - term [ref=e90]: Listed by
+                  - definition [ref=e91]: Approved registry
+                - generic [ref=e92]:
+                  - term [ref=e93]: Oracle
+                  - definition [ref=e94]:
+                    - generic [ref=e95]:
+                      - generic "0x0000000000000000000000000000000000000b11" [ref=e96]:
+                        - text: 0x000000…0b11
+                        - generic [ref=e97]: "0x0000000000000000000000000000000000000b11"
+                      - button "Show full oracle address" [ref=e98] [cursor=pointer]
+                - generic [ref=e99]:
+                  - term [ref=e100]: Interest rate model
+                  - definition [ref=e101]:
+                    - generic [ref=e102]:
+                      - generic "0x0000000000000000000000000000000000000b21" [ref=e103]:
+                        - text: 0x000000…0b21
+                        - generic [ref=e104]: "0x0000000000000000000000000000000000000b21"
+                      - button "Show full IRM address" [ref=e105] [cursor=pointer]
+                - generic [ref=e106]:
+                  - term [ref=e107]: Market ID
+                  - definition [ref=e108]:
+                    - generic [ref=e109]:
+                      - generic "0x0000000000000000000000000000000000000000000000000000000000000b01" [ref=e110]:
+                        - text: 0x000000…0b01
+                        - generic [ref=e111]: "0x0000000000000000000000000000000000000000000000000000000000000b01"
+                      - button "Show full market ID" [ref=e112] [cursor=pointer]
+            - generic [ref=e113]:
+              - heading "Rates and liquidity" [level=2] [ref=e114]
+              - generic [ref=e115]:
+                - generic [ref=e116]:
+                  - term [ref=e117]: Lend rate
+                  - definition [ref=e118]: 5.03% APY
+                - generic [ref=e119]:
+                  - term [ref=e120]: Borrow rate
+                  - definition [ref=e121]: 6.48% APY
+                - generic [ref=e122]:
+                  - term [ref=e123]: Available liquidity
+                  - definition [ref=e124]: 7,197,230 USDC
+                - generic [ref=e125]:
+                  - term [ref=e126]: Total lent
+                  - definition [ref=e127]: 48,200,450 USDC
+                - generic [ref=e128]:
+                  - term [ref=e129]: Total borrowed
+                  - definition [ref=e130]: 41,003,220 USDC
+            - paragraph [ref=e131]: Morpho vaults are a separate product and outside the alpha.
+          - complementary [ref=e132]:
+            - generic [ref=e133]:
+              - paragraph [ref=e134]: Actions are disabled
+              - list [ref=e135]:
+                - listitem [ref=e136]: Morpho on Base is planned after the first route.
+                - listitem [ref=e137]: Addresses are not yet verified against a deployment manifest.
+            - generic [ref=e138]:
+              - generic [ref=e139]:
+                - heading "Lend USDC" [level=3] [ref=e140]
+                - paragraph [ref=e141]: Lent USDC earns the market rate. It does not become collateral.
+              - list [ref=e142]:
+                - listitem [ref=e143]:
+                  - button "Lend Preview →" [ref=e144] [cursor=pointer]:
+                    - text: Lend
+                    - generic [ref=e145]: Preview →
+                - listitem [ref=e146]:
+                  - button "Withdraw Preview →" [ref=e147] [cursor=pointer]:
+                    - text: Withdraw
+                    - generic [ref=e148]: Preview →
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - heading "Borrow against collateral" [level=3] [ref=e151]
+                - paragraph [ref=e152]: Post cbETH, then borrow USDC.
+              - list [ref=e153]:
+                - listitem [ref=e154]:
+                  - button "Post collateral Unavailable" [disabled]:
+                    - text: Post collateral
+                    - generic: Unavailable
+                - listitem [ref=e155]:
+                  - button "Withdraw collateral Preview →" [ref=e156] [cursor=pointer]:
+                    - text: Withdraw collateral
+                    - generic [ref=e157]: Preview →
+                - listitem [ref=e158]:
+                  - button "Borrow Preview →" [ref=e159] [cursor=pointer]:
+                    - text: Borrow
+                    - generic [ref=e160]: Preview →
+                - listitem [ref=e161]:
+                  - button "Repay Preview →" [ref=e162] [cursor=pointer]:
+                    - text: Repay
+                    - generic [ref=e163]: Preview →
+  - region "Notifications alt+T"
+```

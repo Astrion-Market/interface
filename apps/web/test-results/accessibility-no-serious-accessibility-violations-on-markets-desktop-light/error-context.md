@@ -1,0 +1,418 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary [ref=e4]:
+      - link "Astrion" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e7]
+        - generic [ref=e20]: Astrion
+      - navigation "Primary" [ref=e21]:
+        - generic [ref=e22]:
+          - link "Overview" [ref=e23] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e24]
+            - text: Overview
+          - link "Markets" [ref=e26] [cursor=pointer]:
+            - /url: /markets
+            - img [ref=e27]
+            - text: Markets
+          - link "Positions" [ref=e29] [cursor=pointer]:
+            - /url: /portfolio
+            - img [ref=e30]
+            - text: Positions
+          - link "Activity" [ref=e32] [cursor=pointer]:
+            - /url: /activity
+            - img [ref=e33]
+            - text: Activity
+          - link "Learn" [ref=e35] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e36]
+            - text: Learn
+      - navigation "Stellar and settings" [ref=e38]:
+        - link "Stellar positions" [ref=e39] [cursor=pointer]:
+          - /url: /legacy
+        - link "Testnet faucet" [ref=e40] [cursor=pointer]:
+          - /url: /faucet
+        - link "Settings" [ref=e41] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Stellar Testnet
+        - button "Connect Stellar" [ref=e44] [cursor=pointer]:
+          - img
+          - generic [ref=e45]: Connect Stellar
+          - img
+        - button "Connect EVM" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Connect EVM
+          - generic [ref=e48]: ›
+    - main [ref=e49]:
+      - generic [ref=e50]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e51] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - heading "Markets" [level=1] [ref=e55]
+          - paragraph [ref=e56]: Planned lending markets on Base and Ethereum.
+        - group "Market venue" [ref=e57]:
+          - button "Base & Ethereum· Preview" [pressed] [ref=e58] [cursor=pointer]:
+            - text: Base & Ethereum
+            - generic [ref=e59]: · Preview
+          - button "Stellar· Stellar Testnet" [ref=e60] [cursor=pointer]:
+            - text: Stellar
+            - generic [ref=e61]: · Stellar Testnet
+      - generic [ref=e63]:
+        - note [ref=e64]:
+          - generic [ref=e65]:
+            - img [ref=e66]
+            - text: Preview data
+          - paragraph [ref=e68]: Illustrative fixture values, not live market data. Addresses are unverified and every action is disabled.
+        - generic [ref=e69]:
+          - group "Action" [ref=e70]:
+            - generic [ref=e71]: Action
+            - generic [ref=e72]: Action
+            - generic [ref=e73]:
+              - button "All" [pressed] [ref=e74] [cursor=pointer]
+              - button "Lend" [ref=e75] [cursor=pointer]
+              - button "Borrow" [ref=e76] [cursor=pointer]
+          - group "Chain" [ref=e77]:
+            - generic [ref=e78]: Chain
+            - generic [ref=e79]: Chain
+            - generic [ref=e80]:
+              - button "All" [pressed] [ref=e81] [cursor=pointer]
+              - button "Base" [ref=e82] [cursor=pointer]
+              - button "Ethereum" [ref=e83] [cursor=pointer]
+          - group "Protocol" [ref=e84]:
+            - generic [ref=e85]: Protocol
+            - generic [ref=e86]: Protocol
+            - generic [ref=e87]:
+              - button "All" [pressed] [ref=e88] [cursor=pointer]
+              - button "Aave V3" [ref=e89] [cursor=pointer]
+              - button "Morpho Blue" [ref=e90] [cursor=pointer]
+              - button "Compound III" [ref=e91] [cursor=pointer]
+          - group "Sort" [ref=e92]:
+            - generic [ref=e93]: Sort
+            - generic [ref=e94]: Sort
+            - generic [ref=e95]:
+              - button "Default" [pressed] [ref=e96] [cursor=pointer]
+              - button "Highest lend rate" [ref=e97] [cursor=pointer]
+              - button "Lowest borrow rate" [ref=e98] [cursor=pointer]
+              - button "Liquidity" [ref=e99] [cursor=pointer]
+          - paragraph [ref=e100]: Rates exclude one-time bridge and network costs, which depend on your amount. Compound reports APR; Aave and Morpho report APY. Liquidity sorts within each asset.
+        - generic [ref=e101]:
+          - paragraph [ref=e102]: 9 markets
+          - button "Show 1 discovered market not on the approved list" [ref=e103] [cursor=pointer]
+        - generic [ref=e104]:
+          - generic [ref=e105]:
+            - generic [ref=e106]: Market
+            - generic [ref=e107]: Lend rate
+            - generic [ref=e108]: Borrow rate
+            - generic [ref=e109]: Available
+            - generic [ref=e110]: Status
+          - list [ref=e111]:
+            - listitem [ref=e112]:
+              - generic [ref=e113]:
+                - generic [ref=e114]:
+                  - generic [ref=e115]:
+                    - generic [ref=e116]: Aa
+                    - generic [ref=e117]: Aave V3
+                  - generic [ref=e118]:
+                    - generic [ref=e119]: Ba
+                    - generic [ref=e120]: Base
+                - link "USDC reserve on Aave V3, Base" [ref=e121] [cursor=pointer]:
+                  - /url: /markets/base/aave-v3/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+                  - text: USDC reserve
+                  - generic [ref=e122]: on Aave V3, Base
+              - paragraph [ref=e125]: 4.12% APY
+              - paragraph [ref=e128]: 5.86% APY
+              - paragraph [ref=e130]: 81,141,122 USDC
+              - generic [ref=e131]:
+                - generic [ref=e133]:
+                  - img [ref=e134]
+                  - text: Actions disabled
+                - generic [ref=e136]:
+                  - img [ref=e137]
+                  - text: Stale, updated
+                  - time [ref=e139]: 16h ago
+            - listitem [ref=e140]:
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - generic [ref=e143]:
+                    - generic [ref=e144]: Aa
+                    - generic [ref=e145]: Aave V3
+                  - generic [ref=e146]:
+                    - generic [ref=e147]: Ba
+                    - generic [ref=e148]: Base
+                - link "WETH reserve on Aave V3, Base" [ref=e149] [cursor=pointer]:
+                  - /url: /markets/base/aave-v3/0x4200000000000000000000000000000000000006
+                  - text: WETH reserve
+                  - generic [ref=e150]: on Aave V3, Base
+              - paragraph [ref=e153]: 1.94% APY
+              - paragraph [ref=e156]: 2.71% APY
+              - paragraph [ref=e158]: 64,215 WETH
+              - generic [ref=e159]:
+                - generic [ref=e161]:
+                  - img [ref=e162]
+                  - text: Actions disabled
+                - generic [ref=e164]:
+                  - img [ref=e165]
+                  - text: Stale, updated
+                  - time [ref=e167]: 16h ago
+            - listitem [ref=e168]:
+              - generic [ref=e169]:
+                - generic [ref=e170]:
+                  - generic [ref=e171]:
+                    - generic [ref=e172]: Aa
+                    - generic [ref=e173]: Aave V3
+                  - generic [ref=e174]:
+                    - generic [ref=e175]: Ba
+                    - generic [ref=e176]: Base
+                - link "cbETH reserve on Aave V3, Base" [ref=e177] [cursor=pointer]:
+                  - /url: /markets/base/aave-v3/0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22
+                  - text: cbETH reserve
+                  - generic [ref=e178]: on Aave V3, Base
+              - paragraph [ref=e181]: 0% APY
+              - paragraph [ref=e184]: Not borrowable
+              - paragraph [ref=e186]: 29,768 cbETH
+              - generic [ref=e187]:
+                - generic [ref=e188]:
+                  - generic [ref=e189]:
+                    - img [ref=e190]
+                    - text: Actions disabled
+                  - generic [ref=e192]:
+                    - img [ref=e193]
+                    - text: Frozen
+                - generic [ref=e195]:
+                  - img [ref=e196]
+                  - text: Stale, updated
+                  - time [ref=e198]: 16h ago
+            - listitem [ref=e199]:
+              - generic [ref=e200]:
+                - generic [ref=e201]:
+                  - generic [ref=e202]:
+                    - generic [ref=e203]: Aa
+                    - generic [ref=e204]: Aave V3
+                  - generic [ref=e205]:
+                    - generic [ref=e206]: Et
+                    - generic [ref=e207]: Ethereum
+                - link "USDC reserve on Aave V3, Ethereum" [ref=e208] [cursor=pointer]:
+                  - /url: /markets/ethereum/aave-v3/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48
+                  - text: USDC reserve
+                  - generic [ref=e209]: on Aave V3, Ethereum
+              - paragraph [ref=e212]: 3.77% APY
+              - paragraph [ref=e215]: 5.21% APY
+              - paragraph [ref=e217]: 402,108,780 USDC
+              - generic [ref=e218]:
+                - generic [ref=e220]:
+                  - img [ref=e221]
+                  - text: Actions disabled
+                - generic [ref=e223]:
+                  - img [ref=e224]
+                  - text: Stale, updated
+                  - time [ref=e226]: 19h ago
+            - listitem [ref=e227]:
+              - generic [ref=e228]:
+                - generic [ref=e229]:
+                  - generic [ref=e230]:
+                    - generic [ref=e231]: Mo
+                    - generic [ref=e232]: Morpho Blue
+                  - generic [ref=e233]:
+                    - generic [ref=e234]: Ba
+                    - generic [ref=e235]: Base
+                - link "cbETH / USDC · 86% LLTV on Morpho Blue, Base" [ref=e236] [cursor=pointer]:
+                  - /url: /markets/base/morpho-blue/0x0000000000000000000000000000000000000000000000000000000000000b01
+                  - text: cbETH / USDC · 86% LLTV
+                  - generic [ref=e237]: on Morpho Blue, Base
+              - paragraph [ref=e240]: 5.03% APY
+              - paragraph [ref=e243]: 6.48% APY
+              - paragraph [ref=e245]: 7,197,230 USDC
+              - generic [ref=e246]:
+                - generic [ref=e248]:
+                  - img [ref=e249]
+                  - text: Actions disabled
+                - generic [ref=e251]:
+                  - img [ref=e252]
+                  - text: Stale, updated
+                  - time [ref=e254]: 16h ago
+            - listitem [ref=e255]:
+              - generic [ref=e256]:
+                - generic [ref=e257]:
+                  - generic [ref=e258]:
+                    - generic [ref=e259]: Mo
+                    - generic [ref=e260]: Morpho Blue
+                  - generic [ref=e261]:
+                    - generic [ref=e262]: Ba
+                    - generic [ref=e263]: Base
+                - link "cbETH / USDC · 77% LLTV on Morpho Blue, Base" [ref=e264] [cursor=pointer]:
+                  - /url: /markets/base/morpho-blue/0x0000000000000000000000000000000000000000000000000000000000000b02
+                  - text: cbETH / USDC · 77% LLTV
+                  - generic [ref=e265]: on Morpho Blue, Base
+              - paragraph [ref=e268]: 3.61% APY
+              - paragraph [ref=e271]: 4.95% APY
+              - paragraph [ref=e273]: 3,283,890 USDC
+              - generic [ref=e274]:
+                - generic [ref=e276]:
+                  - img [ref=e277]
+                  - text: Actions disabled
+                - generic [ref=e279]:
+                  - img [ref=e280]
+                  - text: Stale, updated
+                  - time [ref=e282]: 16h ago
+            - listitem [ref=e283]:
+              - generic [ref=e284]:
+                - generic [ref=e285]:
+                  - generic [ref=e286]:
+                    - generic [ref=e287]: Mo
+                    - generic [ref=e288]: Morpho Blue
+                  - generic [ref=e289]:
+                    - generic [ref=e290]: Et
+                    - generic [ref=e291]: Ethereum
+                - link "wstETH / USDC · 86% LLTV on Morpho Blue, Ethereum" [ref=e292] [cursor=pointer]:
+                  - /url: /markets/ethereum/morpho-blue/0x0000000000000000000000000000000000000000000000000000000000000e01
+                  - text: wstETH / USDC · 86% LLTV
+                  - generic [ref=e293]: on Morpho Blue, Ethereum
+              - paragraph [ref=e296]: Not available
+              - paragraph [ref=e299]: Not available
+              - paragraph [ref=e301]: Unknown
+              - generic [ref=e302]:
+                - generic [ref=e304]:
+                  - img [ref=e305]
+                  - text: Actions disabled
+                - generic [ref=e307]:
+                  - img [ref=e308]
+                  - text: Data unavailable, last read
+                  - time [ref=e310]: 20h ago
+            - listitem [ref=e311]:
+              - generic [ref=e312]:
+                - generic [ref=e313]:
+                  - generic [ref=e314]:
+                    - generic [ref=e315]: Co
+                    - generic [ref=e316]: Compound III
+                  - generic [ref=e317]:
+                    - generic [ref=e318]: Ba
+                    - generic [ref=e319]: Base
+                - link "USDC Comet on Compound III, Base" [ref=e320] [cursor=pointer]:
+                  - /url: /markets/base/compound-v3/0xb125E6687d4313864e53df431d5425969c15Eb2F
+                  - text: USDC Comet
+                  - generic [ref=e321]: on Compound III, Base
+                - paragraph [ref=e322]: "Collateral: WETH, cbETH (earns no interest)"
+              - paragraph [ref=e325]: 3.94% APR
+              - paragraph [ref=e328]: 5.40% APR
+              - paragraph [ref=e330]: 11,120,110 USDC
+              - generic [ref=e331]:
+                - generic [ref=e333]:
+                  - img [ref=e334]
+                  - text: Actions disabled
+                - generic [ref=e336]:
+                  - img [ref=e337]
+                  - text: Stale, updated
+                  - time [ref=e339]: 16h ago
+            - listitem [ref=e340]:
+              - generic [ref=e341]:
+                - generic [ref=e342]:
+                  - generic [ref=e343]:
+                    - generic [ref=e344]: Co
+                    - generic [ref=e345]: Compound III
+                  - generic [ref=e346]:
+                    - generic [ref=e347]: Et
+                    - generic [ref=e348]: Ethereum
+                - link "USDC Comet on Compound III, Ethereum" [ref=e349] [cursor=pointer]:
+                  - /url: /markets/ethereum/compound-v3/0xc3d688B66703497DAA19211EEdff47f25384cdc3
+                  - text: USDC Comet
+                  - generic [ref=e350]: on Compound III, Ethereum
+                - paragraph [ref=e351]: "Collateral: WETH, WBTC (earns no interest)"
+              - paragraph [ref=e354]: 4.31% APR
+              - paragraph [ref=e357]: 5.92% APR
+              - paragraph [ref=e359]: Unknown
+              - generic [ref=e360]:
+                - generic [ref=e361]:
+                  - generic [ref=e362]:
+                    - img [ref=e363]
+                    - text: Actions disabled
+                  - generic [ref=e365]:
+                    - img [ref=e366]
+                    - text: Partly paused
+                - generic [ref=e368]:
+                  - img [ref=e369]
+                  - text: Partial data, updated
+                  - time [ref=e371]: 16h ago
+        - region "Route availability" [ref=e372]:
+          - heading "Route availability" [level=2] [ref=e373]
+          - list [ref=e374]:
+            - listitem [ref=e375]:
+              - generic [ref=e376]:
+                - generic [ref=e377]:
+                  - generic [ref=e378]: Aa
+                  - generic [ref=e379]: Aave V3
+                - generic [ref=e380]:
+                  - generic [ref=e381]: Ba
+                  - generic [ref=e382]: Base
+              - generic [ref=e383]:
+                - img [ref=e384]
+                - text: Not available
+              - generic [ref=e386]: The Aave on Base route is in development. Actions open after its testnet and fork gates pass.
+            - listitem [ref=e387]:
+              - generic [ref=e388]:
+                - generic [ref=e389]:
+                  - generic [ref=e390]: Mo
+                  - generic [ref=e391]: Morpho Blue
+                - generic [ref=e392]:
+                  - generic [ref=e393]: Ba
+                  - generic [ref=e394]: Base
+              - generic [ref=e395]:
+                - img [ref=e396]
+                - text: Not available
+              - generic [ref=e398]: Morpho on Base is planned after the first route.
+            - listitem [ref=e399]:
+              - generic [ref=e400]:
+                - generic [ref=e401]:
+                  - generic [ref=e402]: Co
+                  - generic [ref=e403]: Compound III
+                - generic [ref=e404]:
+                  - generic [ref=e405]: Ba
+                  - generic [ref=e406]: Base
+              - generic [ref=e407]:
+                - img [ref=e408]
+                - text: Not available
+              - generic [ref=e410]: Compound on Base is planned after the first route.
+            - listitem [ref=e411]:
+              - generic [ref=e412]:
+                - generic [ref=e413]:
+                  - generic [ref=e414]: Aa
+                  - generic [ref=e415]: Aave V3
+                - generic [ref=e416]:
+                  - generic [ref=e417]: Et
+                  - generic [ref=e418]: Ethereum
+              - generic [ref=e419]:
+                - img [ref=e420]
+                - text: Not available
+              - generic [ref=e422]: Ethereum routes follow the Base release gates.
+            - listitem [ref=e423]:
+              - generic [ref=e424]:
+                - generic [ref=e425]:
+                  - generic [ref=e426]: Mo
+                  - generic [ref=e427]: Morpho Blue
+                - generic [ref=e428]:
+                  - generic [ref=e429]: Et
+                  - generic [ref=e430]: Ethereum
+              - generic [ref=e431]:
+                - img [ref=e432]
+                - text: Not available
+              - generic [ref=e434]: Ethereum routes follow the Base release gates.
+            - listitem [ref=e435]:
+              - generic [ref=e436]:
+                - generic [ref=e437]:
+                  - generic [ref=e438]: Co
+                  - generic [ref=e439]: Compound III
+                - generic [ref=e440]:
+                  - generic [ref=e441]: Et
+                  - generic [ref=e442]: Ethereum
+              - generic [ref=e443]:
+                - img [ref=e444]
+                - text: Not available
+              - generic [ref=e446]: Ethereum routes follow the Base release gates.
+  - region "Notifications alt+T"
+```

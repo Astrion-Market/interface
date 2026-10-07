@@ -1,0 +1,285 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - link "Skip to content" [ref=e3] [cursor=pointer]:
+      - /url: "#main-content"
+    - complementary [ref=e4]:
+      - link "Astrion" [ref=e6] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e7]
+        - generic [ref=e20]: Astrion
+      - navigation "Primary" [ref=e21]:
+        - generic [ref=e22]:
+          - link "Overview" [ref=e23] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e24]
+            - text: Overview
+          - link "Markets" [ref=e26] [cursor=pointer]:
+            - /url: /markets
+            - img [ref=e27]
+            - text: Markets
+          - link "Positions" [ref=e29] [cursor=pointer]:
+            - /url: /portfolio
+            - img [ref=e30]
+            - text: Positions
+          - link "Activity" [ref=e32] [cursor=pointer]:
+            - /url: /activity
+            - img [ref=e33]
+            - text: Activity
+          - link "Learn" [ref=e35] [cursor=pointer]:
+            - /url: /docs
+            - img [ref=e36]
+            - text: Learn
+      - navigation "Stellar and settings" [ref=e38]:
+        - link "Stellar positions" [ref=e39] [cursor=pointer]:
+          - /url: /legacy
+        - link "Testnet faucet" [ref=e40] [cursor=pointer]:
+          - /url: /faucet
+        - link "Settings" [ref=e41] [cursor=pointer]:
+          - /url: /settings
+      - generic [ref=e42]:
+        - paragraph [ref=e43]: Stellar Testnet
+        - button "Connect Stellar" [ref=e44] [cursor=pointer]:
+          - img
+          - generic [ref=e45]: Connect Stellar
+          - img
+        - button "Connect EVM" [ref=e46] [cursor=pointer]:
+          - generic [ref=e47]: Connect EVM
+          - generic [ref=e48]: ›
+    - main [ref=e49]:
+      - generic [ref=e50]:
+        - text: Cross-chain lending is in development. Current lending views use the existing Stellar integration.
+        - link "Manage Stellar positions" [ref=e51] [cursor=pointer]:
+          - /url: /legacy
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - heading "Positions" [level=1] [ref=e54]
+          - button "Exit sample" [ref=e55] [cursor=pointer]
+        - note [ref=e56]:
+          - generic [ref=e57]:
+            - img [ref=e58]
+            - text: Preview data
+          - paragraph [ref=e60]: Sample account for previewing the portfolio. Not your wallet and not live data.
+        - alert [ref=e61]:
+          - paragraph [ref=e62]:
+            - img [ref=e63]
+            - text: Some positions couldn't be read
+          - generic [ref=e65]: "Compound III on Ethereum: The Ethereum RPC timed out."
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - paragraph [ref=e68]: Supplied
+            - paragraph [ref=e69]: $5,940.14
+            - paragraph [ref=e70]: Earning. Includes Aave supply that also backs borrowing.
+          - generic [ref=e71]:
+            - paragraph [ref=e72]: Collateral
+            - paragraph [ref=e73]: $3,377.38
+            - paragraph [ref=e74]: Morpho and Compound collateral. Earns nothing.
+          - generic [ref=e75]:
+            - paragraph [ref=e76]: Debt
+            - paragraph [ref=e77]: $2,950.00
+            - paragraph [ref=e78]: Accrues interest on each chain.
+        - region "Needs attention" [ref=e79]:
+          - heading "Needs attention" [level=2] [ref=e80]
+          - list [ref=e81]:
+            - listitem [ref=e82]:
+              - generic [ref=e83]:
+                - img [ref=e84]
+                - text: Act
+              - generic [ref=e86]: "Positions on Compound III on Ethereum couldn't be read: The Ethereum RPC timed out. Totals may be incomplete."
+            - listitem [ref=e87]:
+              - generic [ref=e88]:
+                - img [ref=e89]
+                - text: Check
+              - generic [ref=e91]: "cbETH / USDC · 86% LLTV needs attention: LTV 76.6% of 86% LLTV."
+            - listitem [ref=e92]:
+              - generic [ref=e93]:
+                - img [ref=e94]
+                - text: Check
+              - generic [ref=e96]: Data for all positions are more than 15 minutes old. Values may have moved.
+        - generic [ref=e97]:
+          - heading "Base" [level=2] [ref=e98]:
+            - generic [ref=e99]:
+              - generic [ref=e100]: Ba
+              - generic [ref=e101]: Base
+          - list [ref=e102]:
+            - listitem [ref=e103]:
+              - generic [ref=e104]:
+                - generic [ref=e105]:
+                  - generic [ref=e106]:
+                    - generic [ref=e107]: Aa
+                    - generic [ref=e108]:
+                      - text: Aave V3
+                      - generic [ref=e109]: on Base
+                  - link "USDC reserve" [ref=e110] [cursor=pointer]:
+                    - /url: /markets/base/aave-v3/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913
+                - generic [ref=e111]:
+                  - generic [ref=e112]:
+                    - img [ref=e113]
+                    - text: Stale, updated
+                    - time [ref=e115]: 16h ago
+                  - generic [ref=e116]:
+                    - img [ref=e117]
+                    - text: Matches protocol
+              - generic [ref=e120]:
+                - generic [ref=e121]:
+                  - term [ref=e122]: Supplied
+                  - definition [ref=e123]:
+                    - generic [ref=e124]: 2,500 USDC$2,500.00
+                - generic [ref=e125]:
+                  - term [ref=e126]: Collateral (no interest)
+                  - definition [ref=e127]: None
+                - generic [ref=e128]:
+                  - term [ref=e129]: Debt
+                  - definition [ref=e130]:
+                    - generic [ref=e131]: 1,000 USDC$1,000.00
+              - generic [ref=e132]:
+                - generic [ref=e133]:
+                  - generic [ref=e134]:
+                    - generic [ref=e135]:
+                      - img [ref=e136]
+                      - text: Healthy
+                    - generic [ref=e139]: Health factor 2.44
+                  - paragraph [ref=e140]: Shared across your Aave account on Base.
+                - generic [ref=e141]:
+                  - text: Account
+                  - generic [ref=e142]:
+                    - generic "0x000000000000000000000000000000000000b0b0" [ref=e143]:
+                      - text: 0x000000…b0b0
+                      - generic [ref=e144]: "0x000000000000000000000000000000000000b0b0"
+                    - button "Show full execution account" [ref=e145] [cursor=pointer]
+            - listitem [ref=e146]:
+              - generic [ref=e147]:
+                - generic [ref=e148]:
+                  - generic [ref=e149]:
+                    - generic [ref=e150]: Aa
+                    - generic [ref=e151]:
+                      - text: Aave V3
+                      - generic [ref=e152]: on Base
+                  - link "WETH reserve" [ref=e153] [cursor=pointer]:
+                    - /url: /markets/base/aave-v3/0x4200000000000000000000000000000000000006
+                - generic [ref=e154]:
+                  - generic [ref=e155]:
+                    - img [ref=e156]
+                    - text: Stale, updated
+                    - time [ref=e158]: 16h ago
+                  - generic [ref=e159]:
+                    - img [ref=e160]
+                    - text: Matches protocol
+              - generic [ref=e163]:
+                - generic [ref=e164]:
+                  - term [ref=e165]: Supplied
+                  - definition [ref=e166]:
+                    - generic [ref=e167]: 1.2 WETH$2,940.14
+                    - paragraph [ref=e168]: Also backs your Aave borrowing
+                - generic [ref=e169]:
+                  - term [ref=e170]: Collateral (no interest)
+                  - definition [ref=e171]: None
+                - generic [ref=e172]:
+                  - term [ref=e173]: Debt
+                  - definition [ref=e174]: None
+              - generic [ref=e175]:
+                - generic [ref=e176]:
+                  - generic [ref=e177]:
+                    - generic [ref=e178]:
+                      - img [ref=e179]
+                      - text: Healthy
+                    - generic [ref=e182]: Health factor 2.44
+                  - paragraph [ref=e183]: Shared across your Aave account on Base.
+                - generic [ref=e184]:
+                  - text: Account
+                  - generic [ref=e185]:
+                    - generic "0x000000000000000000000000000000000000b0b0" [ref=e186]:
+                      - text: 0x000000…b0b0
+                      - generic [ref=e187]: "0x000000000000000000000000000000000000b0b0"
+                    - button "Show full execution account" [ref=e188] [cursor=pointer]
+            - listitem [ref=e189]:
+              - generic [ref=e190]:
+                - generic [ref=e191]:
+                  - generic [ref=e192]:
+                    - generic [ref=e193]: Mo
+                    - generic [ref=e194]:
+                      - text: Morpho Blue
+                      - generic [ref=e195]: on Base
+                  - link "cbETH / USDC · 86% LLTV" [ref=e196] [cursor=pointer]:
+                    - /url: /markets/base/morpho-blue/0x0000000000000000000000000000000000000000000000000000000000000b01
+                - generic [ref=e197]:
+                  - generic [ref=e198]:
+                    - img [ref=e199]
+                    - text: Stale, updated
+                    - time [ref=e201]: 16h ago
+                  - generic [ref=e202]:
+                    - img [ref=e203]
+                    - text: Matches protocol
+              - generic [ref=e206]:
+                - generic [ref=e207]:
+                  - term [ref=e208]: Supplied
+                  - definition [ref=e209]:
+                    - generic [ref=e210]: 500 USDC$500.00
+                - generic [ref=e211]:
+                  - term [ref=e212]: Collateral (no interest)
+                  - definition [ref=e213]:
+                    - generic [ref=e215]: 0.8 cbETH$2,152.32
+                - generic [ref=e216]:
+                  - term [ref=e217]: Debt
+                  - definition [ref=e218]:
+                    - generic [ref=e219]: 1,650 USDC$1,650.00
+              - generic [ref=e220]:
+                - generic [ref=e222]:
+                  - generic [ref=e223]:
+                    - img [ref=e224]
+                    - text: Needs attention
+                  - generic [ref=e226]: LTV 76.6% of 86% LLTV
+                - generic [ref=e227]:
+                  - text: Account
+                  - generic [ref=e228]:
+                    - generic "0x000000000000000000000000000000000000b0b0" [ref=e229]:
+                      - text: 0x000000…b0b0
+                      - generic [ref=e230]: "0x000000000000000000000000000000000000b0b0"
+                    - button "Show full execution account" [ref=e231] [cursor=pointer]
+            - listitem [ref=e232]:
+              - generic [ref=e233]:
+                - generic [ref=e234]:
+                  - generic [ref=e235]:
+                    - generic [ref=e236]: Co
+                    - generic [ref=e237]:
+                      - text: Compound III
+                      - generic [ref=e238]: on Base
+                  - link "USDC Comet" [ref=e239] [cursor=pointer]:
+                    - /url: /markets/base/compound-v3/0xb125E6687d4313864e53df431d5425969c15Eb2F
+                - generic [ref=e240]:
+                  - generic [ref=e241]:
+                    - img [ref=e242]
+                    - text: Stale, updated
+                    - time [ref=e244]: 16h ago
+                  - generic [ref=e245]:
+                    - img [ref=e246]
+                    - text: Not yet reconciled
+              - generic [ref=e248]:
+                - generic [ref=e249]:
+                  - term [ref=e250]: Supplied
+                  - definition [ref=e251]: None
+                - generic [ref=e252]:
+                  - term [ref=e253]: Collateral (no interest)
+                  - definition [ref=e254]:
+                    - generic [ref=e256]: 0.5 WETH$1,225.06
+                - generic [ref=e257]:
+                  - term [ref=e258]: Debt
+                  - definition [ref=e259]:
+                    - generic [ref=e260]: 300 USDC$300.00
+              - generic [ref=e261]:
+                - generic [ref=e263]:
+                  - generic [ref=e264]:
+                    - img [ref=e265]
+                    - text: Healthy
+                  - generic [ref=e268]: Liquidation limit used 27.2%
+                - generic [ref=e269]:
+                  - text: Account
+                  - generic [ref=e270]:
+                    - generic "0x000000000000000000000000000000000000b0b0" [ref=e271]:
+                      - text: 0x000000…b0b0
+                      - generic [ref=e272]: "0x000000000000000000000000000000000000b0b0"
+                    - button "Show full execution account" [ref=e273] [cursor=pointer]
+  - region "Notifications alt+T"
+```

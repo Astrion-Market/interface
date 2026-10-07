@@ -1,0 +1,296 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - link "Astrion" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img
+          - generic [ref=e6]: Astrion
+        - navigation "Primary" [ref=e7]:
+          - link "Overview" [ref=e8] [cursor=pointer]:
+            - /url: /dashboard
+          - link "Markets" [ref=e9] [cursor=pointer]:
+            - /url: /markets
+          - link "Positions" [ref=e10] [cursor=pointer]:
+            - /url: /portfolio
+          - link "Activity" [ref=e11] [cursor=pointer]:
+            - /url: /activity
+          - link "Learn" [ref=e12] [cursor=pointer]:
+            - /url: /docs
+        - generic [ref=e13]:
+          - button "Toggle theme" [ref=e14] [cursor=pointer]:
+            - img
+          - link "Launch app" [ref=e15] [cursor=pointer]:
+            - /url: /dashboard
+    - generic [ref=e16]:
+      - img
+      - generic [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]: In development · Testnet today
+          - heading "Lend across chains. Bring your liquidity home." [level=1] [ref=e22]:
+            - text: Lend across chains.
+            - generic [ref=e23]: Bring your liquidity home.
+          - paragraph [ref=e24]: Lend into Aave, Morpho, and Compound from your Stellar wallet.
+          - generic [ref=e25]:
+            - button "Open the app" [ref=e26] [cursor=pointer]:
+              - text: Open the app
+              - generic [ref=e27]: →
+            - button "How it works" [ref=e28] [cursor=pointer]
+        - 'img "Illustration: USDC moves from Stellar through Circle CCTP into Aave, Morpho, or Compound on Base and Ethereum, and back to Stellar." [ref=e30]':
+          - generic [ref=e32]: BASE · ETHEREUM
+          - generic [ref=e34]: USDC back to Stellar
+          - generic [ref=e39]: CCTP
+          - generic [ref=e42]: ST
+          - generic [ref=e43]: Stellar
+          - generic [ref=e44]: USDC
+          - generic [ref=e49]: Aave
+          - generic [ref=e54]: Morpho
+          - generic [ref=e59]: Compound
+    - region "Product status" [ref=e65]:
+      - list [ref=e67]:
+        - listitem [ref=e68]:
+          - img [ref=e70]
+          - generic [ref=e72]:
+            - paragraph [ref=e73]: Testnet today
+            - paragraph [ref=e74]: Cross-chain routes aren't live yet.
+        - listitem [ref=e75]:
+          - img [ref=e77]
+          - generic [ref=e79]:
+            - paragraph [ref=e80]: Aave on Base first
+            - paragraph [ref=e81]: Morpho and Compound follow.
+        - listitem [ref=e82]:
+          - img [ref=e84]
+          - generic [ref=e86]:
+            - paragraph [ref=e87]: Two wallets
+            - paragraph [ref=e88]: Stellar plus an EVM wallet.
+    - generic [ref=e90]:
+      - generic [ref=e91]:
+        - paragraph [ref=e92]: How it will work
+        - heading "Two routes. Three steps each." [level=2] [ref=e93]
+      - generic [ref=e94]:
+        - article [ref=e95]:
+          - generic [ref=e96]:
+            - heading "Lend" [level=3] [ref=e97]
+            - paragraph [ref=e98]: Earn once your supply lands on Base.
+          - list "Lend steps" [ref=e99]:
+            - listitem [ref=e100]:
+              - generic [ref=e101]:
+                - img [ref=e103]
+                - generic [ref=e105]: USDC on Stellar
+            - listitem [ref=e106]:
+              - generic [ref=e108]:
+                - img [ref=e110]
+                - generic [ref=e112]: Bridge via CCTP
+            - listitem [ref=e113]:
+              - generic [ref=e115]:
+                - img [ref=e117]
+                - generic [ref=e119]: Supply on Base
+        - article [ref=e120]:
+          - generic [ref=e121]:
+            - heading "Borrow" [level=3] [ref=e122]
+            - paragraph [ref=e123]: Collateral and debt stay on Base.
+          - list "Borrow steps" [ref=e124]:
+            - listitem [ref=e125]:
+              - generic [ref=e126]:
+                - img [ref=e128]
+                - generic [ref=e130]: Collateral on Base
+            - listitem [ref=e131]:
+              - generic [ref=e133]:
+                - img [ref=e135]
+                - generic [ref=e137]: Borrow USDC
+            - listitem [ref=e138]:
+              - generic [ref=e140]:
+                - img [ref=e142]
+                - generic [ref=e144]: Receive on Stellar
+    - generic [ref=e146]:
+      - generic [ref=e147]:
+        - paragraph [ref=e148]: Planned markets
+        - heading "Three protocols. Base first." [level=2] [ref=e149]:
+          - text: Three protocols.
+          - text: Base first.
+        - paragraph [ref=e150]: Planned integrations, not partnerships. Live rates appear once each market ships.
+      - table "Planned protocol and chain support" [ref=e152]:
+        - caption [ref=e153]: Planned protocol and chain support
+        - rowgroup [ref=e154]:
+          - row "Base Ethereum" [ref=e155]:
+            - cell [ref=e156]
+            - columnheader "Base" [ref=e157]:
+              - generic [ref=e158]:
+                - generic [ref=e159]: Ba
+                - generic [ref=e160]: Base
+            - columnheader "Ethereum" [ref=e161]:
+              - generic [ref=e162]:
+                - generic [ref=e163]: Et
+                - generic [ref=e164]: Ethereum
+        - rowgroup [ref=e165]:
+          - row "Aave V3 First After Base" [ref=e166]:
+            - rowheader "Aave V3" [ref=e167]:
+              - generic [ref=e168]:
+                - generic [ref=e169]: Aa
+                - generic [ref=e170]: Aave V3
+            - cell "First" [ref=e171]:
+              - generic [ref=e172]:
+                - img [ref=e173]
+                - text: First
+            - cell "After Base" [ref=e176]:
+              - generic [ref=e177]:
+                - img [ref=e178]
+                - text: After Base
+          - row "Morpho Blue Planned After Base" [ref=e180]:
+            - rowheader "Morpho Blue" [ref=e181]:
+              - generic [ref=e182]:
+                - generic [ref=e183]: Mo
+                - generic [ref=e184]: Morpho Blue
+            - cell "Planned" [ref=e185]:
+              - generic [ref=e186]:
+                - img [ref=e187]
+                - text: Planned
+            - cell "After Base" [ref=e189]:
+              - generic [ref=e190]:
+                - img [ref=e191]
+                - text: After Base
+          - row "Compound III Planned After Base" [ref=e193]:
+            - rowheader "Compound III" [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: Co
+                - generic [ref=e197]: Compound III
+            - cell "Planned" [ref=e198]:
+              - generic [ref=e199]:
+                - img [ref=e200]
+                - text: Planned
+            - cell "After Base" [ref=e202]:
+              - generic [ref=e203]:
+                - img [ref=e204]
+                - text: After Base
+    - generic [ref=e207]:
+      - generic [ref=e208]:
+        - paragraph [ref=e209]: Why Astrion
+        - heading "Clear before you sign." [level=2] [ref=e210]
+      - list [ref=e211]:
+        - listitem [ref=e212]:
+          - img [ref=e214]
+          - heading "Stellar in, Stellar out" [level=3] [ref=e216]
+          - paragraph [ref=e217]: Fund and get paid in Stellar USDC.
+        - listitem [ref=e218]:
+          - img [ref=e220]
+          - heading "See the full route" [level=3] [ref=e222]
+          - paragraph [ref=e223]: Every leg, fee, and signature up front.
+        - listitem [ref=e224]:
+          - img [ref=e226]
+          - heading "Risk in plain view" [level=3] [ref=e228]
+          - paragraph [ref=e229]: Health and liquidity beside every action.
+        - listitem [ref=e230]:
+          - img [ref=e232]
+          - heading "Track every transfer" [level=3] [ref=e234]
+          - paragraph [ref=e235]: Progress survives reloads and restarts.
+    - generic [ref=e237]:
+      - generic [ref=e238]:
+        - paragraph [ref=e239]: Before you start
+        - heading "Know the risks." [level=2] [ref=e240]
+      - list [ref=e241]:
+        - listitem [ref=e242]:
+          - img [ref=e244]
+          - generic [ref=e246]:
+            - heading "Alpha software" [level=3] [ref=e247]
+            - paragraph [ref=e248]: Security review comes before mainnet.
+        - listitem [ref=e249]:
+          - img [ref=e251]
+          - generic [ref=e253]:
+            - heading "Positions stay on EVM" [level=3] [ref=e254]
+            - paragraph [ref=e255]: Liquidation can happen mid-transfer.
+        - listitem [ref=e256]:
+          - img [ref=e258]
+          - generic [ref=e260]:
+            - heading "Transfers take time" [level=3] [ref=e261]
+            - paragraph [ref=e262]: Times and fees are estimates.
+        - listitem [ref=e263]:
+          - img [ref=e265]
+          - generic [ref=e267]:
+            - heading "Rates move" [level=3] [ref=e268]
+            - paragraph [ref=e269]: APY is variable; fees are separate.
+        - listitem [ref=e270]:
+          - img [ref=e272]
+          - generic [ref=e274]:
+            - heading "Contract risk" [level=3] [ref=e275]
+            - paragraph [ref=e276]: Protocols, CCTP, and Astrion can fail.
+        - listitem [ref=e277]:
+          - img [ref=e279]
+          - generic [ref=e281]:
+            - heading "Two wallets" [level=3] [ref=e282]
+            - paragraph [ref=e283]: Stellar-only signing comes later.
+    - generic [ref=e285]:
+      - paragraph [ref=e286]: Follow the alpha
+      - heading "Lend across chains. From Stellar." [level=2] [ref=e287]:
+        - text: Lend across chains.
+        - text: From Stellar.
+      - generic [ref=e288]:
+        - button "Open the app" [ref=e289] [cursor=pointer]:
+          - text: Open the app
+          - generic [ref=e290]: →
+        - button "Read the docs" [ref=e291] [cursor=pointer]
+      - paragraph [ref=e292]: In development · Testnet today
+    - contentinfo [ref=e293]:
+      - generic [ref=e296]:
+        - generic [ref=e297]:
+          - generic [ref=e298]:
+            - heading "Product" [level=5] [ref=e299]
+            - list [ref=e300]:
+              - listitem [ref=e301]:
+                - link "Overview" [ref=e302] [cursor=pointer]:
+                  - /url: /dashboard
+              - listitem [ref=e303]:
+                - link "Markets" [ref=e304] [cursor=pointer]:
+                  - /url: /markets
+              - listitem [ref=e305]:
+                - link "Positions" [ref=e306] [cursor=pointer]:
+                  - /url: /portfolio
+              - listitem [ref=e307]:
+                - link "Activity" [ref=e308] [cursor=pointer]:
+                  - /url: /activity
+              - listitem [ref=e309]:
+                - link "Stellar positions" [ref=e310] [cursor=pointer]:
+                  - /url: /legacy
+          - generic [ref=e311]:
+            - heading "Learn" [level=5] [ref=e312]
+            - list [ref=e313]:
+              - listitem [ref=e314]:
+                - link "Documentation" [ref=e315] [cursor=pointer]:
+                  - /url: /docs
+              - listitem [ref=e316]:
+                - link "GitHub" [ref=e317] [cursor=pointer]:
+                  - /url: https://github.com/Astrion-Market
+          - generic [ref=e318]:
+            - heading "Community" [level=5] [ref=e319]
+            - list [ref=e320]:
+              - listitem [ref=e321]:
+                - link "Twitter / X" [ref=e322] [cursor=pointer]:
+                  - /url: https://x.com/Astrionmarket
+              - listitem [ref=e323]:
+                - link "Discord" [ref=e324] [cursor=pointer]:
+                  - /url: https://discord.gg/astrionmarket
+              - listitem [ref=e325]:
+                - link "Telegram" [ref=e326] [cursor=pointer]:
+                  - /url: https://t.me/astrionmarket
+        - generic [ref=e327]:
+          - link "X" [ref=e328] [cursor=pointer]:
+            - /url: https://x.com/Astrionmarket
+            - img [ref=e329]
+          - link "Discord" [ref=e331] [cursor=pointer]:
+            - /url: https://discord.gg/astrionmarket
+            - img [ref=e332]
+          - link "Telegram" [ref=e336] [cursor=pointer]:
+            - /url: https://t.me/astrionmarket
+            - img [ref=e337]
+          - link "GitHub" [ref=e339] [cursor=pointer]:
+            - /url: https://github.com/Astrion-Market
+            - img [ref=e340]
+      - img [ref=e343]:
+        - generic [ref=e344]: Astrion
+      - generic [ref=e347]:
+        - generic [ref=e348]: Cross-chain alpha in development
+        - generic [ref=e349]: © 2026 Astrion Labs. All rights reserved.
+  - region "Notifications alt+T"
+```
