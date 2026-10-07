@@ -76,7 +76,7 @@ export function ConnectWalletButton({
         onClick={() => void connect()}
       >
         <HugeiconsIcon icon={Wallet02Icon} strokeWidth={1.8} />
-        <span>{isConnecting ? "Connecting" : "Connect"}</span>
+        <span>{isConnecting ? "Connecting" : placement === "sidebar" ? "Connect Stellar" : "Connect"}</span>
         {placement === "sidebar" ? (
           <HugeiconsIcon
             icon={ArrowDown01Icon}
@@ -102,7 +102,7 @@ export function ConnectWalletButton({
         }
       />
       <DropdownMenuContent align={align} className="w-56">
-        <DropdownMenuLabel>Wallet</DropdownMenuLabel>
+        <DropdownMenuLabel>Stellar wallet</DropdownMenuLabel>
         <div className="px-2 py-1.5">
           <p className="truncate font-mono text-[11px] text-foreground">
             {address}

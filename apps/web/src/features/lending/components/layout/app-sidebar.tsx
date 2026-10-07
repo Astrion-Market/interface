@@ -8,6 +8,7 @@ import {
   SheetTrigger,
 } from "@workspace/ui/components/sheet"
 import { ConnectWalletButton } from "../../../wallet/connect-wallet-button"
+import { EvmConnectButton } from "../../../wallet/evm/evm-connect-button"
 import { PRIMARY_NAV_ITEMS } from "../../navigation"
 import { IS_STELLAR_TESTNET, STELLAR_NETWORK_LABEL } from "../../lib/network"
 
@@ -154,6 +155,7 @@ function SidebarContent({ onNavClick }: { onNavClick?: () => void }) {
           {STELLAR_NETWORK_LABEL}
         </p>
         <ConnectWalletButton placement="sidebar" />
+        <EvmConnectButton />
       </div>
     </>
   )

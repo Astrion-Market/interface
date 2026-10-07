@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { Toaster } from "sonner"
 import appCss from "@workspace/ui/globals.css?url"
 import { ThemeProvider } from "../ui/theme-provider"
+import { EvmWalletProvider } from "../features/wallet/evm/evm-wallet-provider"
 import { WalletProvider } from "../features/wallet/wallet-provider"
 import { NotFound } from "../ui/not-found"
 
@@ -170,7 +171,9 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       <body>
         <QueryClientProvider client={queryClient}>
           <ThemeProvider>
-            <WalletProvider>{children}</WalletProvider>
+            <WalletProvider>
+              <EvmWalletProvider>{children}</EvmWalletProvider>
+            </WalletProvider>
             <Toaster richColors position="bottom-right" />
           </ThemeProvider>
         </QueryClientProvider>

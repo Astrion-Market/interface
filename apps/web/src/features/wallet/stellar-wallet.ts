@@ -187,3 +187,41 @@ export async function getNativeXlmBalance(address: string) {
       ?.balance ?? "0.0000000"
   )
 }
+
+// Network the wallet itself is using. Not every wallet reports it; null means
+// unknown, never "matches".
+export async function getStellarWalletPassphrase(): Promise<string | null> {
+  try {
+    const kit = await initWalletKit()
+    const { networkPassphrase } = await kit.getNetwork()
+    return networkPassphrase || null
+  } catch {
+    return null
+  }
+}
+
+export type StellarUsdcStatus = {
+  // False when the account has not been created (funded) on this network.
+  funded: boolean
+  hasTrustline: boolean
+  // Balance in 7-decimal raw units; 0 when there is no trustline.
+  balanceRaw: bigint
+}
+
+export async function getStellarUsdcStatus(
+  horizon: string,
+  address: string,
+  issuer: string
+): Promise<StellarUsdcStatus> {
+  const response = await fetch(`${horizon}/accounts/${address}`)
+  if (response.status === 404) return { funded: false, hasTrustline: false, balanceRaw: 0n }
+  if (!response.ok) throw new Error("Unable to read the Stellar account")
+  const account = (await response.json()) as {
+    balances: Array<HorizonBalance & { asset_code?: string; asset_issuer?: string }>
+  }
+  const line = account.balances.find((b) => b.asset_code === "USDC" && b.asset_issuer === issuer)
+  if (!line) return { funded: true, hasTrustline: false, balanceRaw: 0n }
+  // Horizon always returns seven fraction digits, e.g. "12.3400000".
+  const [whole, fraction = ""] = line.balance.split(".")
+  return { funded: true, hasTrustline: true, balanceRaw: BigInt(whole) * 10_000_000n + BigInt(fraction.padEnd(7, "0").slice(0, 7)) }
+}

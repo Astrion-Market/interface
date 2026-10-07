@@ -1,5 +1,6 @@
 import { Button } from "@workspace/ui/components/button"
 import { useTheme } from "../../../../ui/theme-provider"
+import { WalletSessions } from "../../../wallet/wallet-sessions"
 import type { Theme } from "../../../../ui/theme-provider"
 
 const themeOptions: Array<{
@@ -34,6 +35,10 @@ export function SettingsPage() {
         <p className="mt-0.5 text-[13px] text-muted-foreground">
           Configure your Astrion workspace preferences.
         </p>
+      </div>
+
+      <div className="mb-8">
+        <WalletSessions />
       </div>
 
       <section className="max-w-2xl">

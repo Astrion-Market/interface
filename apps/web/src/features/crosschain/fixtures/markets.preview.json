@@ -21,6 +21,36 @@
     { "chain": "ethereum", "protocol": "morpho-blue", "enabled": false, "reason": "Ethereum routes follow the Base release gates." },
     { "chain": "ethereum", "protocol": "compound-v3", "enabled": false, "reason": "Ethereum routes follow the Base release gates." }
   ],
+  "prices": {
+    "base:usdc": { "usd": "1.00", "readAt": "2026-10-06T11:59:00Z" },
+    "base:weth": { "usd": "2450.12", "readAt": "2026-10-06T11:59:00Z" },
+    "base:cbeth": { "usd": "2690.40", "readAt": "2026-10-06T11:59:00Z" },
+    "ethereum:usdc": { "usd": "1.00", "readAt": "2026-10-06T11:59:00Z" },
+    "ethereum:weth": { "usd": "2450.12", "readAt": "2026-10-06T11:59:00Z" },
+    "ethereum:wsteth": { "usd": "2930.77", "readAt": "2026-10-06T11:59:00Z" },
+    "ethereum:wbtc": { "usd": "62110.50", "readAt": "2026-10-06T11:59:00Z" }
+  },
+  "fees": {
+    "bridgeBps": 1,
+    "bridgeMinimum": "50000",
+    "stellarNetworkFee": "100",
+    "evmGas": { "base": "20000000000000", "ethereum": "1500000000000000" },
+    "gasSponsored": false
+  },
+  "samplePortfolio": {
+    "note": "Sample account for previewing the portfolio. Not your wallet and not live data.",
+    "owner": { "stellar": "GAMDADDXO4XLCLIDP5ZCQRRWTP2PCA7LB2JLKWM7DSWN6WRNTXAVBPYQ", "evm": "0x000000000000000000000000000000000000a5a5" },
+    "accounts": { "base": "0x000000000000000000000000000000000000b0b0", "ethereum": "0x000000000000000000000000000000000000e0e0" },
+    "positions": [
+      { "market": "base:aave-v3:0x833589fcd6edb6e08f4c7c32d4f71b54bda02913", "readAt": "2026-10-06T11:59:20Z", "reconciled": true, "supplied": "2500000000", "debt": "1000000000", "collateralEnabled": false },
+      { "market": "base:aave-v3:0x4200000000000000000000000000000000000006", "readAt": "2026-10-06T11:59:20Z", "reconciled": true, "supplied": "1200000000000000000", "debt": "0", "collateralEnabled": true },
+      { "market": "base:morpho-blue:0x0000000000000000000000000000000000000000000000000000000000000b01", "readAt": "2026-10-06T11:59:10Z", "reconciled": true, "supplied": "500000000", "collateral": "800000000000000000", "debt": "1650000000" },
+      { "market": "base:compound-v3:0xb125e6687d4313864e53df431d5425969c15eb2f", "readAt": "2026-10-06T11:58:50Z", "reconciled": null, "baseBalance": "-300000000", "collaterals": { "base:weth": "500000000000000000" } }
+    ],
+    "failedReads": [
+      { "chain": "ethereum", "protocol": "compound-v3", "reason": "The Ethereum RPC timed out." }
+    ]
+  },
   "markets": [
     {
       "protocol": "aave-v3",

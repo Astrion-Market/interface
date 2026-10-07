@@ -6,7 +6,10 @@
 
 import { EXECUTION_CHAIN_IDS, PROTOCOL_IDS } from "../lending/lib/identity.ts"
 import { marketKey } from "./model.ts"
+import { parseUnits } from "../lending/lib/amounts.ts"
+import { priceKey } from "./positions.ts"
 import type { ExecutionChainId, ProtocolId } from "../lending/lib/identity"
+import type { FailedRead, FeeSchedule, Portfolio, PositionRead, Price } from "./positions"
 import type {
   AaveReserve,
   Address,
@@ -39,6 +42,9 @@ export type MarketFixture = {
   note: string
   routes: Array<RouteAvailability>
   markets: Array<Market>
+  prices: Map<string, Price>
+  fees: FeeSchedule
+  samplePortfolio: Portfolio
 }
 
 type Obj = Record<string, unknown>
@@ -276,12 +282,86 @@ export function parseMarketFixture(raw: unknown): MarketFixture {
     seen.add(market.key)
   }
 
+  const prices = new Map<string, Price>()
+  for (const [id, entry] of Object.entries(obj(root.prices, "fixture.prices"))) {
+    const p = `fixture.prices.${id}`
+    const t = tokens.get(id)
+    if (!t) throw new FixtureError(p, `unknown token "${id}"`)
+    const o = obj(entry, p)
+    const usdE8 = parseUnits(str(o.usd, `${p}.usd`), 8)
+    if (usdE8 === null) throw new FixtureError(`${p}.usd`, "expected a decimal USD price")
+    prices.set(priceKey(t.chain, t.address), { usdE8, readAt: isoTime(o.readAt, `${p}.readAt`) })
+  }
+
+  const f = obj(root.fees, "fixture.fees")
+  const gas = obj(f.evmGas, "fixture.fees.evmGas")
+  const fees: FeeSchedule = {
+    bridgeBps: bps(f.bridgeBps, "fixture.fees.bridgeBps"),
+    bridgeMinimum: amount(f.bridgeMinimum, "fixture.fees.bridgeMinimum"),
+    stellarNetworkFee: amount(f.stellarNetworkFee, "fixture.fees.stellarNetworkFee"),
+    evmGas: { base: amount(gas.base, "fixture.fees.evmGas.base"), ethereum: amount(gas.ethereum, "fixture.fees.evmGas.ethereum") },
+    gasSponsored: bool(f.gasSponsored, "fixture.fees.gasSponsored"),
+  }
+
+  const sp = obj(root.samplePortfolio, "fixture.samplePortfolio")
+  const owner = obj(sp.owner, "fixture.samplePortfolio.owner")
+  const accounts = obj(sp.accounts, "fixture.samplePortfolio.accounts")
+  const keys = new Set(markets.map((m) => m.key))
+  const positions = arr(sp.positions, "fixture.samplePortfolio.positions").map((entry, i): PositionRead => {
+    const p = `fixture.samplePortfolio.positions[${i}]`
+    const o = obj(entry, p)
+    const marketKey = str(o.market, `${p}.market`)
+    if (!keys.has(marketKey)) throw new FixtureError(`${p}.market`, `unknown market ${marketKey}`)
+    const signed = o.baseBalance
+    if (signed !== undefined && signed !== null && (typeof signed !== "string" || !/^-?\d+$/.test(signed)))
+      throw new FixtureError(`${p}.baseBalance`, "expected a signed integer string")
+    const collaterals: Record<string, bigint> = {}
+    if (o.collaterals !== undefined)
+      for (const [id, raw] of Object.entries(obj(o.collaterals, `${p}.collaterals`))) {
+        const t = tokens.get(id)
+        if (!t) throw new FixtureError(`${p}.collaterals`, `unknown token "${id}"`)
+        collaterals[priceKey(t.chain, t.address)] = amount(raw, `${p}.collaterals.${id}`)
+      }
+    return {
+      marketKey,
+      readAt: isoTime(o.readAt, `${p}.readAt`),
+      reconciled: o.reconciled === null ? null : bool(o.reconciled, `${p}.reconciled`),
+      supplied: o.supplied === undefined ? null : maybe(o.supplied, `${p}.supplied`, amount),
+      debt: o.debt === undefined ? null : maybe(o.debt, `${p}.debt`, amount),
+      collateralEnabled: o.collateralEnabled === undefined ? undefined : bool(o.collateralEnabled, `${p}.collateralEnabled`),
+      collateral: o.collateral === undefined ? undefined : maybe(o.collateral, `${p}.collateral`, amount),
+      baseBalance: typeof signed === "string" ? BigInt(signed) : undefined,
+      collaterals: o.collaterals === undefined ? undefined : collaterals,
+    }
+  })
+  const failedReads = arr(sp.failedReads, "fixture.samplePortfolio.failedReads").map((entry, i): FailedRead => {
+    const p = `fixture.samplePortfolio.failedReads[${i}]`
+    const o = obj(entry, p)
+    return {
+      chain: oneOf(o.chain, EXECUTION_CHAIN_IDS, `${p}.chain`),
+      protocol: oneOf(o.protocol, PROTOCOL_IDS, `${p}.protocol`),
+      reason: str(o.reason, `${p}.reason`),
+    }
+  })
+
   return {
     env,
     generatedAt: isoTime(root.generatedAt, "fixture.generatedAt"),
     note: str(root.note, "fixture.note"),
     routes,
     markets,
+    prices,
+    fees,
+    samplePortfolio: {
+      note: str(sp.note, "fixture.samplePortfolio.note"),
+      owner: { stellar: maybe(owner.stellar, "owner.stellar", str), evm: maybe(owner.evm, "owner.evm", str) },
+      accounts: {
+        base: accounts.base === undefined ? undefined : address(accounts.base, "accounts.base"),
+        ethereum: accounts.ethereum === undefined ? undefined : address(accounts.ethereum, "accounts.ethereum"),
+      },
+      positions,
+      failedReads,
+    },
   }
 }
 

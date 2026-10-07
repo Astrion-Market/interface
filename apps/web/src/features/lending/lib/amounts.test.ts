@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { convertDecimals, formatUnits, shortenIdentifier } from "./amounts.ts"
+import { convertDecimals, formatUnits, parseUnits, shortenIdentifier } from "./amounts.ts"
 
 test("formats seven-decimal Stellar amounts exactly", () => {
   assert.equal(formatUnits(12_345_678_901_234_567n, 7).text, "1,234,567,890.1234567")
@@ -53,4 +53,19 @@ test("middle-truncates long identifiers", () => {
     "0x833589…2913"
   )
   assert.equal(shortenIdentifier("short"), "short")
+})
+
+test("parses decimal input exactly", () => {
+  assert.equal(parseUnits("1,250.1234567", 7), 12_501_234_567n)
+  assert.equal(parseUnits("0.000001", 6), 1n)
+  assert.equal(parseUnits(".5", 6), 500_000n)
+  assert.equal(parseUnits("7", 6), 7_000_000n)
+})
+
+test("rejects malformed or over-precise input", () => {
+  assert.equal(parseUnits("1.0000001", 6), null)
+  assert.equal(parseUnits("-1", 6), null)
+  assert.equal(parseUnits("1e6", 6), null)
+  assert.equal(parseUnits("", 6), null)
+  assert.equal(parseUnits(".", 6), null)
 })

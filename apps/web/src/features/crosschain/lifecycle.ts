@@ -33,7 +33,9 @@ export type OperationStatus =
   | { state: "needs-action"; label: string }
   | { state: "complete"; label: string }
 
-const LEG_LABEL: Record<LegKind, string> = {
+const CHAIN_NAME: Record<ChainId, string> = { stellar: "Stellar", base: "Base", ethereum: "Ethereum" }
+
+export const LEG_LABEL: Record<LegKind, string> = {
   "source-transfer": "Source transfer",
   attestation: "Bridge attestation",
   "destination-mint": "USDC arrives",
@@ -43,7 +45,12 @@ const LEG_LABEL: Record<LegKind, string> = {
 
 export function operationStatus(op: Operation): OperationStatus {
   const failed = op.legs.find((leg) => leg.status === "failed")
-  if (failed) return { state: "needs-action", label: `${LEG_LABEL[failed.kind]} needs attention` }
+  if (failed) {
+    const minted = op.legs.find((leg) => leg.kind === "destination-mint")
+    if (failed.kind === "protocol-action" && minted?.status === "confirmed")
+      return { state: "needs-action", label: `Funds available on ${CHAIN_NAME[failed.chain]}` }
+    return { state: "needs-action", label: `${LEG_LABEL[failed.kind]} needs attention` }
+  }
 
   const action = op.legs.find((leg) => leg.kind === "protocol-action")
   const ret = op.legs.find((leg) => leg.kind === "return-transfer")

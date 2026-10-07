@@ -72,3 +72,16 @@ export function shortenIdentifier(value: string, lead = 6, tail = 4): string {
   if (value.length <= prefix + lead + tail + 1) return value
   return `${value.slice(0, prefix + lead)}…${value.slice(-tail)}`
 }
+
+// Parse a user- or API-supplied decimal string into raw units without floating
+// point. Returns null for anything that is not a plain non-negative decimal or
+// that has more fraction digits than the token supports.
+export function parseUnits(text: string, decimals: number): bigint | null {
+  const cleaned = text.trim().replaceAll(",", "")
+  const match = /^(\d*)(?:\.(\d*))?$/.exec(cleaned)
+  if (!match || cleaned === "" || cleaned === ".") return null
+  const whole = match[1] || "0"
+  const fraction = match[2] ?? ""
+  if (fraction.length > decimals) return null
+  return BigInt(whole) * 10n ** BigInt(decimals) + BigInt(fraction.padEnd(decimals, "0") || "0")
+}

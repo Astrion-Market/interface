@@ -36,3 +36,48 @@ export type PositionScope = {
   // The execution account that holds the position, not the wallet itself.
   account: string
 }
+
+export type Price = { usdE8: bigint; readAt: string }
+
+// Price lookup key: chain plus lowercase token address.
+export function priceKey(chain: ExecutionChainId, address: string) {
+  return `${chain}:${address.toLowerCase()}`
+}
+
+export type FeeSchedule = {
+  bridgeBps: number
+  // Minimum bridge fee in USDC raw units (6 decimals).
+  bridgeMinimum: bigint
+  // Stellar base fee in stroops.
+  stellarNetworkFee: bigint
+  evmGas: Record<ExecutionChainId, bigint>
+  gasSponsored: boolean
+}
+
+// One protocol read for one market. Null fields were not reported; they are
+// never treated as zero.
+export type PositionRead = {
+  marketKey: string
+  readAt: string
+  // True when the balance matched a direct protocol read; null if unchecked.
+  reconciled: boolean | null
+  supplied: bigint | null
+  debt: bigint | null
+  // Aave: the supplied asset also backs borrowing.
+  collateralEnabled?: boolean
+  // Morpho: collateral of the market's collateral token.
+  collateral?: bigint | null
+  // Compound: signed base principal and per-asset collateral.
+  baseBalance?: bigint | null
+  collaterals?: Record<string, bigint>
+}
+
+export type FailedRead = { chain: ExecutionChainId; protocol: string; reason: string }
+
+export type Portfolio = {
+  note: string
+  owner: Owner
+  accounts: Partial<Record<ExecutionChainId, string>>
+  positions: Array<PositionRead>
+  failedReads: Array<FailedRead>
+}
