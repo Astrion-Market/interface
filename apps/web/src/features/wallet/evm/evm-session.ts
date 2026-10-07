@@ -35,8 +35,7 @@ export const INITIAL_EVM_SESSION: EvmSession = {
 const SAME = (a: string | null, b: string | null) => a?.toLowerCase() === b?.toLowerCase()
 
 export function describeWalletError(error: unknown): string {
-  const code =
-    typeof error === "object" && error !== null && "code" in error ? (error as { code: unknown }).code : undefined
+  const code = typeof error === "object" && error !== null && "code" in error ? error.code : undefined
   switch (code) {
     case 4001:
       return "You declined the request in your wallet. Nothing was signed."

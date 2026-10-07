@@ -115,6 +115,6 @@ test("stale quotes and excessive fees are blocked", () => {
   assert.ok(validateQuote(quote, request(), quote.expiresAt).some((i) => i.kind === "expired"))
   // 1 USDC pays the 0.05 USDC minimum bridge fee: 5%, over the 1% limit.
   const tiny = request({ amount: 1_000_000n })
-  assert.ok(MAX_FEE_BPS === 100n)
+  assert.equal(MAX_FEE_BPS, 100n)
   assert.ok(validateQuote(buildQuote(tiny, market, data.fees, 0), tiny, 1).some((i) => i.kind === "fee-too-high"))
 })

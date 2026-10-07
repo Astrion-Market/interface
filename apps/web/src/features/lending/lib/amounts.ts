@@ -81,7 +81,7 @@ export function parseUnits(text: string, decimals: number): bigint | null {
   const match = /^(\d*)(?:\.(\d*))?$/.exec(cleaned)
   if (!match || cleaned === "" || cleaned === ".") return null
   const whole = match[1] || "0"
-  const fraction = match[2] ?? ""
+  const fraction = match.at(2) ?? ""
   if (fraction.length > decimals) return null
   return BigInt(whole) * 10n ** BigInt(decimals) + BigInt(fraction.padEnd(decimals, "0") || "0")
 }

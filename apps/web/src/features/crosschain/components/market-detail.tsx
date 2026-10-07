@@ -7,6 +7,7 @@ import { ChainBadge, ProtocolBadge } from "../../lending/components/primitives/i
 import { ACTION_LABEL, actionAvailability, blockingReasons, loanToken } from "../model"
 import { displayAmount, displayBps, displayCap, displayRate } from "./format"
 import { PreviewNotice } from "./preview-notice"
+import type { ComposerAction } from "./transaction-composer"
 import type {
   AaveReserve,
   ActionAvailability,
@@ -52,7 +53,9 @@ function ActionGroup({
   description,
   actions,
   shared,
+  marketKey,
 }: {
+  marketKey: string
   title: string
   description?: string
   actions: Array<ActionAvailability>
@@ -72,15 +75,30 @@ function ActionGroup({
           const own = a.reasons.filter((r) => !shared.includes(r))
           return (
             <li key={a.action} className="space-y-1">
-              <Button
-                variant="outline"
-                className="h-8 w-full justify-between"
-                disabled={!a.available}
-                aria-describedby={a.available ? undefined : own.length > 0 ? `${reasonId} shared-reasons` : "shared-reasons"}
-              >
-                {ACTION_LABEL[a.action]}
-                {!a.available && <span className="text-label-xs text-muted-foreground">Unavailable</span>}
-              </Button>
+              {REVIEWABLE.includes(a.action) ? (
+                // Reviewing needs no signing authority, so it stays open even
+                // when signing is blocked; the review screen repeats why.
+                <Button
+                  variant="outline"
+                  className="h-8 w-full justify-between"
+                  nativeButton={false}
+                  render={<Link to="/review" search={{ market: marketKey, action: a.action as ComposerAction }} />}
+                  aria-describedby={a.available ? undefined : own.length > 0 ? `${reasonId} shared-reasons` : "shared-reasons"}
+                >
+                  {ACTION_LABEL[a.action]}
+                  <span className="text-label-xs text-muted-foreground">{a.available ? "Review" : "Preview"} →</span>
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  className="h-8 w-full justify-between"
+                  disabled={!a.available}
+                  aria-describedby={a.available ? undefined : own.length > 0 ? `${reasonId} shared-reasons` : "shared-reasons"}
+                >
+                  {ACTION_LABEL[a.action]}
+                  {!a.available && <span className="text-label-xs text-muted-foreground">Unavailable</span>}
+                </Button>
+              )}
               {own.length > 0 && (
                 <ul id={reasonId} className="text-label-xs list-disc space-y-0.5 pl-4 font-normal text-attention">
                   {own.map((r) => (
@@ -95,6 +113,8 @@ function ActionGroup({
     </div>
   )
 }
+
+const REVIEWABLE: Array<LendingAction> = ["lend", "withdraw", "borrow", "repay"]
 
 function pick(actions: Array<ActionAvailability>, wanted: Array<LendingAction>) {
   return actions.filter((a) => wanted.includes(a.action))
@@ -127,6 +147,7 @@ function ActionPanel({ market, route }: { market: Market; route: RouteAvailabili
         }
         actions={pick(actions, ["lend", "withdraw"])}
         shared={shared}
+        marketKey={market.key}
       />
       <ActionGroup
         title={market.protocol === "aave-v3" ? `Borrow ${lendAsset}` : "Borrow against collateral"}
@@ -139,6 +160,7 @@ function ActionPanel({ market, route }: { market: Market; route: RouteAvailabili
         }
         actions={pick(actions, ["post-collateral", "withdraw-collateral", "borrow", "repay"])}
         shared={shared}
+        marketKey={market.key}
       />
     </aside>
   )

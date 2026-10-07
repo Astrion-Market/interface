@@ -5,8 +5,8 @@
 // strict so drift fails loudly in `bun run test`.
 
 import { EXECUTION_CHAIN_IDS, PROTOCOL_IDS } from "../lending/lib/identity.ts"
-import { marketKey } from "./model.ts"
 import { parseUnits } from "../lending/lib/amounts.ts"
+import { marketKey } from "./model.ts"
 import { priceKey } from "./positions.ts"
 import type { ExecutionChainId, ProtocolId } from "../lending/lib/identity"
 import type { FailedRead, FeeSchedule, Portfolio, PositionRead, Price } from "./positions"
@@ -310,20 +310,20 @@ export function parseMarketFixture(raw: unknown): MarketFixture {
   const positions = arr(sp.positions, "fixture.samplePortfolio.positions").map((entry, i): PositionRead => {
     const p = `fixture.samplePortfolio.positions[${i}]`
     const o = obj(entry, p)
-    const marketKey = str(o.market, `${p}.market`)
-    if (!keys.has(marketKey)) throw new FixtureError(`${p}.market`, `unknown market ${marketKey}`)
+    const positionMarket = str(o.market, `${p}.market`)
+    if (!keys.has(positionMarket)) throw new FixtureError(`${p}.market`, `unknown market ${positionMarket}`)
     const signed = o.baseBalance
     if (signed !== undefined && signed !== null && (typeof signed !== "string" || !/^-?\d+$/.test(signed)))
       throw new FixtureError(`${p}.baseBalance`, "expected a signed integer string")
     const collaterals: Record<string, bigint> = {}
     if (o.collaterals !== undefined)
-      for (const [id, raw] of Object.entries(obj(o.collaterals, `${p}.collaterals`))) {
+      for (const [id, units] of Object.entries(obj(o.collaterals, `${p}.collaterals`))) {
         const t = tokens.get(id)
         if (!t) throw new FixtureError(`${p}.collaterals`, `unknown token "${id}"`)
-        collaterals[priceKey(t.chain, t.address)] = amount(raw, `${p}.collaterals.${id}`)
+        collaterals[priceKey(t.chain, t.address)] = amount(units, `${p}.collaterals.${id}`)
       }
     return {
-      marketKey,
+      marketKey: positionMarket,
       readAt: isoTime(o.readAt, `${p}.readAt`),
       reconciled: o.reconciled === null ? null : bool(o.reconciled, `${p}.reconciled`),
       supplied: o.supplied === undefined ? null : maybe(o.supplied, `${p}.supplied`, amount),

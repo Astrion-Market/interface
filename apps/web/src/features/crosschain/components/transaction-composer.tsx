@@ -315,7 +315,7 @@ export function TransactionComposer({ data, market, action }: { data: MarketFixt
             </ul>
           </div>
 
-          {market.env === "fixture" && (action === "lend" || action === "borrow" || action === "repay" || action === "withdraw") && (
+          {market.env === "fixture" && (
             <div className="space-y-2 rounded-lg border border-dashed border-attention/40 p-3">
               <p className="text-label">Simulated run</p>
               <p className="text-copy-sm text-muted-foreground">Walks through tracking with fake events. No wallet is used and no funds move.</p>
